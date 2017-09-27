@@ -1,0 +1,4 @@
+https://www.tensorflow.org/get_started/mnist/beginners
+https://colah.github.io/posts/2014-10-Visualizing-MNIST/
+http://neuralnetworksanddeeplearning.com/chap3.html#softmax
+http://colah.github.io/posts/2015-09-Visual-Information/
