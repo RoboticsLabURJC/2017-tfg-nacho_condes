@@ -23,10 +23,16 @@ cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y_
 
 train_step = tf.train.GradientDescentOptimizer(0.5).minimize(cross_entropy)
 
-for _ in range(1000):
+saver = tf.train.Saver()
+
+for step in range(1000):
     batch = mnist.train.next_batch(100)
     train_step.run(feed_dict={x: batch[0], y_: batch[1]})
+    if step % 100 == 0:
+        print("step: %d" % (step))
+        path = saver.save(sess, './my-model/model', global_step=step)
 
+print("training completed in:%s" % (path))
 # EVALUATION
 correct_prediction = tf.equal(tf.argmax(y,1), tf.argmax(y_,1)) # list of booleans.
 # we have to cast the boolean vector to 1-0 vector
