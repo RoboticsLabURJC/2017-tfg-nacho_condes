@@ -11,6 +11,7 @@
 # https://github.com/Javii91/Domotic/blob/master/Others/cameraview.py
 #
 
+import os
 import sys
 import random
 import traceback
@@ -32,8 +33,8 @@ class Camera:
         in order to predict the digit in the image.
         '''
 	print "\nLoading Keras model..."
-        self.model = load_model("/home/nacho/" + 
-                                "2017-tfg-nacho_condes/Net/Example/" +
+        self.model = load_model(os.getcwd() + 
+                                "/Net/Example/" +
                                 "MNIST_net.h5")
         print "loaded\n"
         status = 0
