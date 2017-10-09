@@ -22,8 +22,7 @@ import numpy as np
 import easyiceconfig as EasyIce
 from PIL import Image
 from jderobot import CameraPrx
-from keras.models import load_model
-from keras import backend
+import tensorflow as tf
 
 
 class Camera:
@@ -32,11 +31,6 @@ class Camera:
         ''' Camera class gets images from live video and transform them
         in order to predict the digit in the image.
         '''
-	print "\nLoading Keras model..."
-        self.model = load_model(os.getcwd() + 
-                                "/Net/Example/" +
-                                "MNIST_net.h5")
-        print "loaded\n"
         status = 0
         ic = None
         
@@ -44,6 +38,8 @@ class Camera:
         ic = EasyIce.initialize(sys.argv)
         properties = ic.getProperties()
         self.lock = threading.Lock()
+
+        self.networkInitialized = False
     
         try:
             # We obtain a proxy for the camera.
@@ -114,21 +110,39 @@ class Camera:
         im_edges = np.uint8(im_edges)
         
         return im_edges
+
+    def initialize_network(self):
+        self.lock.acquire()
+        self.x = tf.placeholder(tf.float32, shape=[None, 784])
+        self.y_ = tf.placeholder(tf.float32, shape=[None,10])
+
+        W = tf.Variable(tf.zeros([784,10]))
+        b = tf.Variable(tf.zeros([10]))
+        self.W = W
+        self.b = b
+
+        self.y = tf.nn.softmax(tf.matmul(self.x,self.W) + self.b)
+
+        saver = tf.train.Saver()
+
+        with tf.Session() as sess:
+    	    saver.restore(sess, './networks/my-model/model-900')
+    	    self.networkInitialized = True
+    	    print("Network loaded")
     
     def classification(self, im):
-        ''' Adapts image shape depending on Keras backend (TensorFlow
-        or Theano) and returns a prediction.
-        '''
-        if backend.image_dim_ordering() == 'th':
-            im = im.reshape(1, 1, im.shape[0], im.shape[1])            
-        else:      
-            im = im.reshape(1, im.shape[0], im.shape[1], 1)            
-        
-        prev_digito = np.where(self.model.predict(im) == 1)
-        print("--------------------------------------------------------------")
-        if prev_digito[1].size == 1:
-            self.digito = prev_digito
+    	if not self.networkInitialized:
+    		print "VOY A INICIALIZAR"
+    		self.initialize_network()
         else:
-            self.digito = (([0]), (["none"]))
-        return self.digito[1][0]
+            self.lock.acquire()
+            reshaped_img = np.reshape(im, (1,784))
+
+            with tf.Session() as sess:
+            	probs = sess.run(self.y, feed_dict={self.x: reshaped_img})
+
+            prediction = probs.argmax()
+            print("Prediction: %d" % (prediction))
+
+            return prediction
         

@@ -14,6 +14,8 @@ from PyQt5 import QtGui
 from PyQt5 import QtCore
 from PyQt5 import QtWidgets
 
+import threading
+
 class GUI(QtWidgets.QWidget):
 
     updGUI = QtCore.pyqtSignal()
@@ -23,6 +25,8 @@ class GUI(QtWidgets.QWidget):
         preview the live video as well as the results of the real-time
         classification.
         '''
+        self.lock = threading.Lock()
+
         QtWidgets.QWidget.__init__(self, parent)
         self.setWindowTitle("Digit Classification (Keras CNN trained with an "
                             + "augmented MNIST database)")
@@ -141,6 +145,8 @@ class GUI(QtWidgets.QWidget):
     def update(self):
         ''' Updates the GUI for every time the thread change '''
         # We get the original image and display it.
+        self.lock.acquire()
+
         im_prev = self.cam.getImage()[0]
         im = QtGui.QImage(im_prev.data, im_prev.shape[1], im_prev.shape[0],
                           QtGui.QImage.Format_RGB888)
@@ -166,6 +172,7 @@ class GUI(QtWidgets.QWidget):
         ''' Updates which digit has the "light on" depending on the 
         network output.
         '''
+        self.lock.acquire()
         for dgt in self.dgts:
             dgt.setStyleSheet("background-color: #7FFFD4; color: #000; "
                               + "font-size: 20px; border: 1px solid black;")
