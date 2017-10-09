@@ -1,0 +1,55 @@
+\chapter{Conclusions}\label{ch:conclusions}
+In this chapter, we are going to recall the main conclusions reached during the development of this project. These conclusions will be divided following the \emph{sub-objectives} defined in Section~\ref{sec:objectives}. After summarizing the conclusions, suggestions for future works will be proposed.
+
+\section{Conclusions}
+\subsection*{Deep understanding of CNNs built with Keras}
+\begin{itemize}
+	\item The input data in Keras models are usually provided as \emph{\gls{hdf5} files}, which can be imported as Numpy arrays that can be easily accessed and reshaped. \gls{hdf5} is also employed by Keras to save the models.
+	\item \glspl{cnn} are built in Keras as a stack of \emph{fully configurable modules} (convolutional layers, regularization layers, activation functions...) which can be easily modified when needed, allowing fast experimentation.
+	\item The core elements of a \gls{cnn} are convolutional and pooling layers combined with non-linear activation functions (e.g. \gls{relu}), which altogether allow the learning of \emph{complex image features} in a hierarchical way with a reasonable computational cost.
+	\item In \emph{classification tasks}, the output layer of the model must be, at least, one fully-connected layer with as many neural units as classes the problem has. The activation function employed in this layer (e.g. Softmax) transforms the outputs into a probability distribution.
+	\item The cost function and optimizer of the \emph{learning process} can be easily configured. Moreover, Keras allows the addition of callbacks which can monitor the state and the performance of the \gls{cnn} at given stages of the training process.
+	\item Keras provides tools for \emph{image preprocessing} that can be used to generate new data in real-time. This is useful for augmenting the database without storing the new samples.
+\end{itemize}
+
+\subsection*{Test bench tools}
+\begin{itemize}
+	\item The creation of a test bench for \emph{comparing results} has improved the speed of the experimentation and the interpretability of the obtained results.
+	\item Employing \emph{handmade augmented datasets} instead of real-time data augmentation has allowed an easier control of what we have fed to the \glspl{cnn}.
+	\item \emph{Scikit-learn library} provides a wide variety of functions for evaluating \glspl{cnn}. Besides that, it is independent from Keras, which allows the comparison of the results obtained with models built with different platforms like Caffe.
+	\item Building \emph{a bridge from Python to Octave} with the SciPy library has opened the doors to the powerful visualization tools provided by Octave.
+	\item The modular logic employed by Keras allows to easily look into the inner parts of the models, which has been very useful for \emph{visualizing the activation maps and filters} of the convolutional layers.
+\end{itemize}
+
+\subsection*{Effects of the learning process in \glspl{cnn} performance}
+\begin{itemize}
+	\item While training the \gls{cnn} with the \emph{original \gls{mnist} database} leads to impressive accuracy in test time, the model generated doesn't generalize well enough when it is evaluated with real-world images.
+	\item Training with \emph{gradient images} instead of the original ones makes the \gls{cnn} more robust with respect to the light and color conditions.
+	\item The \emph{datasets augmented} with random transformations enable a better generalization, which means a significant improvement with real-world images.
+	\item The models trained with \emph{dropout} learn slower and have worse results during training that the ones trained without dropout, but perform much better in validation and test time. This means that the \glspl{cnn} trained with dropout generalize better. 
+	\item Setting a good \emph{early stopping} rule is critical to make the most of the training process. 
+	\item The analysis of the \emph{activation maps} has proved that the \gls{cnn} is learning mostly features about the edges of the samples. It's easier to see this trend in the activation maps of the last convolutional layer.
+	\item Some activation maps look \textit{dead}, which could mean that the learning rate is too high according to some researchers~\cite{cs231n}.
+	\item The \emph{filters} in the first layer can be related with their activation maps. However, when we go deeper into the network, the dimensionality grows too much to easily interpret the filters and they look noisier. 
+\end{itemize}
+
+\subsection*{JdeRobot component for digit classification}
+\begin{itemize}
+	\item The \emph{image acquisition} from different video streams has been easily solved using the \textit{cameraserver} driver provided by JdeRobot framework.
+	\item On one hand, capturing images from \emph{smartphone cameras} instead of webcams has made the application much more flexible than before. On the other hand, the frame rate is significantly higher with webcams.
+	\item The use of \emph{threads} for the different tasks of the component is essential for enabling real-time execution.
+	\item The performance of the component has been highly improved after replacing the \gls{cnn} of the Keras example analyzed in Section~\ref{sec:understanding} with the \emph{\textit{4Conv; Patience=5} model} evaluated in Section~\ref{subsec:arch}.
+\end{itemize}
+
+\section{Future works}
+The understanding of the \glspl{cnn} acquired in this project opens the door to the application of new algorithms in \emph{more complex real-world problems}. For instance, they can be used not only for object classification, but also for \emph{object detection}. Algorithms based in \glspl{cnn} have shown a great performance in classical benchmarks like Pascal VOC\footnote{\url{http://host.robots.ox.ac.uk/pascal/VOC/databases.html}} and COCO\footnote{\url{http://mscoco.org/}}. Deep learning libraries like Keras and Caffe provide pre-trained weights for popular neural networks trained with these databases, allowing the user to fine-tune the models with new samples. The main difficulty that has to be faced in object detection is the high computational cost, but some algorithms are achieving real-time or almost \emph{real-time predictions} (e.g. YOLO\footnote{\url{https://pjreddie.com/darknet/yolo/}} and SSD\footnote{\url{https://github.com/weiliu89/caffe/tree/ssd}}). Possible applications of these kind of algorithms are autonomous driving, video surveillance and face recognition. In particular, in autonomous driving we can find them coping with problems like steering angle prediction and vehicle detection (see Figure~\ref{fig:vehicle}).
+\begin{figure}
+	\centering
+	\includegraphics[width=0.8\linewidth, keepaspectratio]{figures/cars.jpg}
+	\caption{Vehicle detection with YOLO applied to Udacity's self-driving car dataset (source~\cite{udacity}).}
+	\label{fig:vehicle}
+\end{figure}
+
+Another interesting field of study is to estimate the pose of the human body from video images. In that sense, convolutional pose machines are achieving very promising results~\cite{DBLP:journals/corr/WeiRKS16}. These algorithms can be used to better understand body language.
+
+Besides the possible applications in computer vision, \glspl{cnn} can also be employed to solve tasks like speech recognition~\cite{conf/icassp/Abdel-HamidMJP12} and natural language processing~\cite{DBLP:journals/corr/LopezK17}.

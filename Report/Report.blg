@@ -1,0 +1,77 @@
+This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: Report.aux
+The style file: biblatex.bst
+A level-1 auxiliary file: 0-Cover.aux
+A level-1 auxiliary file: 0-Agradecimientos.aux
+A level-1 auxiliary file: 0-Resumen.aux
+A level-1 auxiliary file: 0-Summary.aux
+A level-1 auxiliary file: 1-Introduction.aux
+A level-1 auxiliary file: 2-Infrastructure.aux
+A level-1 auxiliary file: 3-Digit_classifier.aux
+A level-1 auxiliary file: 4-Test_bench.aux
+A level-1 auxiliary file: 5-Evaluation.aux
+A level-1 auxiliary file: 6-Conclusions.aux
+A level-1 auxiliary file: 7-Bibliography.aux
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated field_info (elt_size=4) to 10143 items from 5000.
+Database file #1: Report-blx.bib
+Database file #2: Bibliography.bib
+A bad cross reference---entry "conf/icassp/Abdel-HamidMJP12"
+refers to entry "conf/icassp/2012", which doesn't exist
+Warning--I didn't find a database entry for "conf/icassp/2012"
+Biblatex version: 3.3
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 9000 items from 6000.
+You've used 37 entries,
+            6047 wiz_defined-function locations,
+            1362 strings with 15004 characters,
+and the built_in function-call counts, 153645 in all, are:
+= -- 4676
+> -- 11749
+< -- 1317
++ -- 8388
+- -- 8398
+* -- 8868
+:= -- 14765
+add.period$ -- 0
+call.type$ -- 37
+change.case$ -- 439
+chr.to.int$ -- 755
+cite$ -- 72
+duplicate$ -- 14799
+empty$ -- 13115
+format.name$ -- 2485
+if$ -- 27828
+int.to.chr$ -- 0
+int.to.str$ -- 85
+missing$ -- 0
+newline$ -- 1068
+num.names$ -- 1581
+pop$ -- 11594
+preamble$ -- 1
+purify$ -- 588
+quote$ -- 0
+skip$ -- 7097
+stack$ -- 0
+substring$ -- 4347
+swap$ -- 4915
+text.length$ -- 1096
+text.prefix$ -- 0
+top$ -- 1
+type$ -- 1393
+warning$ -- 0
+while$ -- 1158
+width$ -- 0
+write$ -- 1030
+(There was 1 error message)
