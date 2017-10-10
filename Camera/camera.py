@@ -39,7 +39,6 @@ class Camera:
         properties = ic.getProperties()
         self.lock = threading.Lock()
 
-        self.networkInitialized = False
     
         try:
             # We obtain a proxy for the camera.
@@ -111,38 +110,28 @@ class Camera:
         
         return im_edges
 
-    def initialize_network(self):
-        self.lock.acquire()
-        self.x = tf.placeholder(tf.float32, shape=[None, 784])
-        self.y_ = tf.placeholder(tf.float32, shape=[None,10])
+    
+    def classification(self, im):
+
+        reshaped_img = np.reshape(im, (1,784))
+
+        # TF variables
+        x = tf.placeholder(tf.float32, shape=[None, 784])
+        y_ = tf.placeholder(tf.float32, shape=[None, 10])
 
         W = tf.Variable(tf.zeros([784,10]))
         b = tf.Variable(tf.zeros([10]))
-        self.W = W
-        self.b = b
 
-        self.y = tf.nn.softmax(tf.matmul(self.x,self.W) + self.b)
+        y = tf.nn.softmax(tf.matmul(x, W) + b)
 
         saver = tf.train.Saver()
 
         with tf.Session() as sess:
-    	    saver.restore(sess, './networks/my-model/model-900')
-    	    self.networkInitialized = True
-    	    print("Network loaded")
-    
-    def classification(self, im):
-    	if not self.networkInitialized:
-    		print "VOY A INICIALIZAR"
-    		self.initialize_network()
-        else:
-            self.lock.acquire()
-            reshaped_img = np.reshape(im, (1,784))
-
-            with tf.Session() as sess:
-            	probs = sess.run(self.y, feed_dict={self.x: reshaped_img})
-
+            saver.restore(sess, './networks/my-model/model-900')
+            probs = sess.run(y, feed_dict={x: reshaped_img})
             prediction = probs.argmax()
-            print("Prediction: %d" % (prediction))
 
-            return prediction
-        
+        tf.reset_default_graph()
+
+        return prediction
+    
