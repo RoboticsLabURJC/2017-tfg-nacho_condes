@@ -61,7 +61,7 @@ y_conv = tf.matmul(h_fc1_drop, W_fc2) + b_fc2
 
 
 LEARNING_RATE = 1e-4
-TRAIN_STEPS = 50000
+TRAIN_STEPS = 2000
 
 cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y_conv))
 train_step = tf.train.AdamOptimizer(LEARNING_RATE).minimize(cross_entropy)
@@ -72,10 +72,10 @@ saver = tf.train.Saver()
 with tf.Session() as sess:
 	sess.run(tf.global_variables_initializer())
 	for step in range(TRAIN_STEPS):
-	    batch = mnist.train.next_batch(10000)
-	    sess.run(train_step, feed_dict={x: batch[0], y_: batch[1]})
+	    batch = mnist.train.next_batch(10)
+	    sess.run(train_step, feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
 	    if step % 100 == 0:
-	        print("step: %d, accuracy: %3f" % (step, sess.run(accuracy, feed_dict= {x: mnist.test.images, y_: mnist.test.labels})))
+	        print("step: %d, accuracy: %3f" % (step, sess.run(accuracy, feed_dict= {x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0})))
 	        path = saver.save(sess, './my-model/model', global_step=step)
 
 	print("training completed in:%s" % (path))
