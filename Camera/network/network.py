@@ -16,8 +16,12 @@ class Network():
 
     def __init__(self):
         # initializing placeholders
-        self.x = tf.placeholder(tf.float32, shape=[None, 784], name='x')
-        self.y_ = tf.placeholder(tf.float32, shape=[None, 10], name='y_')
+        self.x = tf.placeholder(tf.float32, shape=[None, 784], name='image')
+
+
+        self.x_image = tf.reshape(self.x, [-1, 28, 28, 1])
+
+        self.y_ = tf.placeholder(tf.float32, shape=[None, 10], name='ground_truth')
         self.keep_prob = tf.placeholder(tf.float32, name='keep_prob')
 
         # common session to share variables
@@ -31,20 +35,45 @@ class Network():
         def bias_variable(shape, name):
             initial = tf.constant(0.1, shape=shape)
             return tf.Variable(initial, name=name)
-        
+
+
         # variables.
-        self.weights = {
-            'conv1': weight_variable([5, 5, 1, 32], 'conv1'),
-            'conv2': weight_variable([5, 5, 32, 32], 'conv2'),
-            'fc1':   weight_variable([14*14*32, 128], 'fc1'),
-            'fc2':   weight_variable([128, 10], 'fc2')
-        }
-        self.biases = {
-            'conv1': bias_variable([32], 'conv1'),
-            'conv2': bias_variable([32], 'conv2'),
-            'fc1':   bias_variable([128], 'fc1'),
-            'fc2':   bias_variable([10], 'fc2')
-        }
+        self.weights = {}
+        self.biases = {}
+        
+        # conv1
+        with tf.name_scope('conv1'):
+            self.weights['conv1'] = weight_variable([5, 5, 1, 32], 'W_conv1')
+            self.biases['conv1'] = bias_variable([32], 'b_conv1')
+            self.h_conv1 = tf.nn.relu(self.conv2d(self.x_image, self.weights['conv1']) + self.biases['conv1'])
+
+        # conv2
+        with tf.name_scope('conv2'):
+            self.weights['conv2'] = weight_variable([5, 5, 32, 32], 'W_conv2')
+            self.biases['conv2'] = bias_variable([32], 'b_conv2')
+            self.h_conv2 = tf.nn.relu(self.conv2d(self.h_conv1, self.weights['conv2']) + self.biases['conv2'])
+
+
+        self.h_pool = self.max_pool_2x2(self.h_conv2)
+        self.h_drop1 = tf.nn.dropout(self.h_pool, self.keep_prob)
+        self.h_pool_flat = tf.reshape(self.h_drop1, [-1, 14*14*32])
+
+        # fc1
+        with tf.name_scope('fc1'):
+            self.weights['fc1'] = weight_variable([14*14*32, 128], 'W_fc1')
+            self.biases['fc1'] = bias_variable([128], 'b_fc1')
+            self.h_fc1 = tf.nn.relu(tf.matmul(self.h_pool_flat, self.weights['fc1']) + self.biases['fc1'])
+
+            
+        self.h_drop2 = tf.nn.dropout(self.h_fc1, self.keep_prob)
+
+        #fc2
+        with tf.name_scope('fc2'):
+            self.weights['fc2'] = weight_variable([128, 10], 'W_fc2')
+            self.biases['fc2'] = bias_variable([10], 'b_fc2')
+            self.y = tf.nn.softmax(tf.nn.relu(tf.matmul(self.h_drop2, self.weights['fc2']) + self.biases['fc2']))
+
+
 
         self.saver = tf.train.Saver({'W_conv1': self.weights['conv1'], 'b_conv1': self.biases['conv1'],
                         'W_conv2': self.weights['conv2'], 'b_conv2': self.biases['conv2'],
@@ -57,18 +86,12 @@ class Network():
 
 
         # model definition.
-
-        self.x_image = tf.reshape(self.x, [-1, 28, 28, 1])
-
-        self.h_conv1 = tf.nn.relu(self.conv2d(self.x_image, self.weights['conv1']) + self.biases['conv1'])
-        self.h_conv2 = tf.nn.relu(self.conv2d(self.h_conv1, self.weights['conv2']) + self.biases['conv2'])
+        '''
         self.h_pool = self.max_pool_2x2(self.h_conv2)
         self.h_drop1 = tf.nn.dropout(self.h_pool, self.keep_prob)
         self.h_pool_flat = tf.reshape(self.h_drop1, [-1, 14*14*32])
-        self.h_fc1 = tf.nn.relu(tf.matmul(self.h_pool_flat, self.weights['fc1']) + self.biases['fc1'])
         self.h_drop2 = tf.nn.dropout(self.h_fc1, self.keep_prob)
-        self.y = tf.nn.softmax(tf.nn.relu(tf.matmul(self.h_drop2, self.weights['fc2']) + self.biases['fc2']))
-
+        '''
 
         self.mnist = input_data.read_data_sets('/tmp/MNIST_data', one_hot=True)
 
@@ -82,6 +105,8 @@ class Network():
         '''
         Trains the model, and saves the parameters into a checkpoint
         '''
+        writer = tf.summary.FileWriter((parameters['model_path'] + '/logs'), graph=tf.get_default_graph())
+
         cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=self.y_, logits=self.y))
         train_step = tf.train.AdamOptimizer(parameters['learning_rate']).minimize(cross_entropy)
         accuracy = tf.reduce_mean(tf.cast(tf.equal(tf.argmax(self.y, 1), tf.argmax(self.y_,1)), tf.float32))
@@ -131,7 +156,7 @@ class Network():
                                                              self.y_: validationBatch[1],
                                                              self.keep_prob: 1.0})
                 total_validation_accuracy.append(validation_accuracy)
-                path = self.saver.save(self.sess, parameters['model_path'], global_step=step+1)
+                path = self.saver.save(self.sess, (parameters['model_path'] + '/model'), global_step=step+1)
 
 
             training_loss = self.sess.run(cross_entropy, 
@@ -185,7 +210,7 @@ class Network():
         '''
         Loads the latest model saved on path
         '''
-        latest_model = tf.train.latest_checkpoint(path)
+        latest_model = tf.train.latest_checkpoint((path + '/model'))
         print(latest_model)
         self.saver.restore(self.sess, latest_model)
 

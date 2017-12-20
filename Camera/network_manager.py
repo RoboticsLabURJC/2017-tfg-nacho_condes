@@ -12,7 +12,6 @@ def train(final_test=False):
     model_path = raw_input('Enter the path to save the network (leave blank for "my-model"): ')
     if model_path == '':
         model_path = 'my-model'
-    model_path = (model_path + '/model')
 
     training_dataset_path = raw_input('Enter the path to the training dataset .h5 file (leave blank to use standard MNIST): ')
     while training_dataset_path != '' and not os.path.isfile(training_dataset_path):
