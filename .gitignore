@@ -1,5 +1,6 @@
-*datasets
-*pyc
-misc
+*datasets*
+*pyc*
+misc*
 *MNIST_data*
-
+*results*
+*logs*

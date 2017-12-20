@@ -70,7 +70,7 @@ class Network():
         self.y = tf.nn.softmax(tf.nn.relu(tf.matmul(self.h_drop2, self.weights['fc2']) + self.biases['fc2']))
 
 
-        self.mnist = input_data.read_data_sets('MNIST_data', one_hot=True)
+        self.mnist = input_data.read_data_sets('/tmp/MNIST_data', one_hot=True)
 
     def conv2d(self, x, W):
         return tf.nn.conv2d(x, W, strides=[1, 1, 1, 1], padding='SAME')
@@ -82,7 +82,7 @@ class Network():
         '''
         Trains the model, and saves the parameters into a checkpoint
         '''
-        cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.y_, logits=self.y))
+        cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=self.y_, logits=self.y))
         train_step = tf.train.AdamOptimizer(parameters['learning_rate']).minimize(cross_entropy)
         accuracy = tf.reduce_mean(tf.cast(tf.equal(tf.argmax(self.y, 1), tf.argmax(self.y_,1)), tf.float32))
 

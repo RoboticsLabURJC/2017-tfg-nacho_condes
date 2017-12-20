@@ -14,9 +14,8 @@ class HDF5Importer():
         self.data, self.labels = self.convert(raw_data, raw_labels)
         self.length = len(self.data)
         print("shape: {}".format(self.data.shape))
-
         if image_name:
-            self.plot_samples(np.random.randint(0, self.length, 9), image_name)
+        	self.plot_samples(np.random.randint(0, self.length, 9), image_name)
 
 
     def convert(self, data, labels):
@@ -27,9 +26,9 @@ class HDF5Importer():
         arrImgs = np.zeros([self.dataSet_size, 28, 28], dtype='float32')
 
         for index in range(self.dataSet_size):
-            currentImg = data[index]
+            currentImg = np.true_divide(data[index], 255.0)
             currentLabel = labels[index]
-            arrImgs[index] = np.true_divide(currentImg.reshape([28,28]), 255.0)
+            arrImgs[index] = currentImg.reshape([28,28])
             arrLabels[index][currentLabel] = 1.0
 
         return arrImgs, arrLabels
@@ -42,7 +41,7 @@ class HDF5Importer():
         for row in ax:
             for a in row:
                 a.imshow(self.data[numbers[counter]])
-                a.set_title('Label: {1} (sample {1})'.format(self.labels[numbers[counter]].argmax(), numbers[counter]))
+                a.set_title('Label: {0} (sample {1})'.format(self.labels[numbers[counter]].argmax(), numbers[counter]))
                 counter += 1
         plt.show(block=False)
         plt.savefig(image_name, bbox_inches='tight')
