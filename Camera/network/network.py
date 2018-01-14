@@ -1,6 +1,8 @@
 import tensorflow as tf
 import numpy as np
 import cv2
+import progressbar as pb
+import os.path
 
 import h5importer
 from cprint import *
@@ -53,7 +55,6 @@ class Network():
             self.biases['conv2'] = bias_variable([32], 'b_conv2')
             self.h_conv2 = tf.nn.relu(self.conv2d(self.h_conv1, self.weights['conv2']) + self.biases['conv2'])
 
-
         self.h_pool = self.max_pool_2x2(self.h_conv2)
         self.h_drop1 = tf.nn.dropout(self.h_pool, self.keep_prob)
         self.h_pool_flat = tf.reshape(self.h_drop1, [-1, 14*14*32])
@@ -64,16 +65,13 @@ class Network():
             self.biases['fc1'] = bias_variable([128], 'b_fc1')
             self.h_fc1 = tf.nn.relu(tf.matmul(self.h_pool_flat, self.weights['fc1']) + self.biases['fc1'])
 
-            
         self.h_drop2 = tf.nn.dropout(self.h_fc1, self.keep_prob)
 
-        #fc2
+        # fc2
         with tf.name_scope('fc2'):
             self.weights['fc2'] = weight_variable([128, 10], 'W_fc2')
             self.biases['fc2'] = bias_variable([10], 'b_fc2')
             self.y = tf.nn.softmax(tf.nn.relu(tf.matmul(self.h_drop2, self.weights['fc2']) + self.biases['fc2']))
-
-
 
         self.saver = tf.train.Saver({'W_conv1': self.weights['conv1'], 'b_conv1': self.biases['conv1'],
                         'W_conv2': self.weights['conv2'], 'b_conv2': self.biases['conv2'],
@@ -81,17 +79,9 @@ class Network():
                         'W_fc2': self.weights['fc2'], 'b_fc2': self.biases['fc2']
                         })
 
-
         self.sess.run(tf.global_variables_initializer())
 
-
         # model definition.
-        '''
-        self.h_pool = self.max_pool_2x2(self.h_conv2)
-        self.h_drop1 = tf.nn.dropout(self.h_pool, self.keep_prob)
-        self.h_pool_flat = tf.reshape(self.h_drop1, [-1, 14*14*32])
-        self.h_drop2 = tf.nn.dropout(self.h_fc1, self.keep_prob)
-        '''
 
         self.mnist = input_data.read_data_sets('/tmp/MNIST_data', one_hot=True)
 
@@ -108,9 +98,8 @@ class Network():
         writer = tf.summary.FileWriter((parameters['model_path'] + '/logs'), graph=tf.get_default_graph())
 
         cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=self.y_, logits=self.y))
-        train_step = tf.train.AdamOptimizer(parameters['learning_rate']).minimize(cross_entropy)
+        train_step = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
         accuracy = tf.reduce_mean(tf.cast(tf.equal(tf.argmax(self.y, 1), tf.argmax(self.y_,1)), tf.float32))
-
         
         if parameters['training_dataset_path'] == '':
             training_dataset = self.mnist.train
@@ -122,8 +111,6 @@ class Network():
         else:
             validation_dataset = h5importer.HDF5Importer(parameters['validation_dataset_path'], 'validation.png')
 
-
-        training_length = parameters['train_steps']
 
         total_training_loss = []
         total_training_accuracy = []
@@ -138,6 +125,42 @@ class Network():
         # training process
         self.sess.run(tf.global_variables_initializer())
 
+        dataset_size = 48000
+        batch_size = 128
+        batch_count = dataset_size / batch_size # 375
+        total_epochs = 25
+
+        batch = 0
+
+        for epoch in range(total_epochs):       # each epoch must iterate over all the dataset -> 25 times over all the dataset (forwards only for the moment).
+            print("Epoch %d/%d" % (epoch+1, total_epochs))
+            bar = pb.ProgressBar(max_value=batch_count,
+                                 redirect_stdout=True,
+                                 widgets=[
+                                    ' [', pb.Timer(), '] ',
+                                    pb.Bar(), ' (', pb.ETA(), ') '])
+
+
+            for batch in range(batch_count):
+                train_batch = training_dataset.next_batch(batch_size)
+
+
+                training_loss = self.sess.run(cross_entropy, feed_dict={self.x: train_batch[0],
+                                                                        self.y_: train_batch[1],
+                                                                        self.keep_prob: 1.0})
+
+                training_accuracy = self.sess.run(accuracy, feed_dict={self.x: train_batch[0],
+                                                                       self.y_: train_batch[1],
+                                                                       self.keep_prob: 1.0})
+                print("batch %d, loss: %.3f, acc: %.3f" % (batch, training_loss, training_accuracy))
+            
+                self.sess.run(train_step, feed_dict= {self.x: train_batch[0], 
+                                                  self.y_: train_batch[1], 
+                                                  self.keep_prob: 0.5})
+                bar.update(batch+1)
+            path = self.saver.save(self.sess, (parameters['model_path'] + '/model'), global_step=epoch+1)
+
+        '''
         for step in range(training_length):
             trainBatch = training_dataset.next_batch(parameters['batch_size'])
             #print(step)
@@ -199,7 +222,7 @@ class Network():
             self.sess.run(train_step, feed_dict= {self.x: trainBatch[0], 
                                                   self.y_: trainBatch[1], 
                                                   self.keep_prob: 0.5})
-
+        '''
 
         print("training completed\nSaved in %s\n\n" %(path))
 
@@ -210,7 +233,7 @@ class Network():
         '''
         Loads the latest model saved on path
         '''
-        latest_model = tf.train.latest_checkpoint((path + '/model'))
+        latest_model = tf.train.latest_checkpoint(path)
         print(latest_model)
         self.saver.restore(self.sess, latest_model)
 
@@ -227,9 +250,9 @@ class Network():
         else:
             test_dataset = h5importer.HDF5Importer(test_parameters['test_dataset_path'], 'test.png')
 
-        testBatch = test_dataset.next_batch(test_parameters['n_samples'])
+        test_batch = test_dataset.next_batch(2000)
 
-        test_output = self.sess.run(self.y, feed_dict={self.x: testBatch[0], self.keep_prob: 1.0})
+        test_output = self.sess.run(self.y, feed_dict={self.x: test_batch[0], self.keep_prob: 1.0})
 
         if test_parameters['is_training']:
             is_training = 'y'
@@ -244,9 +267,109 @@ class Network():
             val_loss = None
             val_acc = None
 
-        results = CustomEvaluation(np.argmax(testBatch[1], axis=1), test_output, is_training, train_loss, train_acc, val_loss, val_acc)
+        results = CustomEvaluation(np.argmax(test_batch[1], axis=1), test_output, is_training, train_loss, train_acc, val_loss, val_acc)
 
         score_dict = results.dictionary()
 
         results.log(score_dict, test_parameters['output_matrix'])
-       
+
+
+#
+# MANAGER METHODS
+#
+def do_train(final_test=False):
+
+    net = Network()
+
+    model_path = raw_input('Enter the path to save the network (leave blank for "my-model"): ')
+    if model_path == '':
+        model_path = 'my-model'
+
+    training_dataset_path = raw_input('Enter the path to the training dataset .h5 file (leave blank to use standard MNIST): ')
+
+    while training_dataset_path != '' and not os.path.isfile(training_dataset_path):
+        training_dataset_path = raw_input('    Please enter a correct path to the .h5 file (leave blank to use standard MNIST): ')
+
+    validation_dataset_path = raw_input('Enter the path to the validation dataset .h5 file (leave blank to use standard MNIST): ')
+    while validation_dataset_path != '' and not os.path.isfile(validation_dataset_path):
+        validation_dataset_path = raw_input('    Please enter a correct path to the .h5 file (leave blank to use standard MNIST): ')
+
+    early_stopping = raw_input('Do you want to implement early stopping (y/n)? ')
+    while early_stopping != 'y' and early_stopping != 'n':
+        early_stopping = raw_input('    Please enter y (yes) or n (no): ')
+
+    monitor = None
+    patience =  None
+    if early_stopping == 'y':
+        monitor = raw_input('    What do you want to monitor (accuracy/loss)? ')
+        while monitor != 'accuracy' and monitor != 'loss':
+            monitor = raw_input('    Please enter "accuracy" or "loss": ')
+        patience = raw_input('    Enter patience (leave blank for 5): ')
+        if patience == '':
+            patience = 5
+        else:
+            patience = int(patience)
+
+
+    parameters = {'model_path': model_path,
+                  'training_dataset_path': training_dataset_path,
+                  'validation_dataset_path': validation_dataset_path,
+                  'early_stopping': early_stopping,
+                  'monitor': monitor,
+                  'patience': patience}
+    (train_acc, train_loss, val_acc, val_loss) = net.train(parameters)
+
+    if final_test:
+        test_parameters = get_test_parameters(is_training=True)
+        test_parameters['train_acc'] = train_acc
+        test_parameters['train_loss'] = train_loss
+        test_parameters['val_acc'] = val_acc
+        test_parameters['val_loss'] = val_loss
+        net.test(test_parameters)
+
+
+def get_test_parameters(is_training=False):
+    test_dataset_path = raw_input('Enter the path to the testing dataset .h5 file (leave blank to use standard MNIST): ')
+    while test_dataset_path != '' and not os.path.isfile(test_dataset_path):
+        test_dataset_path = raw_input('    Please enter a correct path to the .h5 file (leave blank to use standard MNIST): ')
+
+    output_matrix = raw_input('Enter the desired name for the output matrix .mat file (leave blank to "results"): ')
+    if output_matrix == '':
+        output_matrix = 'results'
+        
+    output_matrix = (output_matrix + '.mat')
+
+    test_parameters = {'test_dataset_path': test_dataset_path,
+                       'is_training': is_training,
+                       'output_matrix': output_matrix}
+
+    return test_parameters
+
+
+
+
+
+
+if __name__ == '__main__':
+    action = None
+    while action != 'train' and action != 'test' and action != 'both':
+        action = raw_input('\nWhat do you want to do (train/test/both)? ')
+
+    if action == 'train':
+        do_train()
+
+    elif action == 'test':
+        net = Network()
+        model_path = raw_input('Enter the path containing the model to evaluate (leave blank for "my-model"): ')
+        while model_path != '' and not os.path.exists(model_path):
+            model_path = raw_input('    Please enter a valid path (leave blank for "my-model")')
+        if model_path == '':
+            model_path = 'my-model'
+
+        net.load(model_path)
+
+        test_parameters = get_test_parameters()
+        net.test(test_parameters)
+
+    else:
+        do_train(final_test=True)
