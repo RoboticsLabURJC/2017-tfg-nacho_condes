@@ -18,18 +18,17 @@ class Network():
 
     def __init__(self):
         # initializing placeholders
-        self.x = tf.placeholder(tf.float32, shape=[None, 784], name='image')
-
+        self.x = tf.placeholder(tf.float32, shape=[None, 784], name='x')
 
         self.x_image = tf.reshape(self.x, [-1, 28, 28, 1])
 
-        self.y_ = tf.placeholder(tf.float32, shape=[None, 10], name='ground_truth')
+        self.y_ = tf.placeholder(tf.float32, shape=[None, 10], name='y_')
         self.keep_prob = tf.placeholder(tf.float32, name='keep_prob')
 
         # common session to share variables
         self.sess = tf.Session()
 
-        # initalizing methods.
+        # initializing methods.
         def weight_variable(shape, name):
             initial = tf.truncated_normal(shape, stddev=0.1)
             return tf.Variable(initial, name=name)
@@ -38,11 +37,10 @@ class Network():
             initial = tf.constant(0.1, shape=shape)
             return tf.Variable(initial, name=name)
 
-
         # variables.
         self.weights = {}
         self.biases = {}
-        
+
         # conv1
         with tf.name_scope('conv1'):
             self.weights['conv1'] = weight_variable([5, 5, 1, 32], 'W_conv1')
@@ -117,23 +115,28 @@ class Network():
         total_validation_loss = []
         total_validation_accuracy = []
 
-        previous_monitored = None
+        if parameters['monitor'] == 'accuracy':
+            previous_monitored = 0
+        else:
+            previous_monitored = 99999
+
         early_stopping_counter = 0
-        improvement = None
 
 
         # training process
         self.sess.run(tf.global_variables_initializer())
 
-        dataset_size = 48000
-        batch_size = 128
-        batch_count = dataset_size / batch_size # 375
-        total_epochs = 25
+        DATASET_SIZE = 48000
+        BATCH_SIZE = 128
+        batch_count = DATASET_SIZE / BATCH_SIZE # 375
+        TOTAL_EPOCHS = 100
+
+        VALIDATION_SIZE = 2000
 
         batch = 0
 
-        for epoch in range(total_epochs):       # each epoch must iterate over all the dataset -> 25 times over all the dataset (forwards only for the moment).
-            print("Epoch %d/%d" % (epoch+1, total_epochs))
+        for epoch in range(TOTAL_EPOCHS):       # each epoch must iterate over all the dataset -> 25 times over all the dataset (forwards only for the moment).
+            print("Epoch %d/%d" % (epoch+1, TOTAL_EPOCHS))
             bar = pb.ProgressBar(max_value=batch_count,
                                  redirect_stdout=True,
                                  widgets=[
@@ -142,7 +145,7 @@ class Network():
 
 
             for batch in range(batch_count):
-                train_batch = training_dataset.next_batch(batch_size)
+                train_batch = training_dataset.next_batch(BATCH_SIZE)
 
 
                 training_loss = self.sess.run(cross_entropy, feed_dict={self.x: train_batch[0],
@@ -152,13 +155,56 @@ class Network():
                 training_accuracy = self.sess.run(accuracy, feed_dict={self.x: train_batch[0],
                                                                        self.y_: train_batch[1],
                                                                        self.keep_prob: 1.0})
-                print("batch %d, loss: %.3f, acc: %.3f" % (batch, training_loss, training_accuracy))
+
+                total_training_loss.append(training_loss)
+                total_training_accuracy.append(training_accuracy)
+
+
+                # print("batch %d, loss: %.3f, acc: %.3f" % (batch, training_loss, training_accuracy))
             
-                self.sess.run(train_step, feed_dict= {self.x: train_batch[0], 
-                                                  self.y_: train_batch[1], 
+                self.sess.run(train_step, feed_dict= {self.x: train_batch[0],
+                                                  self.y_: train_batch[1],
                                                   self.keep_prob: 0.5})
                 bar.update(batch+1)
-            path = self.saver.save(self.sess, (parameters['model_path'] + '/model'), global_step=epoch+1)
+
+
+            # for each epoch, we validate the model
+            validation_batch = validation_dataset.next_batch(VALIDATION_SIZE)
+
+            validation_loss = self.sess.run(cross_entropy, feed_dict={self.x: validation_batch[0],
+                                                                      self.y_: validation_batch[1],
+                                                                      self.keep_prob: 1.0})
+
+
+            validation_accuracy = self.sess.run(accuracy, feed_dict={self.x: validation_batch[0],
+                                                                     self.y_: validation_batch[1],
+                                                                     self.keep_prob: 1.0})
+
+            total_validation_loss.append(validation_loss)
+            total_validation_accuracy.append(validation_accuracy)
+
+            print("VALIDATION EPOCH %d: loss %.3f, accuracy %.3f" %(epoch+1, validation_loss, validation_accuracy))
+
+            if parameters['early_stopping']:
+                if parameters['monitor'] == 'accuracy':
+                    if validation_accuracy > previous_monitored:
+                        path = self.saver.save(self.sess, (parameters['model_path'] + '/model'), global_step=epoch+1)
+                        cprint.ok('Accuracy improved from {0} to {1}. Saving at {2}'.format(previous_monitored, validation_accuracy, path))
+                        previous_monitored = validation_accuracy
+                    else:
+                        cprint.warn('Accuracy did not improve.')
+                        early_stopping_counter += 1
+                else:
+                    if validation_loss < previous_monitored:
+                        path = self.saver.save(self.sess, (parameters['model_path'] + '/model'), global_step=epoch+1)
+                        cprint.ok('Loss improved from {0} to {1}. Saving at {2}'.format(previous_monitored, validation_loss, path))
+                        previous_monitored = validation_loss
+                    else:
+                        cprint.warn('Loss did not improve.')
+                        early_stopping_counter += 1
+                if early_stopping_counter > parameters['patience']:
+                    cprint.fatal('Patience exceeded. Training halted. Best model saved on {}'.format(path))
+                    break
 
         '''
         for step in range(training_length):
@@ -304,9 +350,9 @@ def do_train(final_test=False):
         monitor = raw_input('    What do you want to monitor (accuracy/loss)? ')
         while monitor != 'accuracy' and monitor != 'loss':
             monitor = raw_input('    Please enter "accuracy" or "loss": ')
-        patience = raw_input('    Enter patience (leave blank for 5): ')
+        patience = raw_input('    Enter patience (leave blank for 2): ')
         if patience == '':
-            patience = 5
+            patience = 2
         else:
             patience = int(patience)
 
