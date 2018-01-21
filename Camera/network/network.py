@@ -3,6 +3,7 @@ import numpy as np
 
 import progressbar as pb
 import os.path
+import sys
 
 import h5importer
 from cprint import *
@@ -77,9 +78,10 @@ class Network:
 
         self.sess.run(tf.global_variables_initializer())
 
+        # placeholder for the tf mnist dataset, in case we select it
+        self.mnist = None
         # model definition.
 
-        self.mnist = input_data.read_data_sets('/tmp/MNIST_data', one_hot=True)
 
     def conv2d(self, x, W):
         return tf.nn.conv2d(x, W, strides=[1, 1, 1, 1], padding='SAME')
@@ -96,13 +98,17 @@ class Network:
         cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=self.y_, logits=self.y))
         train_step = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
         accuracy = tf.reduce_mean(tf.cast(tf.equal(tf.argmax(self.y, 1), tf.argmax(self.y_,1)), tf.float32))
-        
+
         if parameters['training_dataset_path'] == '':
+            if not self.mnist:
+                self.mnist = input_data.read_data_sets('/tmp/MNIST_data', one_hot=True)
             training_dataset = self.mnist.train
         else:
             training_dataset = h5importer.HDF5Importer(parameters['training_dataset_path'], 'training.png')
 
         if parameters['validation_dataset_path'] == '':
+            if not self.mnist:
+                self.mnist = input_data.read_data_sets('/tmp/MNIST_data', one_hot=True)
             validation_dataset = self.mnist.validation
         else:
             validation_dataset = h5importer.HDF5Importer(parameters['validation_dataset_path'], 'validation.png')
@@ -133,10 +139,12 @@ class Network:
 
         batch = 0
 
+        cprint.ok('BEGINNING TRAINING PROCESS THROUGH %d EPOCHS, BATCH SIZE: %d\n----------------------------------------------------------------' % (TOTAL_EPOCHS, BATCH_SIZE))
+
         for epoch in range(TOTAL_EPOCHS):       # each epoch must iterate over all the dataset -> 25 times over all the dataset (forwards only for the moment).
             print("Epoch %d/%d" % (epoch+1, TOTAL_EPOCHS))
             bar = pb.ProgressBar(max_value=batch_count,
-                                 redirect_stdout=True,
+                                 redirect_stdout=False,
                                  widgets=[
                                     ' [', pb.Timer(), '] ',
                                     pb.Bar(), ' (', pb.ETA(), ') '])
@@ -158,7 +166,7 @@ class Network:
                 total_training_accuracy.append(training_accuracy)
 
                 # print("batch %d, loss: %.3f, acc: %.3f" % (batch, training_loss, training_accuracy))
-            
+
                 self.sess.run(train_step, feed_dict= {self.x: train_batch[0],
                                                       self.y_: train_batch[1],
                                                       self.keep_prob: 0.5})
@@ -180,12 +188,14 @@ class Network:
 
             print("VALIDATION EPOCH %d: loss %.3f, accuracy %.3f" %(epoch+1, validation_loss, validation_accuracy))
 
-            if parameters['early_stopping']:
+
+            if parameters['early_stopping'] == 'y':
                 if parameters['monitor'] == 'accuracy':
                     if validation_accuracy > previous_monitored:
                         path = self.saver.save(self.sess, (parameters['model_path'] + '/model'), global_step=epoch+1)
                         cprint.ok('Accuracy improved from {0} to {1}. Saving at {2}'.format(previous_monitored, validation_accuracy, path))
                         previous_monitored = validation_accuracy
+                        early_stopping_counter = 0
                     else:
                         cprint.warn('Accuracy did not improve.')
                         early_stopping_counter += 1
@@ -194,77 +204,17 @@ class Network:
                         path = self.saver.save(self.sess, (parameters['model_path'] + '/model'), global_step=epoch+1)
                         cprint.ok('Loss improved from {0} to {1}. Saving at {2}'.format(previous_monitored, validation_loss, path))
                         previous_monitored = validation_loss
+                        early_stopping_counter = 0
                     else:
                         cprint.warn('Loss did not improve.')
                         early_stopping_counter += 1
                 if early_stopping_counter > parameters['patience']:
                     cprint.fatal('Patience exceeded. Training halted. Best model saved on {}'.format(path))
                     break
+            else:
+                path = self.saver.save(self.sess, (parameters['model_path'] + '/model'), global_step=epoch+1)
 
-        '''
-        for step in range(training_length):
-            trainBatch = training_dataset.next_batch(parameters['batch_size'])
-            #print(step)
-            if (step + 1) % 100 == 0:
-                validationBatch = validation_dataset.next_batch(parameters['batch_size'])
-                print("step: %d" % (step+1))
-                validation_loss = self.sess.run(cross_entropy, 
-                                          feed_dict={self.x: validationBatch[0], 
-                                                     self.y_: validationBatch[1], 
-                                                     self.keep_prob: 1.0})
-                total_validation_loss.append(validation_loss)
-
-
-                validation_accuracy = self.sess.run(accuracy,
-                                                  feed_dict={self.x: validationBatch[0],
-                                                             self.y_: validationBatch[1],
-                                                             self.keep_prob: 1.0})
-                total_validation_accuracy.append(validation_accuracy)
-                path = self.saver.save(self.sess, (parameters['model_path'] + '/model'), global_step=step+1)
-
-
-            training_loss = self.sess.run(cross_entropy, 
-                                          feed_dict={self.x: trainBatch[0], 
-                                                     self.y_: trainBatch[1], 
-                                                     self.keep_prob: 1.0})
-            total_training_loss.append(training_loss)
-
-
-
-            training_accuracy = self.sess.run(accuracy,
-                                              feed_dict={self.x: trainBatch[0],
-                                                         self.y_: trainBatch[1],
-                                                         self.keep_prob: 1.0})
-            total_training_accuracy.append(training_accuracy)
-
-            # early stopping implementation
-            if parameters['early_stopping'] == 'y' or previous_monitored:
-                if parameters['monitor'] == 'accuracy':
-                    improvement = (training_accuracy > previous_monitored)
-                    previous_monitored = training_accuracy
-                elif parameters['monitor'] == 'loss':
-                    improvement = (training_loss < previous_monitored)
-                    previous_monitored = training_loss
-                else:
-                    print('Error on monitored parameter.')
-
-                
-                if not improvement:
-                    early_stopping_counter += 1
-                    #cprint.warn("Stopping in: %d" % (parameters['patience'] - early_stopping_counter))
-                    if early_stopping_counter > parameters['patience']:
-                        cprint.fatal("Training not improved. Process halted on step %d." % (step))
-                        break
-                else:
-                    early_stopping_counter = 0
-
-                
-
-            self.sess.run(train_step, feed_dict= {self.x: trainBatch[0], 
-                                                  self.y_: trainBatch[1], 
-                                                  self.keep_prob: 0.5})
-        '''
-
+        print('\n\n\n\n')
         print("training completed\nSaved in %s\n\n" %(path))
 
         return (total_training_accuracy, total_training_loss, total_validation_accuracy, total_validation_loss)
@@ -286,7 +236,10 @@ class Network:
         return self.sess.run(self.y, feed_dict={self.x: img, self.keep_prob: 1.0})
 
     def test(self, test_parameters):
+        print("ENTERING TO TEST")
         if test_parameters['test_dataset_path'] == '':
+            if not self.mnist:
+                self.mnist = input_data.read_data_sets('/tmp/MNIST_data', one_hot=True)
             test_dataset = self.mnist.test
         else:
             test_dataset = h5importer.HDF5Importer(test_parameters['test_dataset_path'], 'test.png')
@@ -309,7 +262,6 @@ class Network:
             val_acc = None
 
         results = CustomEvaluation(np.argmax(test_batch[1], axis=1), test_output, is_training, train_loss, train_acc, val_loss, val_acc)
-
         score_dict = results.dictionary()
 
         results.log(score_dict, test_parameters['output_matrix'])
@@ -360,12 +312,16 @@ def do_train(final_test=False):
                   'patience': patience}
     (train_acc, train_loss, val_acc, val_loss) = net.train(parameters)
 
+
+    print("TRAINING FINISHED")
+
     if final_test:
         test_parameters = get_test_parameters(is_training=True)
         test_parameters['train_acc'] = train_acc
         test_parameters['train_loss'] = train_loss
         test_parameters['val_acc'] = val_acc
         test_parameters['val_loss'] = val_loss
+
         net.test(test_parameters)
 
 
@@ -377,7 +333,7 @@ def get_test_parameters(is_training=False):
     output_matrix = raw_input('Enter the desired name for the output matrix .mat file (leave blank to "results"): ')
     if output_matrix == '':
         output_matrix = 'results'
-        
+
     output_matrix = (output_matrix + '.mat')
 
     test_parameters = {'test_dataset_path': test_dataset_path,

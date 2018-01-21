@@ -43,7 +43,7 @@ class Camera:
         self.network = Network()
 
 
-        self.network.load('Camera/my-model')
+        self.network.load('Camera/network/my-model')
 
         try:
             # We obtain a proxy for the camera.
