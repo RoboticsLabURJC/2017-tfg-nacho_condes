@@ -1,6 +1,6 @@
 import tensorflow as tf
 import numpy as np
-import cv2
+
 import progressbar as pb
 import os.path
 
@@ -9,12 +9,10 @@ from cprint import *
 
 from tensorflow.examples.tutorials.mnist import input_data
 
-import random as rnd
-
 from customevaluation import CustomEvaluation
 
 
-class Network():
+class Network:
 
     def __init__(self):
         # initializing placeholders
@@ -159,14 +157,12 @@ class Network():
                 total_training_loss.append(training_loss)
                 total_training_accuracy.append(training_accuracy)
 
-
                 # print("batch %d, loss: %.3f, acc: %.3f" % (batch, training_loss, training_accuracy))
             
                 self.sess.run(train_step, feed_dict= {self.x: train_batch[0],
-                                                  self.y_: train_batch[1],
-                                                  self.keep_prob: 0.5})
+                                                      self.y_: train_batch[1],
+                                                      self.keep_prob: 0.5})
                 bar.update(batch+1)
-
 
             # for each epoch, we validate the model
             validation_batch = validation_dataset.next_batch(VALIDATION_SIZE)
@@ -174,7 +170,6 @@ class Network():
             validation_loss = self.sess.run(cross_entropy, feed_dict={self.x: validation_batch[0],
                                                                       self.y_: validation_batch[1],
                                                                       self.keep_prob: 1.0})
-
 
             validation_accuracy = self.sess.run(accuracy, feed_dict={self.x: validation_batch[0],
                                                                      self.y_: validation_batch[1],
