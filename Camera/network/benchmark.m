@@ -75,7 +75,7 @@ function benchmark(results_path)
 
     xlabel("Batch number", "fontsize", 15);
 
-    ylabel("Categorical crossentropy", "fontsize", 15);
+    ylabel("Loss", "fontsize", 15);
 
 
 

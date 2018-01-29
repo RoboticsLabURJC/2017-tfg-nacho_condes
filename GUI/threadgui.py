@@ -32,4 +32,4 @@ class ThreadGUI(threading.Thread):
                 + dt.microseconds / 1000.0)
 
             if(dtms < t_cycle):
-                time.sleep((t_cycle - dtms) / 1000.0);
+                time.sleep((t_cycle - dtms) / 1000.0)

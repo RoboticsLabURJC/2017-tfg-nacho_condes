@@ -7,6 +7,7 @@ import sys
 
 import h5importer
 from cprint import *
+import time
 
 from tensorflow.examples.tutorials.mnist import input_data
 
@@ -232,8 +233,13 @@ class Network:
         '''
         gets an image and processes it, returning the predicted label
         '''
+        start_time = time.time()
         img = img.reshape([1,784])
-        return self.sess.run(self.y, feed_dict={self.x: img, self.keep_prob: 1.0})
+        output = self.sess.run(self.y, feed_dict={self.x: img, self.keep_prob: 1.0})
+        elapsed_time = time.time() - start_time
+
+        print "elapsed time: ", elapsed_time
+        return output
 
     def test(self, test_parameters):
         print("ENTERING TO TEST")
