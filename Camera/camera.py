@@ -1,14 +1,21 @@
 #
-# Created on Mar 7, 2017
+# Created on Oct, 2017
 #
-# @author: dpascualhe
+# @author: naxvm
+#
+# Class which abstracts a Camera from a proxy (created by ICE/ROS),
+# and provides the methods to keep it constantly updated. Also, it processes
+# it by using a Sobel edges filter, and delivers it to the neural network,
+# which returns the predicted digit.
+#
 #
 # Based on @nuriaoyaga code:
 # https://github.com/RoboticsURJC-students/2016-tfg-nuria-oyaga/blob/
-#     master/camera/camera.py
+#     master/numberclassifier.py
+# and @dpascualhe's:
+# https://github.com/RoboticsURJC-students/2016-tfg-david-pascual/blob/
+#     master/digitclassifier.py
 #
-# And @Javii91 code:
-# https://github.com/Javii91/Domotic/blob/master/Others/cameraview.py
 #
 
 import os
@@ -23,40 +30,37 @@ import easyiceconfig as EasyIce
 from PIL import Image
 from jderobot import CameraPrx
 import tensorflow as tf
-from network.network import Network
+from Net.network import Network
+import comm
+import config
 
 
 class Camera:
 
-    def __init__ (self):
+    def __init__(self):
         ''' Camera class gets images from live video and transform them
         in order to predict the digit in the image.
         '''
         status = 0
-        ic = None
 
-        # Initializing the Ice run-time.
-        ic = EasyIce.initialize(sys.argv)
-        properties = ic.getProperties()
+        # Creation of the camera through the comm-ICE proxy.
+        cfg = config.load(sys.argv[1])
+        jdrc = comm.init(cfg, 'DigitClassifier')
+        self.cam = jdrc.getCameraClient('DigitClassifier.Camera')
+
         self.lock = threading.Lock()
 
-        self.network = Network()
-
-
-        self.network.load('Camera/network/my-model')
+        # Creation of the network, and load of the model into it.
+        self.network = Network('Net/mnist-model')
 
         try:
-            # We obtain a proxy for the camera.
-            #obj = ic.propertyToProxy("Digitclassifier.Camera.Proxy")
-	    obj = ic.stringToProxy('cameraA:default -h localhost -p 9999')
-            # We get the first image and print its description.
-            self.cam = CameraPrx.checkedCast(obj)
 
             if self.cam:
-                self.im = self.cam.getImageData("RGB8")
-                self.im_height = self.im.description.height
-                self.im_width = self.im.description.width
-                print(self.im.description)
+                self.im = self.cam.getImage()
+                self.im_height = self.im.height
+                self.im_width = self.im.width
+                print('Image size: {0}x{1} px'.format(
+                        self.im_width, self.im_height))
             else:
                 print("Interface camera not connected")
 
@@ -74,10 +78,10 @@ class Camera:
             self.lock.acquire()
 
             im = np.zeros((self.im_height, self.im_width, 3), np.uint8)
-            im = np.frombuffer(self.im.pixelData, dtype=np.uint8)
+            im = np.frombuffer(self.im.data, dtype=np.uint8)
             im.shape = self.im_height, self.im_width, 3
             im_trans = self.transformImage(im)
-            # It prints the ROI over the live video
+
             cv2.rectangle(im, (218, 138), (422, 342), (0, 0, 255), 2)
             ims = [im, im_trans]
 
@@ -90,9 +94,9 @@ class Camera:
         if self.cam:
             self.lock.acquire()
 
-            self.im = self.cam.getImageData("RGB8")
-            self.im_height = self.im.description.height
-            self.im_width = self.im.description.width
+            self.im = self.cam.getImage()
+            self.im_height = self.im.height
+            self.im_width = self.im.width
 
             self.lock.release()
 
@@ -100,9 +104,9 @@ class Camera:
         ''' Transforms the image into a 28x28 pixel grayscale image and
         applies a sobel filter (both x and y directions).
         '''
-        im_crop = im [140:340, 220:420]
+        im_crop = im[140:340, 220:420]
         im_gray = cv2.cvtColor(im_crop, cv2.COLOR_BGR2GRAY)
-        im_blur = cv2.GaussianBlur(im_gray, (5, 5), 0) # Noise reduction.
+        im_blur = cv2.GaussianBlur(im_gray, (5, 5), 0)  # Noise reduction.
 
         im_res = cv2.resize(im_blur, (28, 28))
 
@@ -115,9 +119,9 @@ class Camera:
 
         return im_edges
 
-
     def classification(self, im):
-
-        prediction = self.network.predict(im).argmax()
+        ''' Calls the prediction method, and returns the digit
+        which the neural network yields.'''
+        prediction = self.network.classify(im).argmax()
 
         return prediction

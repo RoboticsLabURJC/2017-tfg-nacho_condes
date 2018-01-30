@@ -26,8 +26,8 @@ class GUI(QtWidgets.QWidget):
         '''
 
         QtWidgets.QWidget.__init__(self, parent)
-        self.setWindowTitle("Digit Classification (TensorFlow CNN trained with a "
-                            + "MNIST database)")
+        self.setWindowTitle("Digit Classification (TensorFlow CNN trained " +
+                            "with a MNIST database)")
         self.resize(1000, 600)
         self.move(150, 50)
         self.updGUI.connect(self.update)
@@ -51,8 +51,8 @@ class GUI(QtWidgets.QWidget):
         lab0.move(785, 450)
         lab0.setText('0')
         lab0.setAlignment(QtCore.Qt.AlignCenter)
-        lab0.setStyleSheet("background-color: #7FFFD4; color: #000; "
-                           + "font-size: 20px; border: 1px solid black;")
+        lab0.setStyleSheet("background-color: #7FFFD4; color: #000; " +
+                           "font-size: 20px; border: 1px solid black;")
         self.dgts.append(lab0)
 
         lab1 = QtWidgets.QLabel(self)
@@ -60,8 +60,8 @@ class GUI(QtWidgets.QWidget):
         lab1.move(700, 300)
         lab1.setText('1')
         lab1.setAlignment(QtCore.Qt.AlignCenter)
-        lab1.setStyleSheet("background-color: #7FFFD4; color: #000; " 
-                           + "font-size: 20px; border: 1px solid black;")
+        lab0.setStyleSheet("background-color: #7FFFD4; color: #000; " +
+                           "font-size: 20px; border: 1px solid black;")
         self.dgts.append(lab1)
 
         lab2 = QtWidgets.QLabel(self)
@@ -69,8 +69,8 @@ class GUI(QtWidgets.QWidget):
         lab2.move(785, 300)
         lab2.setText('2')
         lab2.setAlignment(QtCore.Qt.AlignCenter)
-        lab2.setStyleSheet("background-color: #7FFFD4; color: #000; " 
-                           + "font-size: 20px; border: 1px solid black;")
+        lab0.setStyleSheet("background-color: #7FFFD4; color: #000; " +
+                           "font-size: 20px; border: 1px solid black;")
         self.dgts.append(lab2)
 
         lab3 = QtWidgets.QLabel(self)
@@ -78,8 +78,8 @@ class GUI(QtWidgets.QWidget):
         lab3.move(870, 300)
         lab3.setText('3')
         lab3.setAlignment(QtCore.Qt.AlignCenter)
-        lab3.setStyleSheet("background-color: #7FFFD4; color: #000; "
-                           + "font-size: 20px; border: 1px solid black;")
+        lab0.setStyleSheet("background-color: #7FFFD4; color: #000; " +
+                           "font-size: 20px; border: 1px solid black;")
         self.dgts.append(lab3)
 
         lab4 = QtWidgets.QLabel(self)
@@ -87,8 +87,8 @@ class GUI(QtWidgets.QWidget):
         lab4.move(700, 350)
         lab4.setText('4')
         lab4.setAlignment(QtCore.Qt.AlignCenter)
-        lab4.setStyleSheet("background-color: #7FFFD4; color: #000; " 
-                           + "font-size: 20px; border: 1px solid black;")
+        lab0.setStyleSheet("background-color: #7FFFD4; color: #000; " +
+                           "font-size: 20px; border: 1px solid black;")
         self.dgts.append(lab4)
 
         lab5 = QtWidgets.QLabel(self)
@@ -96,8 +96,8 @@ class GUI(QtWidgets.QWidget):
         lab5.move(785, 350)
         lab5.setText('5')
         lab5.setAlignment(QtCore.Qt.AlignCenter)
-        lab5.setStyleSheet("background-color: #7FFFD4; color: #000; " 
-                           + "font-size: 20px; border: 1px solid black;")
+        lab0.setStyleSheet("background-color: #7FFFD4; color: #000; " +
+                           "font-size: 20px; border: 1px solid black;")
         self.dgts.append(lab5)
 
         lab6 = QtWidgets.QLabel(self)
@@ -105,8 +105,8 @@ class GUI(QtWidgets.QWidget):
         lab6.move(870, 350)
         lab6.setText('6')
         lab6.setAlignment(QtCore.Qt.AlignCenter)
-        lab6.setStyleSheet("background-color: #7FFFD4; color: #000; " 
-                           + "font-size: 20px; border: 1px solid black;")
+        lab0.setStyleSheet("background-color: #7FFFD4; color: #000; " +
+                           "font-size: 20px; border: 1px solid black;")
         self.dgts.append(lab6)
 
         lab7 = QtWidgets.QLabel(self)
@@ -114,8 +114,8 @@ class GUI(QtWidgets.QWidget):
         lab7.move(700, 400)
         lab7.setText('7')
         lab7.setAlignment(QtCore.Qt.AlignCenter)
-        lab7.setStyleSheet("background-color: #7FFFD4; color: #000; " 
-                           + "font-size: 20px; border: 1px solid black;")
+        lab0.setStyleSheet("background-color: #7FFFD4; color: #000; " +
+                           "font-size: 20px; border: 1px solid black;")
         self.dgts.append(lab7)
 
         lab8 = QtWidgets.QLabel(self)
@@ -123,8 +123,8 @@ class GUI(QtWidgets.QWidget):
         lab8.move(785, 400)
         lab8.setText('8')
         lab8.setAlignment(QtCore.Qt.AlignCenter)
-        lab8.setStyleSheet("background-color: #7FFFD4; color: #000; " 
-                           + "font-size: 20px; border: 1px solid black;")
+        lab0.setStyleSheet("background-color: #7FFFD4; color: #000; " +
+                           "font-size: 20px; border: 1px solid black;")
         self.dgts.append(lab8)
 
         lab9 = QtWidgets.QLabel(self)
@@ -132,8 +132,8 @@ class GUI(QtWidgets.QWidget):
         lab9.move(870, 400)
         lab9.setText('9')
         lab9.setAlignment(QtCore.Qt.AlignCenter)
-        lab9.setStyleSheet("background-color: #7FFFD4; color: #000; " 
-                           + "font-size: 20px; border: 1px solid black;")
+        lab0.setStyleSheet("background-color: #7FFFD4; color: #000; " +
+                           "font-size: 20px; border: 1px solid black;")
         self.dgts.append(lab9)
 
     def setCamera(self, cam):
@@ -148,7 +148,7 @@ class GUI(QtWidgets.QWidget):
                           QtGui.QImage.Format_RGB888)
         im_scaled = im.scaled(self.im_label.size())
         self.im_label.setPixmap(QtGui.QPixmap.fromImage(im_scaled))
-        
+
         # We get the transformed image and display it.
         im_prev_trans = self.cam.getImage()[1]
         im_trans = QtGui.QImage(im_prev_trans.data, im_prev_trans.shape[1],
@@ -159,20 +159,20 @@ class GUI(QtWidgets.QWidget):
         im_trans.setColorTable(colortable)
         im_trans_scaled = im_trans.scaled(self.im_trans_label.size())
         self.im_trans_label.setPixmap(QtGui.QPixmap.fromImage(im_trans_scaled))
-        
+
         # We "turn on" the digit that it's been classified.
         net_out = self.cam.classification(im_prev_trans)
-        print("out: %d" % (net_out))
+        print("Out: %d" % (net_out))
         self.lightON(net_out)
 
     def lightON(self, out):
-        ''' Updates which digit has the "light on" depending on the 
+        ''' Updates which digit has the "light on" depending on the
         network output.
         '''
         for dgt in self.dgts:
-            dgt.setStyleSheet("background-color: #7FFFD4; color: #000; "
-                              + "font-size: 20px; border: 1px solid black;")
-            if out != None:
-                self.dgts[out].setStyleSheet("background-color: #FFFF00; "
-                                             + "color: #000; font-size: 20px; "
-                                             + "border: 1px solid black;")
+            dgt.setStyleSheet("background-color: #7FFFD4; color: #000; " +
+                              "font-size: 20px; border: 1px solid black;")
+            if out is not None:
+                self.dgts[out].setStyleSheet("background-color: #FFFF00; " +
+                                             "color: #000; font-size: 20px; " +
+                                             "border: 1px solid black;")
