@@ -12,6 +12,8 @@ MediaWiki of this project available [here.](http://jderobot.org/Naxvm-tfg)
 
 
 Video example:
+
+
 [
 ![YouTube video](http://img.youtube.com/vi/x-OhWal38Ak/0.jpg)](http://www.youtube.com/watch?v=x-OhWal38Ak)
 
