@@ -43,7 +43,11 @@ class Camera:
         status = 0
 
         # Creation of the camera through the comm-ICE proxy.
-        cfg = config.load(sys.argv[1])
+        try:
+            cfg = config.load(sys.argv[1])
+        except IndexError:
+            raise SystemExit('Error: Missing YML file. \n  Usage: python2 digitclassifier.py digitclassifier.yml')
+
         jdrc = comm.init(cfg, 'DigitClassifier')
         self.cam = jdrc.getCameraClient('DigitClassifier.Camera')
 
