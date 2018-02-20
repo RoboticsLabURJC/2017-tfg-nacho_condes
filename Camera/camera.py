@@ -53,6 +53,7 @@ class Camera:
         self.lock = threading.Lock()
 
         # Creation of the network, and load of the model into it.
+        model_path = cfg.getNode()['DigitClassifier']['Model']
         self.network = Network('Net/mnist-model')
 
         try:
