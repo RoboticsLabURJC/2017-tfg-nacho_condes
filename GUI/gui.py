@@ -146,13 +146,14 @@ class GUI(QtWidgets.QWidget):
         self.button_cont_detection = QtWidgets.QPushButton(self)
         self.button_cont_detection.move(700, 100)
         self.button_cont_detection.clicked.connect(self.toggleNetwork)
+        self.button_cont_detection.setText('Continuous')
 
 
         # Button for processing a single frame
         self.button_one_frame = QtWidgets.QPushButton(self)
         self.button_one_frame.move(700, 200)
         self.button_one_frame.clicked.connect(self.updateOnce)
-        self.button_one_frame.setText('On-demand\nClassification')
+        self.button_one_frame.setText('Step')
 
         # Logo
         self.logo_label = QtWidgets.QLabel(self)
@@ -212,11 +213,8 @@ class GUI(QtWidgets.QWidget):
 
         if self.t_network.activated:
             self.button_cont_detection.setStyleSheet('QPushButton {color: red;}')
-            self.button_cont_detection.setText('Switch off\nContinuous\nClassification')
         else:
             self.button_cont_detection.setStyleSheet('QPushButton {color: green;}')
-            self.button_cont_detection.setText('Switch on\nContinuous\nClassification')
-
 
 
     def updateTransImg(self):
