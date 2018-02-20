@@ -152,7 +152,7 @@ class GUI(QtWidgets.QWidget):
         self.button_one_frame = QtWidgets.QPushButton(self)
         self.button_one_frame.move(700, 200)
         self.button_one_frame.clicked.connect(self.updateOnce)
-        self.button_one_frame.setText('On-demand\ndetection')
+        self.button_one_frame.setText('On-demand\nClassification')
 
         # Logo
         self.logo_label = QtWidgets.QLabel(self)
@@ -212,10 +212,10 @@ class GUI(QtWidgets.QWidget):
 
         if self.t_network.activated:
             self.button_cont_detection.setStyleSheet('QPushButton {color: red;}')
-            self.button_cont_detection.setText('Switch off\nContinuous\nDetection')
+            self.button_cont_detection.setText('Switch off\nContinuous\nClassification')
         else:
             self.button_cont_detection.setStyleSheet('QPushButton {color: green;}')
-            self.button_cont_detection.setText('Switch on\nContinuous\nDetection')
+            self.button_cont_detection.setText('Switch on\nContinuous\nClassification')
 
 
 
