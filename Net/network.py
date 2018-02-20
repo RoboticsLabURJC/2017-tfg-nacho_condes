@@ -13,7 +13,7 @@ from cprint import *
 import time
 from tensorflow.examples.tutorials.mnist import input_data
 from customevaluation import CustomEvaluation
-
+import threading
 
 class Network:
     '''Class which creates a CNN, specially prepared to process 28x28 images,
@@ -131,6 +131,13 @@ class Network:
         # if a model is given as an argument, we load it now.
         if model:
             self.load(model)
+
+
+            # attributes containing the input image and the output category.
+        self.input_image = None
+        self.output_digit = None
+
+        self.lock = threading.Lock()
 
     def conv2d(self, x, W):
         return tf.nn.conv2d(x, W, strides=[1, 1, 1, 1],
@@ -373,6 +380,12 @@ class Network:
             self.x: img, self.keep_prob: 1.0})
 
         return output
+
+    def update(self):
+        self.lock.acquire()
+        self.output_digit = np.argmax(self.classify(self.input_image))
+        self.lock.release()
+
 
     def test(self, test_dataset_path, output_matrix,
              is_training=False, train_acc=None, train_loss=None,
