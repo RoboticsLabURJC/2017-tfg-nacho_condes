@@ -29,7 +29,6 @@ import numpy as np
 from PIL import Image
 from jderobot import CameraPrx
 import tensorflow as tf
-from Net.network import Network
 import comm
 import config
 
@@ -53,8 +52,7 @@ class Camera:
         self.lock = threading.Lock()
 
         # Creation of the network, and load of the model into it.
-        model_path = cfg.getNode()['DigitClassifier']['Model']
-        self.network = Network('Net/mnist-model')
+        self.model_path = cfg.getNode()['DigitClassifier']['Model']
 
         try:
             

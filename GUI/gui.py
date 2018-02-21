@@ -15,6 +15,7 @@ from PyQt5 import QtCore
 from PyQt5 import QtWidgets
 
 from Net.threadnetwork import ThreadNetwork
+from Net.network import Network
 
 
 class GUI(QtWidgets.QWidget):
@@ -168,15 +169,16 @@ class GUI(QtWidgets.QWidget):
 
 
 
+    def setNetwork(self, model_path):
+        self.network = Network(model_path)
+        self.t_network = ThreadNetwork(self.network)
+        self.t_network.start()
+        self.toggleNetwork()
+
 
     def setCamera(self, cam):
         ''' Declares the Camera object '''
         self.cam = cam
-        # Network initialization.
-        
-        self.t_network = ThreadNetwork(self.cam.network)
-        self.t_network.start()
-        self.toggleNetwork()
 
     def update(self):
         ''' Updates the GUI for every time the thread change '''
@@ -193,7 +195,7 @@ class GUI(QtWidgets.QWidget):
             self.updateTransImg()
             
         # We "turn on" the digit that it's been classified.
-        self.lightON(self.cam.network.output_digit)
+        self.lightON(self.network.output_digit)
 
     def lightON(self, out):
         ''' Updates which digit has the "light on" depending on the
@@ -222,7 +224,7 @@ class GUI(QtWidgets.QWidget):
         # We get the transformed image and display it.
         im_prev_trans = self.cam.getImage()[1]
 
-        self.cam.network.input_image = im_prev_trans
+        self.network.input_image = im_prev_trans
 
         im_trans = QtGui.QImage(im_prev_trans.data, im_prev_trans.shape[1],
                                     im_prev_trans.shape[0],
