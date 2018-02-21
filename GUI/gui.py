@@ -8,8 +8,6 @@
 #     master/gui/gui.py
 #
 
-import sys
-
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 from PyQt5 import QtWidgets
@@ -195,7 +193,6 @@ class GUI(QtWidgets.QWidget):
         im_trans = QtGui.QImage(im_prev_trans.data, im_prev_trans.shape[1],
                                 im_prev_trans.shape[0],
                                 QtGui.QImage.Format_Indexed8)
-        im_trans_cvt = im_trans.convertToFormat(QtGui.QImage.Format_Indexed8)
         colortable = [QtGui.qRgb(i, i, i) for i in range(255)]
         im_trans.setColorTable(colortable)
         im_trans_scaled = im_trans.scaled(self.im_trans_label.size())

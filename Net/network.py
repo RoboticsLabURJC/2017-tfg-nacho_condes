@@ -7,10 +7,8 @@ import tensorflow as tf
 import numpy as np
 import progressbar as pb
 import os.path
-import sys
 import h5importer
-from cprint import *
-import time
+from cprint import cprint
 from tensorflow.examples.tutorials.mnist import input_data
 from customevaluation import CustomEvaluation
 import threading
@@ -254,9 +252,9 @@ class Network:
 
         batch = 0
 
-        cprint.ok(('BEGINNING TRAINING PROCESS THROUGH %d EPOCHS, ' +
+        cprint.cprint.ok(('BEGINNING TRAINING PROCESS THROUGH %d EPOCHS, ' +
                    'BATCH SIZE: %d') % (TOTAL_EPOCHS, BATCH_SIZE))
-        cprint.ok(('--------------------------------------------------' +
+        cprint.cprint.ok(('--------------------------------------------------' +
                   '--------------'))
 
         for epoch in range(TOTAL_EPOCHS):
@@ -320,31 +318,31 @@ class Network:
                         path = self.saver.save(self.sess,
                                                (model_path + '/model'),
                                                global_step=epoch+1)
-                        cprint.ok(('Accuracy improved from {0} to {1}. ' +
+                        cprint.cprint.ok(('Accuracy improved from {0} to {1}. ' +
                                   'Saving at {2}').format(
                                     previous_monitored, validation_accuracy,
                                     path))
                         previous_monitored = validation_accuracy
                         early_stopping_counter = 0
                     else:
-                        cprint.warn('Accuracy did not improve.')
+                        cprint.cprint.warn('Accuracy did not improve.')
                         early_stopping_counter += 1
                 else:
                     if validation_loss < previous_monitored:
                         path = self.saver.save(self.sess,
                                                (model_path + '/model'),
                                                global_step=epoch+1)
-                        cprint.ok(('Loss improved from {0} to {1}. ' +
+                        cprint.cprint.ok(('Loss improved from {0} to {1}. ' +
                                    'Saving at {2}').format(
                                         previous_monitored, validation_loss,
                                         path))
                         previous_monitored = validation_loss
                         early_stopping_counter = 0
                     else:
-                        cprint.warn('Loss did not improve.')
+                        cprint.cprint.warn('Loss did not improve.')
                         early_stopping_counter += 1
                 if early_stopping_counter > patience:
-                    cprint.fatal(('Patience exceeded. Training halted. ' +
+                    cprint.cprint.fatal(('Patience exceeded. Training halted. ' +
                                   'Best model saved on {}').format(path))
                     break
             else:

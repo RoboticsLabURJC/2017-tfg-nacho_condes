@@ -18,17 +18,12 @@
 #
 #
 
-import os
 import sys
-import random
 import traceback
 import threading
 
 import cv2
 import numpy as np
-from PIL import Image
-from jderobot import CameraPrx
-import tensorflow as tf
 import comm
 import config
 
@@ -39,7 +34,6 @@ class Camera:
         ''' Camera class gets images from live video and transform them
         in order to predict the digit in the image.
         '''
-        status = 0
 
         # Creation of the camera through the comm-ICE proxy.
         try:
@@ -69,7 +63,6 @@ class Camera:
         except:
             traceback.print_exc()
             exit()
-            status = 1
 
     def getImage(self):
         ''' Gets the image from the webcam and returns the original
