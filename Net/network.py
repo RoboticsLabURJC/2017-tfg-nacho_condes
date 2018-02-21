@@ -14,6 +14,7 @@ import time
 from tensorflow.examples.tutorials.mnist import input_data
 from customevaluation import CustomEvaluation
 import threading
+import cv2
 
 class Network:
     '''Class which creates a CNN, specially prepared to process 28x28 images,
@@ -381,10 +382,27 @@ class Network:
 
         return output
 
+    def transformImage(self):
+        ''' Transforms the image into a 28x28 pixel grayscale image and
+        applies a sobel filter (both x and y directions).
+        '''
+        im_crop = np.copy(self.input_image[140:340, 220:420])
+        im_gray = cv2.cvtColor(im_crop, cv2.COLOR_BGR2GRAY)
+        im_blur = cv2.GaussianBlur(im_gray, (5, 5), 0)  # Noise reduction.
+
+        im_res = cv2.resize(im_blur, (28, 28))
+
+        # Edge extraction.
+        im_sobel_x = cv2.Sobel(im_res, cv2.CV_32F, 1, 0, ksize=5)
+        im_sobel_y = cv2.Sobel(im_res, cv2.CV_32F, 0, 1, ksize=5)
+        im_edges = cv2.add(abs(im_sobel_x), abs(im_sobel_y))
+        im_edges = cv2.normalize(im_edges, None, 0, 255, cv2.NORM_MINMAX)
+        im_edges = np.uint8(im_edges)
+        self.processed_image = im_edges
+
     def update(self):
-        self.lock.acquire()
-        self.output_digit = np.argmax(self.classify(self.input_image))
-        self.lock.release()
+        self.output_digit = np.argmax(self.classify(self.processed_image))
+
 
 
     def test(self, test_dataset_path, output_matrix,

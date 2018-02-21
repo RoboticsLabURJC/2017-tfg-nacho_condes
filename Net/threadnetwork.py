@@ -18,6 +18,23 @@ class ThreadNetwork(threading.Thread):
 		threading.Thread.__init__(self)
 		self.activated = False
 
+		self.lock = threading.Lock()
+
+	def doUpdate(self, img):
+		self.lock.acquire()
+		self.network.input_image = img
+		self.network.transformImage()
+		self.lock.release()
+
+
+	def updateImage(self, img):
+		if self.activated:
+			self.doUpdate(img)
+
+
+	def getProcessedImage(self):
+		return self.network.processed_image
+
 
 	def run(self):
 		''' Updates the thread.'''
@@ -34,7 +51,8 @@ class ThreadNetwork(threading.Thread):
 			if(dtms < t_cycle):
 				time.sleep((t_cycle - dtms) / 1000.0)
 
-	def runOnce(self):
+	def runOnce(self, img):
 		''' Processes one image, and then stops again.'''
 		if not self.activated:
+			self.doUpdate(img)
 			self.network.update()

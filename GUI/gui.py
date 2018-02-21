@@ -183,17 +183,24 @@ class GUI(QtWidgets.QWidget):
     def update(self):
         ''' Updates the GUI for every time the thread change '''
         # We get the original image and display it.
-        im_prev = self.cam.getImage()[0]
-        im = QtGui.QImage(im_prev.data, im_prev.shape[1], im_prev.shape[0],
+        self.im_prev = self.cam.getImage()
+        self.t_network.updateImage(self.im_prev)
+        im = QtGui.QImage(self.im_prev.data, self.im_prev.shape[1], self.im_prev.shape[0],
                           QtGui.QImage.Format_RGB888)
         im_scaled = im.scaled(self.im_label.size())
         self.im_label.setPixmap(QtGui.QPixmap.fromImage(im_scaled))
+   
+        # Processed image (fetched from the network)
+        im_prev_trans = self.t_network.getProcessedImage()
+        im_trans = QtGui.QImage(im_prev_trans.data, im_prev_trans.shape[1],
+                                im_prev_trans.shape[0],
+                                QtGui.QImage.Format_Indexed8)
+        im_trans_cvt = im_trans.convertToFormat(QtGui.QImage.Format_Indexed8)
+        colortable = [QtGui.qRgb(i, i, i) for i in range(255)]
+        im_trans.setColorTable(colortable)
+        im_trans_scaled = im_trans.scaled(self.im_trans_label.size())
+        self.im_trans_label.setPixmap(QtGui.QPixmap.fromImage(im_trans_scaled))
 
-
-
-        if self.t_network.activated:
-            self.updateTransImg()
-            
         # We "turn on" the digit that it's been classified.
         self.lightON(self.network.output_digit)
 
@@ -218,24 +225,5 @@ class GUI(QtWidgets.QWidget):
         else:
             self.button_cont_detection.setStyleSheet('QPushButton {color: green;}')
 
-
-    def updateTransImg(self):
-
-        # We get the transformed image and display it.
-        im_prev_trans = self.cam.getImage()[1]
-
-        self.network.input_image = im_prev_trans
-
-        im_trans = QtGui.QImage(im_prev_trans.data, im_prev_trans.shape[1],
-                                    im_prev_trans.shape[0],
-                                    QtGui.QImage.Format_Indexed8)
-        im_trans_cvt = im_trans.convertToFormat(QtGui.QImage.Format_Indexed8)
-        colortable = [QtGui.qRgb(i, i, i) for i in range(255)]
-        im_trans.setColorTable(colortable)
-        im_trans_scaled = im_trans.scaled(self.im_trans_label.size())
-        self.im_trans_label.setPixmap(QtGui.QPixmap.fromImage(im_trans_scaled))
-
-
     def updateOnce(self):
-        self.t_network.runOnce()
-        self.updateTransImg()
+        self.t_network.runOnce(self.im_prev)
