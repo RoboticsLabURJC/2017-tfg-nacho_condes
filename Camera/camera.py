@@ -87,7 +87,7 @@ class Camera:
 
             self.lock.release()
 
-            return ims
+            return im
 
     def update(self):
         ''' Updates the camera every time the thread changes. '''
