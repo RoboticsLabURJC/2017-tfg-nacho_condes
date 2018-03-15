@@ -133,8 +133,9 @@ class Network:
 
 
             # attributes containing the input image and the output category.
-        self.input_image = None
+        self.input_image = np.zeros([28, 28])
         self.output_digit = None
+        self.processed_image = np.zeros([28, 28])
 
         self.lock = threading.Lock()
 
