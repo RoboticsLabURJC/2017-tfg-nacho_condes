@@ -1,7 +1,7 @@
 #
 # Original code by @naxvm
 # Available on:
-# 
+#
 #
 import tensorflow as tf
 import numpy as np
@@ -15,32 +15,6 @@ import threading
 import cv2
 
 class Network:
-    '''Class which creates a CNN, specially prepared to process 28x28 images,
-    typically from MNIST databases. It is capable to train a model, load a
-    previously trained model, test itself, and be used to predict an input
-    image. If this file is executed, it offers a network manager, which
-    allows you to train and/or test a network, optionally using a saved
-    model, and HDF5 datasets, or standard TensorFlow MNIST libraries.
-
-    When a model is trained, the training logs are automatically saved too,
-    so you can watch your network structure using TensorBoard.
-
-    Args:
-        [model] (str): path to a saved checkpoint to be loaded into the
-               instantiated network.
-    Attributes:
-        x (np.array): placeholder for an input image/batch (1, 784, N)
-        to be introduced to the network.
-
-        y_ (np.array): placeholder for the ground truth labels, corresponding
-        to the image(s). It is used as an input when we are testing/training
-        the model.
-
-        keep_prob (float32): placeholder for the keep_prob, it means,
-        the probability (over 1.0) of a node of staying switched on
-        during the call to the network. Tipycally 0.5 for training, and
-        1.0 for testing/predicting.
-        '''
 
     def __init__(self, model=None):
         # initializing placeholders
@@ -133,9 +107,9 @@ class Network:
 
 
             # attributes containing the input image and the output category.
-        self.input_image = np.zeros([28, 28])
-        self.output_digit = None
+        self.input_image = None
         self.processed_image = np.zeros([28, 28])
+        self.output_digit = 0
 
         self.lock = threading.Lock()
 
@@ -148,6 +122,10 @@ class Network:
         return tf.nn.max_pool(x, ksize=[1, 2, 3, 1],
                               strides=[1, 2, 2, 1],
                               padding='SAME')
+
+    def setCamera(self, cam):
+        self.cam = cam
+
 
     def train(self, model_path, training_dataset_path,
               validation_dataset_path, early_stopping,
@@ -369,18 +347,6 @@ class Network:
         print(latest_model)
         self.saver.restore(self.sess, latest_model)
 
-    def classify(self, img):
-        '''
-        Processes the given image img, returning the predicted label.
-        Arguments:
-            img (np.array): image to be classified
-        '''
-        img = img.reshape([1, 784])
-        output = self.sess.run(self.y, feed_dict={
-            self.x: img, self.keep_prob: 1.0})
-
-        return output
-
     def transformImage(self):
         ''' Transforms the image into a 28x28 pixel grayscale image and
         applies a sobel filter (both x and y directions).
@@ -399,32 +365,22 @@ class Network:
         im_edges = np.uint8(im_edges)
         self.processed_image = im_edges
 
-    def update(self):
-        self.output_digit = np.argmax(self.classify(self.processed_image))
 
+    def predict(self):
+        self.input_image = self.cam.get_image()
+
+        self.transformImage()
+
+        img = self.processed_image.reshape([1, 784])
+        output = self.sess.run(self.y, feed_dict={
+            self.x: img, self.keep_prob: 1.0})
+
+        self.output_digit = np.argmax(output)
 
 
     def test(self, test_dataset_path, output_matrix,
              is_training=False, train_acc=None, train_loss=None,
              val_acc=None, val_loss=None):
-        ''' Tests the network (it requires a previously loaded/trained
-        model on it), and saves the results on a .mat file.
-        Arguments:
-            test_dataset_path (str): path to the HDF5 dataset,
-                                     used for testing.
-            output_matrix (str): desired name for the output matrix
-                                 containing the results.
-            is_training (bool): flag to indicate that the test is done
-                                just at the end of a training.
-            [train_acc (array)]: optional vector containing the
-                                 training accuracy.
-            [train_loss (array)]: optional vector containing the
-                                  training loss.
-            [val_acc (array)]: optional vector containing the
-                               validation accuracy.
-            [val_loss (array)]: optional vector containing the
-                                validation loss.
-            '''
         print("ENTERING TO TEST")
         if test_dataset_path == '':
             if not self.mnist:

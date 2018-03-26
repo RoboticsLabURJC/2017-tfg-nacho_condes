@@ -12,7 +12,6 @@ import time
 import threading
 from datetime import datetime
 
-t_cycle = 20  # ms
 
 
 class ThreadCamera(threading.Thread):
@@ -21,6 +20,7 @@ class ThreadCamera(threading.Thread):
         ''' Threading class for Camera. '''
         self.cam = cam
         threading.Thread.__init__(self)
+        self.t_cycle = 50   # ms
 
     def run(self):
         ''' Updates the thread. '''
@@ -32,6 +32,8 @@ class ThreadCamera(threading.Thread):
             dt = end_time - start_time
             dtms = ((dt.days * 24 * 60 * 60 + dt.seconds) * 1000 +
                     dt.microseconds / 1000.0)
+            delta = max(self.t_cycle, dtms)
+            self.framerate = int(1000.0 / delta)
 
-            if(dtms < t_cycle):
-                time.sleep((t_cycle - dtms) / 1000.0)
+            if(dtms < self.t_cycle):
+                time.sleep((self.t_cycle - dtms) / 1000.0)

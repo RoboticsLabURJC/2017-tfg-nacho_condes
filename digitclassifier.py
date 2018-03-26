@@ -26,24 +26,54 @@ from Camera.camera import Camera
 from Camera.threadcamera import ThreadCamera
 from GUI.gui import GUI
 from GUI.threadgui import ThreadGUI
+from Network.network import Network
+from Network.threadnetwork import ThreadNetwork
+
+import config
+import comm
 
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 if __name__ == '__main__':
 
-    cam = Camera()
-    app = QtWidgets.QApplication(sys.argv)
-    window = GUI()
-    window.setCamera(cam)
-    window.setNetwork(cam.model_path)
-    window.show()
+    # YML parsing
+    try:
+        cfg = config.load(sys.argv[1])
+    except IndexError:
+        raise SystemExit('Missing YML file. Usage: python2 digitclassifier.py digitclassifier.yml')
 
-    # Threading camera
+    # Create camera proxy
+    jdrc = comm.init(cfg, 'DigitClassifier')
+    proxy = jdrc.getCameraClient('DigitClassifier.Camera')
+
+    # Parse network model
+    network_model_path = cfg.getNode()['DigitClassifier']['Model']
+
+    # Node creation
+    cam = Camera(proxy)
     t_cam = ThreadCamera(cam)
     t_cam.start()
+
+    network = Network(network_model_path)
+    network.setCamera(cam)
+    t_network = ThreadNetwork(network)
+    t_network.start()
+
+    app = QtWidgets.QApplication(sys.argv)
+    window = GUI()
+    window.setCamera(cam, t_cam)
+    window.setNetwork(network, t_network)
+    window.show()
 
     # Threading GUI
     t_gui = ThreadGUI(window)
     t_gui.start()
+
+    print("")
+    print("Requested timers:")
+    print("    Camera: %d ms" % (t_cam.t_cycle))
+    print("    GUI: %d ms" % (t_gui.t_cycle))
+    print("    Network: %d ms" % (t_network.t_cycle))
+    print("")
 
     sys.exit(app.exec_())

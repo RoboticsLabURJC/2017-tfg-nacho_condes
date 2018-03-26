@@ -18,53 +18,30 @@
 #
 #
 
-import sys
 import traceback
 import threading
 
 import cv2
 import numpy as np
-import comm
-import config
-
 
 class Camera:
 
-    def __init__(self):
+    def __init__(self, proxy):
         ''' Camera class gets images from live video and transform them
         in order to predict the digit in the image.
         '''
 
-        # Creation of the camera through the comm-ICE proxy.
-        try:
-            cfg = config.load(sys.argv[1])
-        except IndexError:
-            raise SystemExit('Error: Missing YML file. \n  Usage: python2 digitclassifier.py digitclassifier.yml')
-
-        jdrc = comm.init(cfg, 'DigitClassifier')
-
         self.lock = threading.Lock()
 
-        # Creation of the network, and load of the model into it.
-        self.model_path = cfg.getNode()['DigitClassifier']['Model']
 
         try:
-            
-            self.cam = jdrc.getCameraClient('DigitClassifier.Camera')
-            if self.cam:
-                self.im = self.cam.getImage()
-                self.im_height = self.im.height
-                self.im_width = self.im.width
-                print('Image size: {0}x{1} px'.format(
-                        self.im_width, self.im_height))
-            else:
-                print("Interface camera not connected")
 
+            self.cam = proxy
         except:
             traceback.print_exc()
             exit()
 
-    def getImage(self):
+    def get_image(self):
         ''' Gets the image from the webcam and returns the original
         image with a ROI draw over it and the transformed image that
         we're going to use to make the prediction.
@@ -72,9 +49,8 @@ class Camera:
         if self.cam:
             self.lock.acquire()
 
-            im = np.zeros((self.im_height, self.im_width, 3), np.uint8)
             im = np.frombuffer(self.im.data, dtype=np.uint8)
-            im.shape = self.im_height, self.im_width, 3
+            im.shape = self.im.height, self.im.width, 3
 
             cv2.rectangle(im, (218, 138), (422, 342), (0, 0, 255), 2)
 
@@ -88,14 +64,5 @@ class Camera:
             self.lock.acquire()
 
             self.im = self.cam.getImage()
-            self.im_height = self.im.height
-            self.im_width = self.im.width
 
             self.lock.release()
-
-    def classification(self, im):
-        ''' Calls the prediction method, and returns the digit
-        which the neural network yields.'''
-        prediction = self.network.classify(im).argmax()
-
-        return prediction

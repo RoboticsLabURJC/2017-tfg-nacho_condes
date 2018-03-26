@@ -5,7 +5,7 @@ DigitClassifier:
     Format: RGB8
     Topic: "/usb_cam/image_raw"
     Name: cameraA
-    
-  Model: "Net/mnist-model"
+
+  Model: "Network/mnist-model"
 
   NodeName: dl-digitclassifier
