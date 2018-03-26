@@ -7,7 +7,6 @@
 import h5py
 import numpy as np
 import matplotlib.pyplot as plt
-import random as rnd
 
 
 class HDF5Importer():
@@ -71,7 +70,7 @@ class HDF5Importer():
         batchImgs = self.data[indices]
         # Reshaping to the CNN format (28x28 -> 1x784)
         batchImgs = batchImgs.reshape([batchSize, 784])
-        
+
         batchLabels = self.labels[indices]
 
         return batchImgs, batchLabels
