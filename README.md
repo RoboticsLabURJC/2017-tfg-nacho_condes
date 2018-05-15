@@ -2,8 +2,17 @@
 # Final Degree Project (Nacho Condés)
 MediaWiki of this project available [here.](http://jderobot.org/Naxvm-tfg)
 
+# Requirements
+* You will need to install JdeRobot for this component to work ([installation guide here](https://jderobot.org/Installation)).
+* Make sure you already installed the `ros-kinetic-usb-cam`. You can easily install it via <code>apt</code> once you have already installed JdeRobot:
+`sudo apt install ros-kinetic-usb-cam`
+* All the necessary Python packages have been annotated for <code>pip</code> to install them automatically. To do so, run:
+`pip2 install -r requirements.txt`
+
 ## Follow Person (current stuff):
 A component which commands a Sony Evicam 100D to track a person with the use of Deep Learning (a Convolutional Neural Network implemented on TensorFlow or ~~Keras~~ (not yet)).
+
+__Video available soon!__
 
 ### How to execute:
 * Terminal 1:
@@ -29,7 +38,6 @@ __Available on [this release](https://github.com/RoboticsURJC-students/2017-tfg-
 
 
 Video example:
-
 
 [
 ![YouTube video](http://img.youtube.com/vi/x-OhWal38Ak/0.jpg)](http://www.youtube.com/watch?v=x-OhWal38Ak)
