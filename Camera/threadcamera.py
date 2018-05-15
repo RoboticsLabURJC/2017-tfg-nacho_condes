@@ -16,11 +16,15 @@ from datetime import datetime
 
 class ThreadCamera(threading.Thread):
 
+
+
     def __init__(self, cam):
         ''' Threading class for Camera. '''
+
+        self.t_cycle = 50      # ms
+
         self.cam = cam
         threading.Thread.__init__(self)
-        self.t_cycle = 50   # ms
 
     def run(self):
         ''' Updates the thread. '''
@@ -30,8 +34,9 @@ class ThreadCamera(threading.Thread):
             end_time = datetime.now()
 
             dt = end_time - start_time
-            dtms = ((dt.days * 24 * 60 * 60 + dt.seconds) * 1000 +
-                    dt.microseconds / 1000.0)
+            dtms = ((dt.days * 24 * 60 * 60 + dt.seconds) * 1000
+                + dt.microseconds / 1000.0)
+
             delta = max(self.t_cycle, dtms)
             self.framerate = int(1000.0 / delta)
 

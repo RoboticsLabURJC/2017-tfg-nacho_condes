@@ -1,60 +1,45 @@
 #
-# Created on Oct, 2017
+# Created on Jan, 2018
 #
 # @author: naxvm
 #
 # Class which abstracts a Camera from a proxy (created by ICE/ROS),
-# and provides the methods to keep it constantly updated. Also, it processes
-# it by using a Sobel edges filter, and delivers it to the neural network,
-# which returns the predicted digit.
-#
-#
-# Based on @nuriaoyaga code:
-# https://github.com/RoboticsURJC-students/2016-tfg-nuria-oyaga/blob/
-#     master/numberclassifier.py
-# and @dpascualhe's:
-# https://github.com/RoboticsURJC-students/2016-tfg-david-pascual/blob/
-#     master/digitclassifier.py
-#
+# and provides the methods to keep it constantly updated. Also, delivers it
+# to the neural network, which returns returns the same image with the
+# detected classes and scores, and the bounding boxes drawn on it.
 #
 
 import traceback
 import threading
-
-import cv2
 import numpy as np
 
 class Camera:
 
-    def __init__(self, proxy):
+    def __init__ (self, cam):
         ''' Camera class gets images from live video and transform them
         in order to predict the digit in the image.
         '''
 
+        self.cam = cam
         self.lock = threading.Lock()
 
+        if self.cam.hasproxy():
+            self.im = self.cam.getImage()
+            self.im_height = self.im.height
+            self.im_width = self.im.width
 
-        try:
+            print('Image size: {0}x{1} px'.format(
+                    self.im_width, self.im_height))
+        else:
+            raise SystemExit("Interface camera not connected")
 
-            self.cam = proxy
-        except:
-            traceback.print_exc()
-            exit()
 
-    def get_image(self):
-        ''' Gets the image from the webcam and returns the original
-        image with a ROI draw over it and the transformed image that
-        we're going to use to make the prediction.
-        '''
+    def getImage(self):
+        ''' Gets the image from the webcam and returns it. '''
         if self.cam:
-            self.lock.acquire()
-
+            im = np.zeros((self.im_height, self.im_width, 3), np.uint8)
             im = np.frombuffer(self.im.data, dtype=np.uint8)
-            im.shape = self.im.height, self.im.width, 3
-
-            cv2.rectangle(im, (218, 138), (422, 342), (0, 0, 255), 2)
-
-            self.lock.release()
+            im = np.reshape(im, (self.im_height, self.im_width, 3))
 
             return im
 
@@ -64,5 +49,7 @@ class Camera:
             self.lock.acquire()
 
             self.im = self.cam.getImage()
+            self.im_height = self.im.height
+            self.im_width = self.im.width
 
             self.lock.release()

@@ -14,13 +14,14 @@ from datetime import datetime
 
 
 
-
 class ThreadGUI(threading.Thread):
+
 
     def __init__(self, gui):
         ''' Threading class for GUI. '''
-        self.t_cycle = 25  # ms
 
+        self.t_cycle = 50  # ms
+        
         self.gui = gui
         threading.Thread.__init__(self)
 
@@ -31,8 +32,8 @@ class ThreadGUI(threading.Thread):
             self.gui.updGUI.emit()
             end_time = datetime.now()
             dt = end_time - start_time
-            dtms = ((dt.days * 24 * 60 * 60 + dt.seconds) * 1000 +
-                    dt.microseconds / 1000.0)
+            dtms = ((dt.days * 24 * 60 * 60 + dt.seconds) * 1000
+                + dt.microseconds / 1000.0)
 
             if(dtms < self.t_cycle):
                 time.sleep((self.t_cycle - dtms) / 1000.0)
