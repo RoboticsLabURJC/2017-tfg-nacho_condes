@@ -31,6 +31,7 @@ class ThreadNetwork(threading.Thread):
             start_time = datetime.now()
             if self.is_activated:
                 self.network.predict()
+                self.network.moveCam()
             end_time = datetime.now()
 
             dt = end_time - start_time

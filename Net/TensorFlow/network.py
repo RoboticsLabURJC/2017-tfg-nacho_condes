@@ -68,10 +68,16 @@ class TrackingNetwork():
         self.original_height = cam.im_height
         self.original_width = cam.im_width
 
+        self.center_coords = (self.original_width/2, self.original_height/2)
+
+        # Epsilon defined on px, to avoid
+        self.epsilon = 30
+
+
 
     def setMotors(self, motors):
         self.motors = motors
-        self.previous_pos = [0, 0]
+        self.limits = self.motors.getLimits()
 
 
     def predict(self):
@@ -96,12 +102,6 @@ class TrackingNetwork():
         for pred in predictions:
             self.predictions.append(self.classes[pred])
 
-        self.moveCam()
-        #import time
-        #time.sleep(10)
-
-
-
 
     def moveCam(self):
         try:
@@ -112,45 +112,40 @@ class TrackingNetwork():
             box = [0, 0, 0, 0]
 
         box_center = ((box[2] + box[0]) / 2, (box[1] + box[3]) / 2)
-        true_center = (self.original_width / 2, self.original_height / 2)
-        # How much we will move in px (inverted because of motors syntax)
-        if index is None:
-            delta_px = [0, 0]
-        else:
-            delta_px = np.subtract(true_center, box_center)
+        current_pos = self.motors.motors.data
+        current_pos = (current_pos.pan, current_pos.tilt)
+        if index is not None:
+            print('---Person detected, centered on (%d, %d)---' % (box_center[0], box_center[1]))
+            print('+++Current position: (%d, %d)+++' % (current_pos[0], current_pos[1]))
 
-        delta_px[0] = -delta_px[0]
-        
-        # Transform it to a percentage (w.r.t. the center)
-        delta_pct = np.true_divide(delta_px, [self.original_width/2, self.original_height/2])
+            # Horizontal delta:
+            if abs(box_center[0] - self.center_coords[0]) > self.epsilon:
+                if box_center[0] > self.center_coords[0]:
+                    print(" Go right.")
+                    h_delta = 2
+                else:
+                    print(" Go left.")
+                    h_delta = -2
+            else:
+                h_delta = 0
 
-        delta = delta_pct * [101, 25]
+            # Vertical delta
+            if abs(box_center[1] - self.center_coords[1]) > self.epsilon:
 
-        [curr_pan, curr_tilt] = [self.motors.motors.data.pan, self.motors.motors.data.tilt]
+                if box_center[1] > self.center_coords[1]:
+                    v_delta = -2
+                    print(" Go down.")
+                else:
+                    v_delta = 2
+                    print(" Go up.")
+            else:
+                v_delta = 0
 
-        [new_pan, new_tilt] = [curr_pan, curr_tilt] + delta
 
-        print new_pan, new_tilt
 
-        self.lock.acquire()
-        self.motors.setPTMotorsData(new_pan, new_tilt, 1, 1)
-        self.lock.release()
+            new_pos = (current_pos[0] + h_delta, current_pos[1] + v_delta)
+            print("    Sending:")
+            print("       Pan:  %d" %(new_pos[0]))
+            print("       Tilt: %d" %(new_pos[1]))
 
-        import time
-
-        time.sleep(5)
-        '''
-        delta = norm_center * [101, 25] # map into the motors range
-        print delta
-        PT_position = self.previous_pos + delta.astype(int)
-
-        print(PT_position)
-        print('------------------')
-
-        if index is None:
-            PT_position = [0, 0]
-
-        #self.motors.setPTMotorsData(PT_position[0], -PT_position[1], 1, 1)
-
-        self.previous_pos = PT_position
-        '''
+            self.motors.setPTMotorsData(new_pos[0], new_pos[1], self.limits.maxPanSpeed, self.limits.maxTiltSpeed)
