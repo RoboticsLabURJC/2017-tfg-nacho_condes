@@ -15,6 +15,12 @@ A component which commands a Sony Evicam 100D to track a person with the use of 
 __Video available soon!__
 
 ### How to execute:
+Make sure that you execute `sudo chmod 777 /dev/ttyUSB0` when you connect the PT motors (EVI connector) to your computer (`evicam_driver` needs this to be this way, otherwise it will raise an _EBADF_ error when trying to access the device).
+
+Also, check which of your computer video devices corresponds to the PT camera interface. You can perform this launching `ls /dev`. You will see the devices related to your computer. `/dev/video0` is tipically your laptop webcam (or default camera). The PT camera will correspond to the next device, which can stand for `/dev/video1`, `/dev/video2`, etc. This is due to the order of the USB connections. You will have to change the value of the `usb_cam-test.launch` file to match to this device no (line 2):
+  `<param name="video_device" value="/dev/your_video_device" />`
+
+Once this is done, you are ready to rock!
 * Terminal 1:
 `$ roslaunch usb_cam-test.launch`
 * Terminal 2:
