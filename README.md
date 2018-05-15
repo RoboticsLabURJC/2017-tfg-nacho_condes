@@ -10,7 +10,7 @@ MediaWiki of this project available [here.](http://jderobot.org/Naxvm-tfg)
 `pip2 install -r requirements.txt`
 
 ## Follow Person (current stuff):
-A component which commands a Sony Evicam 100D to track a person with the use of Deep Learning (a Convolutional Neural Network implemented on TensorFlow or ~~Keras~~ (not yet)).
+A component which commands a Sony Evicam D100P to track a person with the use of Deep Learning (a Convolutional Neural Network implemented on TensorFlow or ~~Keras~~ (not yet)).
 
 __Video available soon!__
 
