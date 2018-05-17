@@ -89,6 +89,7 @@ if __name__ == '__main__':
     print("    Camera: %d ms" % (t_cam.t_cycle))
     print("    GUI: %d ms" % (t_gui.t_cycle))
     print("    Network: %d ms" % (t_network.t_cycle))
+    print("    Motors: %d ms" % (t_motors.t_cycle))
     print("")
 
     sys.exit(app.exec_())

@@ -6,13 +6,16 @@ class Motors():
 
     def setNetwork(self, network):
         self.network = network
-        self.center_coords = self.network.center_coords
+        self.center_coords = (self.network.original_width/2, self.network.original_height/2)
         self.epsilon = 60
 
     def moveCam(self):
         try:
             index = self.network.predictions.index('person')
             box = self.network.boxes[index]
+        except AttributeError:
+            index = None
+            box = [0, 0, 0, 0]
         except ValueError:
             index = None
             box = [0, 0, 0, 0]

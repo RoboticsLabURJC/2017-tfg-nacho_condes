@@ -10,9 +10,12 @@ MediaWiki of this project available [here.](http://jderobot.org/Naxvm-tfg)
 `pip2 install -r requirements.txt`
 
 ## Follow Person (current stuff):
-A component which commands a Sony Evicam D100P to track a person with the use of Deep Learning (a Convolutional Neural Network implemented on TensorFlow or ~~Keras~~ (not yet)).
+A component which commands a Sony Evicam D100P to track a person with the use of Deep Learning (a Convolutional Neural Network implemented on TensorFlow or Keras (functional, but not usable, due to its slowness: it's 8 times slower than TensorFlow)).
 
 __Video available soon!__
+
+### Available detection models:
+You can download any of [these pre-trained models](http://jderobot.org/store/deeplearning-networks/TensorFlow/) to embed them on the component. Just download the model (<code>pb</code> file for TF, <code>h5</code> for Keras), place it on the <code>Network/[desired framework]</code> directory, and specify its name on the <code>followperson.yml</code> file (<code>Network.Model</code> node of the YML tree).
 
 ### How to execute:
 Make sure that you execute `sudo chmod 777 /dev/ttyUSB0` when you connect the PT motors (EVI connector) to your computer (`evicam_driver` needs this to be this way, otherwise it will raise an _EBADF_ error when trying to access the device).
