@@ -3,7 +3,6 @@ import numpy as np
 import tarfile
 import os
 
-from threading import Lock
 
 from Net.utils import label_map_util
 
@@ -49,8 +48,6 @@ class TrackingNetwork():
         self.boxes = []
         self.scores = []
         self.predictions = []
-
-        self.lock = Lock()
 
 
         # Dummy initialization (otherwise it takes longer then)
@@ -102,7 +99,7 @@ class TrackingNetwork():
         for pred in predictions:
             self.predictions.append(self.classes[pred])
 
-
+'''
     def moveCam(self):
         try:
             index = self.predictions.index('person')
@@ -149,3 +146,4 @@ class TrackingNetwork():
             print("       Tilt: %d" %(new_pos[1]))
 
             self.motors.setPTMotorsData(new_pos[0], new_pos[1], self.limits.maxPanSpeed, self.limits.maxTiltSpeed)
+'''

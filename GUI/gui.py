@@ -101,7 +101,6 @@ class GUI(QtWidgets.QWidget):
 
         self.t_network = t_network
 
-
     def update(self):
         ''' Updates the GUI for every time the thread change '''
         # We get the original image and display it.

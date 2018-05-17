@@ -26,6 +26,8 @@ from Camera.threadcamera import ThreadCamera
 from GUI.gui import GUI
 from GUI.threadgui import ThreadGUI
 from Net.threadnetwork import ThreadNetwork
+from Motors.threadmotors import ThreadMotors
+from Motors.motors import Motors
 
 import config
 import comm
@@ -42,7 +44,7 @@ if __name__ == '__main__':
 
     jdrc = comm.init(cfg, 'FollowPerson')
     cam_proxy = jdrc.getCameraClient('FollowPerson.Camera')
-    motors = jdrc.getPTMotorsClient('FollowPerson.PTMotors')
+    PTMotors = jdrc.getPTMotorsClient('FollowPerson.PTMotors')
 
 
     net_prop = cfg.getProperty('Network')
@@ -63,9 +65,13 @@ if __name__ == '__main__':
 
     network = TrackingNetwork(net_prop)
     network.setCamera(cam)
-    network.setMotors(motors)
     t_network = ThreadNetwork(network)
     t_network.start()
+
+    motors = Motors(PTMotors)
+    motors.setNetwork(network)
+    t_motors = ThreadMotors(motors)
+    t_motors.start()
 
     app = QtWidgets.QApplication(sys.argv)
     window = GUI()
