@@ -29,7 +29,7 @@ class ThreadMotors(threading.Thread):
         while(True):
             start_time = datetime.now()
             if self.is_activated:
-                self.motors.moveCam()
+                self.motors.move()
             end_time = datetime.now()
 
             dt = end_time - start_time

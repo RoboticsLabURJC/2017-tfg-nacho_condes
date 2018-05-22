@@ -1,0 +1,34 @@
+FollowPerson:
+  Device: kobuki
+
+  Motors:
+    Server: ROS # Deactivate, Ice, ROS
+    Proxy: "Motors:default -h localhost -p 9001"
+    Topic: "/mobile_base/commands/velocity"
+    Name: kobukiMotors
+    maxV: 3
+    maxW: 0.7
+
+  Camera:
+    Server: Ice
+    Proxy: "cameraA:default -h localhost -p 9999"
+    Format: RGB8
+    Topic: "/camera/rgb/image_raw"
+    Name: cameraA
+    Fps: 30
+
+  Depth:
+    Server: Ice
+    Proxy: "cameraB:tcp -h localhost -p 9999"
+    Format: RGB8
+    Topic: "/camera/depth_registered/image_raw"
+    Name: cameraB
+    Fps: 30
+
+  NodeName: FollowPerson
+
+Network:
+  Framework: TensorFlow  # Currently supported: "Keras" or "TensorFlow"
+  #Model: VGG_512_512_coco.h5
+  Model: ssd_mobilenet_v2_coco_2018_03_29.pb
+  Dataset: COCO # available: VOC, COCO, KITTI, OID, PET

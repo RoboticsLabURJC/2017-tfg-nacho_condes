@@ -18,6 +18,8 @@
 
 import sys
 import signal
+import config
+import comm
 
 from PyQt5 import QtWidgets
 
@@ -27,10 +29,8 @@ from GUI.gui import GUI
 from GUI.threadgui import ThreadGUI
 from Net.threadnetwork import ThreadNetwork
 from Motors.threadmotors import ThreadMotors
-from Motors.motors import Motors
 
-import config
-import comm
+
 
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 
@@ -40,13 +40,25 @@ if __name__ == '__main__':
     try:
         cfg = config.load(sys.argv[1])
     except IndexError:
-        raise SystemExit('Missing YML file. Usage: python2 followperson.py followperson.yml')
+        raise SystemExit('Missing YML file. Usage: python2 followperson.py [your_config_file].yml')
 
     jdrc = comm.init(cfg, 'FollowPerson')
+    #cam_proxy = jdrc.getCameraClient('FollowPerson.Camera')
     cam_proxy = jdrc.getCameraClient('FollowPerson.Camera')
-    PTMotors = jdrc.getPTMotorsClient('FollowPerson.PTMotors')
+
+    # Device (PTZ/Kobuki) parsing:
+    device_type = cfg.getProperty('FollowPerson.Device')
+    if device_type.lower() == 'kobuki':
+        from Motors.Kobuki.motors import Motors
+        motors_proxy = jdrc.getMotorsClient('FollowPerson.Motors')
+    elif device_type.lower() == 'ptz':
+        from Motors.PTZ.motors import Motors
+        motors_proxy = jdrc.getPTMotorsClient('FollowPerson.PTMotors')
+    else:
+        raise SystemExit(('%s not supported! Supported frameworks: Kobuki, PTZ') % (device_type))
 
 
+    # Network (TensorFlow/Keras) parsing:
     net_prop = cfg.getProperty('Network')
     framework = net_prop['Framework']
     if framework.lower() == 'tensorflow':
@@ -68,7 +80,7 @@ if __name__ == '__main__':
     t_network = ThreadNetwork(network)
     t_network.start()
 
-    motors = Motors(PTMotors)
+    motors = Motors(motors_proxy)
     motors.setNetwork(network)
     t_motors = ThreadMotors(motors)
     t_motors.start()

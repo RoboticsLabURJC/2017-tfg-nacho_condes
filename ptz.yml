@@ -1,11 +1,11 @@
 FollowPerson:
-
+  Device: ptz
   PTMotors:
     Server: 1 # 0 -> Deactivate, 1 -> Ice , 2 -> ROS (Not supported)
     Proxy: "PanTilt:default -h localhost -p 9977"
     Topic: "/usb_cam/PTMotors"
     Name: FollowPersonPTMotors
-  
+
   Camera:
     Server: 2 # 0 -> Deactivate, 1 -> Ice , 2 -> ROS
     Proxy: "cameraA:default -h localhost -p 9999"
