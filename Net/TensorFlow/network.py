@@ -65,6 +65,8 @@ class TrackingNetwork():
         self.original_height = cam.im_height
         self.original_width = cam.im_width
 
+    def setDepth(self, depth):
+        self.depth = depth
 
     def setMotors(self, motors):
         self.motors = motors

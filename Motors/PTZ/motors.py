@@ -4,14 +4,20 @@ class Motors():
         self.motors = motors
         self.limits = self.motors.getLimits()
 
+        self.last_center = (0, 0)
+        self.threshold = 60
+
     def setNetwork(self, network):
         self.network = network
         self.center_coords = (self.network.original_width/2, self.network.original_height/2)
-        self.epsilon = 60
 
     def move(self):
         try:
             index = self.network.predictions.index('person')
+            # predictions are sorted in score order
+            # .index returns the lowest position
+            # hence, we will keep the most confident bounding box
+
             box = self.network.boxes[index]
         except AttributeError:
             index = None
@@ -28,7 +34,7 @@ class Motors():
             print('+++Current position: (%d, %d)+++' % (current_pos[0], current_pos[1]))
 
             # Horizontal delta:
-            if abs(box_center[0] - self.center_coords[0]) > self.epsilon:
+            if abs(box_center[0] - self.center_coords[0]) > self.threshold:
                 if box_center[0] > self.center_coords[0]:
                     print(" Go right.")
                     h_delta = 2
@@ -39,7 +45,7 @@ class Motors():
                 h_delta = 0
 
             # Vertical delta
-            if abs(box_center[1] - self.center_coords[1]) > self.epsilon:
+            if abs(box_center[1] - self.center_coords[1]) > self.threshold:
 
                 if box_center[1] > self.center_coords[1]:
                     v_delta = -2
@@ -58,3 +64,6 @@ class Motors():
             print("       Tilt: %d" %(new_pos[1]))
 
             self.motors.setPTMotorsData(new_pos[0], new_pos[1], self.limits.maxPanSpeed, self.limits.maxTiltSpeed)
+            self.last_center = box_center
+        else: # there are no people in the image
+            print("NOT DETECTED")

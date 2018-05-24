@@ -81,7 +81,7 @@ class GUI(QtWidgets.QWidget):
         self.logo_label.show()
 
         self.font = cv2.FONT_HERSHEY_SIMPLEX
-        self.scale = 0.7
+        self.scale = 0.6
 
 
     def setCamera(self, cam, t_cam):
@@ -140,26 +140,105 @@ class GUI(QtWidgets.QWidget):
 
         for index in range(len(detection_classes)):
             _class = detection_classes[index]
-            score = detection_scores[index]
-            rect = detection_boxes[index]
-            xmin = rect[0]
-            ymin = rect[1]
-            xmax = rect[2]
-            ymax = rect[3]
-            cv2.rectangle(image_np, (xmin, ymax), (xmax, ymin), (0,255,0), 3)
+            if _class == 'person':
+                score = detection_scores[index]
+                rect = detection_boxes[index]
+                xmin = rect[0]
+                ymin = rect[1]
+                xmax = rect[2]
+                ymax = rect[3]
+                cv2.rectangle(image_np, (xmin, ymax), (xmax, ymin), (0,255,0), 2)
 
-            label = "{0} ({1} %)".format(_class, int(score*100))
-            [size, base] = cv2.getTextSize(label, self.font, self.scale, 2)
+                label = "{0} ({1} %)".format(_class, int(score*100))
+                [size, base] = cv2.getTextSize(label, self.font, self.scale, 1)
 
-            points = np.array([[[xmin, ymin + base],
-                                [xmin, ymin - size[1]],
-                                [xmin + size[0], ymin - size[1]],
-                                [xmin + size[0], ymin + base]]], dtype=np.int32)
-            cv2.fillPoly(image_np, points, (0, 0, 0))
-            cv2.putText(image_np, label, (xmin, ymin), self.font, self.scale, (255, 255, 255), 2)
+                points = np.array([[[xmin, ymin + base],
+                                    [xmin, ymin - size[1]],
+                                    [xmin + size[0], ymin - size[1]],
+                                    [xmin + size[0], ymin + base]]], dtype=np.int32)
+                cv2.fillPoly(image_np, points, (0, 0, 0))
+                cv2.putText(image_np, label, (xmin, ymin), self.font, self.scale, (255, 255, 255), 2)
 
         im = QtGui.QImage(image_np.data, image_np.shape[1], image_np.shape[0],
                           QtGui.QImage.Format_RGB888)
 
         im_drawn = im.scaled(self.im_label.size())
         self.im_pred_label.setPixmap(QtGui.QPixmap.fromImage(im_drawn))
+
+
+
+
+class DepthGUI(GUI):
+    ''' This class inherites all the standard GUI behavioral, except the
+    configuration to additionally show the depth image from the XTION sensor. '''
+
+    def __init__(self):
+        # Standard initialization
+        GUI.__init__(self)
+        # Now, we add/move labels to display the depth image
+        self.resize(1300, 700)
+        self.im_label.move(25, 150)
+
+        self.video_framerate_label.move(220, 500)
+
+        self.im_pred_label.resize(450, 320)
+        self.im_pred_label.move(780, 10)
+        self.predict_framerate_label.move(960, 320)
+
+        # New label (for the depth map)
+        self.depth_label = QtWidgets.QLabel(self)
+        self.depth_label.move(780, 370)
+        self.depth_label.resize(450, 320)
+        self.depth_label.show()
+
+    def setDepth(self, depth, t_depth):
+        self.depth = depth
+        self.t_depth = t_depth
+
+
+    def renderModifiedImage(self):
+        GUI.renderModifiedImage(self)
+        image_np = np.copy(self.depth_prev)
+
+        detection_boxes = self.network.boxes
+        detection_classes = self.network.predictions
+        detection_scores = self.network.scores
+
+        for index in range(len(detection_classes)):
+            _class = detection_classes[index]
+            if _class == 'person':
+                score = detection_scores[index]
+                rect = detection_boxes[index]
+                xmin = rect[0]
+                ymin = rect[1]
+                xmax = rect[2]
+                ymax = rect[3]
+                cv2.rectangle(image_np, (xmin, ymax), (xmax, ymin), (0,255,0), 2)
+
+                label = "{0} ({1} %)".format(_class, int(score*100))
+                [size, base] = cv2.getTextSize(label, self.font, self.scale, 1)
+
+                points = np.array([[[xmin, ymin + base],
+                                    [xmin, ymin - size[1]],
+                                    [xmin + size[0], ymin - size[1]],
+                                    [xmin + size[0], ymin + base]]], dtype=np.int32)
+                cv2.fillPoly(image_np, points, (0, 0, 0))
+                cv2.putText(image_np, label, (xmin, ymin), self.font, self.scale, (255, 255, 255), 2)
+
+        im = QtGui.QImage(image_np.data, image_np.shape[1], image_np.shape[0],
+                          QtGui.QImage.Format_RGB888)
+
+        im_drawn = im.scaled(self.im_label.size())
+        self.depth_label.setPixmap(QtGui.QPixmap.fromImage(im_drawn))
+
+    def update(self):
+        depth_total = self.depth.getImage()
+        layers = cv2.split(depth_total)
+        self.depth_prev = cv2.cvtColor(layers[0], cv2.COLOR_GRAY2BGR)
+
+        depth = QtGui.QImage(self.depth_prev, self.depth_prev.shape[0], self.depth_prev.shape[1],
+                             QtGui.QImage.Format_RGB888)
+        self.depth_scaled = depth.scaled(self.depth_label.size())
+        self.depth_label.setPixmap(QtGui.QPixmap.fromImage(self.depth_scaled))
+
+        GUI.update(self)
