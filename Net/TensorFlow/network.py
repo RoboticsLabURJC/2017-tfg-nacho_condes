@@ -67,11 +67,11 @@ class TrackingNetwork():
 
     def setDepth(self, depth):
         self.depth = depth
-
+    '''
     def setMotors(self, motors):
         self.motors = motors
         self.limits = self.motors.getLimits()
-
+    '''
 
     def predict(self):
         input_image = self.cam.getImage()

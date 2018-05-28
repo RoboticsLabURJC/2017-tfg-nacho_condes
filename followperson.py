@@ -56,6 +56,7 @@ if __name__ == '__main__':
         motors_proxy = jdrc.getMotorsClient('FollowPerson.Motors')
         # PT motors for EVI camera
     elif device_type.lower() == 'ptz':
+        from GUI.gui import GUI as GUIClass
         from Motors.PTZ.motors import Motors
         motors_proxy = jdrc.getPTMotorsClient('FollowPerson.PTMotors')
     else:
@@ -91,6 +92,7 @@ if __name__ == '__main__':
     motors = Motors(motors_proxy)
     motors.setNetwork(network)
     t_motors = ThreadMotors(motors)
+    window.setMotors(motors, t_motors)
     t_motors.start()
 
 

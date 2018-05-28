@@ -30,6 +30,12 @@ class ThreadMotors(threading.Thread):
             start_time = datetime.now()
             if self.is_activated:
                 self.motors.move()
+            else:
+                try:
+                    self.motors.motors.sendW(0)
+                    self.motors.motors.sendVX(0)
+                except AttributeError:
+                    pass # when PTZ instead of turtlebot
             end_time = datetime.now()
 
             dt = end_time - start_time

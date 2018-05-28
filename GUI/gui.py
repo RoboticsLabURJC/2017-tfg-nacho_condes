@@ -101,6 +101,12 @@ class GUI(QtWidgets.QWidget):
 
         self.t_network = t_network
 
+
+    def setMotors(self, motors, t_motors):
+        self.motors = motors
+        self.t_motors = t_motors
+
+
     def update(self):
         ''' Updates the GUI for every time the thread change '''
         # We get the original image and display it.
@@ -120,6 +126,7 @@ class GUI(QtWidgets.QWidget):
 
     def toggleNetwork(self):
         self.t_network.toggle()
+        self.t_motors.toggle()
 
         if self.t_network.is_activated:
             self.button_cont_detection.setStyleSheet('QPushButton {color: green;}')
@@ -141,8 +148,12 @@ class GUI(QtWidgets.QWidget):
         for index in range(len(detection_classes)):
             _class = detection_classes[index]
             if _class == 'person':
-                score = detection_scores[index]
-                rect = detection_boxes[index]
+                try:
+                    score = detection_scores[index]
+                    rect = detection_boxes[index]
+                except:
+                    rect = [0, 0, 0, 0]
+                    print('EXCEPTED')
                 xmin = rect[0]
                 ymin = rect[1]
                 xmax = rect[2]
@@ -183,7 +194,7 @@ class DepthGUI(GUI):
 
         self.im_pred_label.resize(450, 320)
         self.im_pred_label.move(780, 10)
-        self.predict_framerate_label.move(960, 320)
+        self.predict_framerate_label.move(980, 320)
 
         # New label (for the depth map)
         self.depth_label = QtWidgets.QLabel(self)
@@ -194,6 +205,11 @@ class DepthGUI(GUI):
     def setDepth(self, depth, t_depth):
         self.depth = depth
         self.t_depth = t_depth
+
+
+    def setMotors(self, motors, t_motors):
+        self.motors = motors
+        self.t_motors = t_motors
 
 
     def renderModifiedImage(self):
@@ -235,6 +251,7 @@ class DepthGUI(GUI):
         depth_total = self.depth.getImage()
         layers = cv2.split(depth_total)
         self.depth_prev = cv2.cvtColor(layers[0], cv2.COLOR_GRAY2BGR)
+
 
         depth = QtGui.QImage(self.depth_prev, self.depth_prev.shape[0], self.depth_prev.shape[1],
                              QtGui.QImage.Format_RGB888)
