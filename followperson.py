@@ -91,6 +91,8 @@ if __name__ == '__main__':
 
     motors = Motors(motors_proxy)
     motors.setNetwork(network)
+    if device_type.lower() == 'kobuki':
+        motors.setDepth(depth)
     t_motors = ThreadMotors(motors)
     window.setMotors(motors, t_motors)
     t_motors.start()

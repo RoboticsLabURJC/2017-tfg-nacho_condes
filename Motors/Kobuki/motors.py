@@ -4,77 +4,45 @@ import rospy
 from kobuki_msgs.msg import Sound
 from time import sleep
 from datetime import datetime
-import matplotlib.pyplot as plt
-
+from Motors.Kobuki.pid_motors import PIDMotors
 from cprint import *
 
-class PID:
-    def __init__(self, Kc, Ki, Kd, K_loss, scaling_factor, limiter, prev_pct):
-        self.Kc = Kc
-        self.Ki = Ki
-        self.Kd = Kd
-        self.K_loss = K_loss
-        self.scaling_factor = scaling_factor
-        self.prev_error = 0
-        self.cum_error = 0
-        self.limiter = limiter
-        # To avoid abrupt stops, we combine with the previous input
-        self.prev_pct = prev_pct
-
-    def resetCounter(self):
-        ''' Reset the cumulative error when the target is in range. '''
-        self.cum_error = 0
-
-    def compute_response(self, error, detail=False):
-        # Error "echo" to soften output
-        error = error + self.prev_pct * self.prev_error
-        P = self.Kc * error
-        I = self.Ki * (error + self.cum_error)
-        D = self.Kd * (error - self.prev_error)
-        #response = self.scaling_factor * (P + I + D)
-        response = P + I + D
-        if detail:
-            cprint.ok("    P >> %.3f" % (P))
-            cprint.ok("    I >> %.3f" % (I))
-            cprint.ok("    D >> %.3f" % (D))
-        ''' Current error storage... '''
-        self.prev_error = error
-        self.cum_error += error
-
-        scaled_response = response * self.scaling_factor
-        if scaled_response > self.limiter:
-            scaled_response = self.limiter
-
-        return scaled_response
-
-    def loss_response(self, last_error=0):
-        response = self.scaling_factor * self.K_loss * last_error
-        return response
 
 class Motors():
+    ''' Class to process the error computed from the RGB and depth images, and send commands,
+    which will be intelligently interpreted. '''
 
     def __init__(self, motors):
         self.motors = motors
-
-        self.w_PID = PID(Kc=2,
-                         Ki=1,
+        # PID controllers:
+        self.w_PID = PIDMotors(
+                         func=self.motors.sendW,
+                         Kc=7,
+                         Ki=0.5,
                          Kd=10,
-                         K_loss=10,
+                         K_loss=1,
                          scaling_factor=0.0003,
-                         limiter=1,
-                         prev_pct = 0.7)
+                         limiter=1)
 
-        self.v_PID = PID(Kc=3,
-                         Ki=2,
-                         Kd=10,
+        self.v_PID = PIDMotors(
+                         func=self.motors.sendVX,
+                         Kc=2,
+                         Ki=0.1,
+                         Kd=4,
                          K_loss=0,
-                         scaling_factor=0.0001,
-                         limiter=0.5,
-                         prev_pct = 0.7)
+                         scaling_factor=0.003,
+                         limiter=0.5)
 
-        self.w_threshold = 70
-        self.v_thresholds = [30, 50]
+        # Parameters for error processing:
+        self.w_center = 0
+        self.w_margin = 60
+
+        self.v_center = 40
+        self.v_margin = 15
+
         self.last_center = [0, 0]
+
+        # Status flags:
         self.initial = True
         self.can_sound = True
         self.lost = True
@@ -89,7 +57,11 @@ class Motors():
         self.network = network
         self.center_coords = (self.network.original_width/2, self.network.original_height/2)
 
+    def setDepth(self, depth):
+        self.depth = depth
+
     def estimateDistance(self, person):
+        ''' Given a depth bounding box, estimate the distance to the person which is inside of it. '''
         height, width = person.shape
         # Firstly, we crop the 10% outer part of the box
         vert_crop, horz_crop = [height / 10, width / 10]
@@ -104,74 +76,88 @@ class Motors():
 
         grid = np.meshgrid(v_grid, h_grid)
         # We sample the depth map
-        try:
-            samples = person[grid]
-        except Exception as e:
-            cprint.fatal(e)
-            samples = 0
+        samples = person[grid]
         median = np.median(samples)
 
-        # Returning also the grid, to be able to draw it on the depth image
+        # Returning also the grid, to be able to draw it on the depth image (TODO)
         return median, grid
 
     def move(self):
+        ''' Method called on each iteration. Processes the error and moves the robot. '''
+        print("")
         try:
             index = self.network.predictions.index('person')
+            box = self.network.boxes[index]
             # predictions are sorted in score order
             # .index returns the lowest position
             # hence, we will keep the most confident bounding box
-            box = self.network.boxes[index]
-        except AttributeError:
-            index = None
-            box = [0, 0, 0, 0]
         except ValueError:
             index = None
             box = [0, 0, 0, 0]
+
         if index is not None: # Found somebody
-            cprint.info('---Person detected---')
+            cprint.info('           ---Person detected---')
+            '''
             ##################################################
             #################### DISTANCE ####################
             ##################################################
-            depth_total = self.network.depth.getImage()
+            depth_total = self.depth.getImage()
             depth, _, _ = cv2.split(depth_total)
-            self.depth = cv2.cvtColor(depth, cv2.COLOR_GRAY2BGR)
+            self.depth_img = cv2.cvtColor(depth, cv2.COLOR_GRAY2BGR)
 
             # We crop the person, and compute its depth
             person_slice = depth[box[1]:box[3], box[0]:box[2]]
+            try:
+                distance, grid = self.estimateDistance(person_slice)
+            except Exception as e:
+                cprint.fatal(e)
+                distance = self.v_center
 
-            distance, grid = self.estimateDistance(person_slice)
-            if distance > self.v_thresholds[1]:
-                vx = self.v_PID.compute_response(distance)
-                cprint.warn('  Distance: %d px (too far) == VX: %.3f' % (distance, vx))
-                self.motors.sendVX(vx)
-            elif distance < self.v_thresholds[0] and distance > 0:
-                vx = self.v_PID.compute_response(1000/distance, True)
-                cprint.warn('  Distance: %d px (too near) == VX: %.3f' % (distance, -vx))
-                self.motors.sendVX(-vx)
+            error = distance - self.v_center
+
+            if error < -self.v_margin:
+                # Too far
+                v = self.v_PID.processError(error)
+                cprint.warn('  Distance: %d px (too near) >> VX = %.3f m/s' % (distance, v))
+
+            elif error > self.v_margin:
+                # Too near
+                v = self.v_PID.processError(error)
+                cprint.warn('  Distance: %d px (too far) >> VX = %.3f m/s' % (distance, v))
+
             else:
+                # Inside range (OK)
                 cprint.ok('  Distance: %d px (under control)' % (distance))
-                self.v_PID.resetCounter()
-                v = self.v_PID.compute_response(0)
-                self.motors.sendVX(v)
-
+                self.v_PID.resetError()
+                self.v_PID.brake()
+            '''
 
             ###################################################
             ###################### ANGLE ######################
             ###################################################
             box_center = ((box[2] + box[0]) / 2, (box[1] + box[3]) / 2)
+            # Compute the horizontal error between the centers (image vs bounding box)
             h_error = self.center_coords[0] - box_center[0]
-            if abs(h_error) > self.w_threshold:
-                w = self.w_PID.compute_response(h_error, True)
 
-                cprint.warn('  Angle: %d px == W: %.3f' % (h_error, w))
-                self.motors.sendW(w)
+            if abs(h_error) > self.w_margin:
+                # Turning...
+                w = self.w_PID.processError(h_error, verbose=True)
+                if w < 0:
+                    dir = 'right'
+                else:
+                    dir = 'left'
+
+                cprint.warn('  Angle: %d px >> Turning %s (w: %.3f r/s)' % (h_error, dir, w))
             else:
+                # Inside the angle margin (OK)
                 cprint.ok('  Angle: %d px (under control)' % (h_error))
-                self.w_PID.resetCounter()
-                v = self.v_PID.compute_response(0)
-                self.motors.sendW(v)
+                self.w_PID.resetError()
+                self.w_PID.brake()
 
+            # Updating parameters for next iteration
             self.last_center = box_center
+
+
             # A person was already detected in the past.
             self.initial = False
             self.can_sound = True
@@ -180,11 +166,10 @@ class Motors():
                 self.sound_publisher.publish(Sound.RECHARGE)
                 self.lost = False
 
-
         elif not self.initial: # Person lost
-            last_x = self.last_center[0]
             self.lost = True
 
+            # Beeps from the kobuki
             if self.can_sound:
                 self.sound_publisher.publish(Sound.BUTTON)
                 self.can_sound = False
@@ -194,15 +179,16 @@ class Motors():
                 if elapsed.seconds >= 2:
                     self.can_sound = True
 
-            h_loss = self.center_coords[0] - last_x
-            w = self.w_PID.loss_response(h_loss)
-            v = self.v_PID.loss_response()
-
+            # Slowly turn on the last known direction
+            w = self.w_PID.lostResponse()
+            # Stops the robot (K_loss = 0)
+            v = self.v_PID.lostResponse()
             if w < 0:
-                cprint.fatal("  Person lost. Turning right (w = %.3f)" % (w))
+                dir = 'right'
             else:
-                cprint.fatal("  Person lost. Turning left (w = %.3f)" % (w))
-            self.motors.sendW(w)
-            self.motors.sendVX(v)
+                dir = 'left'
+
+            cprint.fatal("  Person lost. Turning %s (w = %.3f r/s)" % (dir, w))
+
         else: # Nothing detected yet.
-            cprint.warn('---Nothing detected yet...---')
+            cprint.warn('           ---Nothing detected yet---')
