@@ -36,12 +36,14 @@ if __name__ == '__main__':
 
 
     # Network (TensorFlow/Keras) parsing:
-    net_prop = cfg.getProperty('Network')
+    net_prop = cfg.getProperty('FollowPerson.Network')
     framework = net_prop['Framework']
     if framework.lower() == 'tensorflow':
         from Net.TensorFlow.network import TrackingNetwork
+        # Parse and import the siamese network for face identification
+        siamese_model = net_prop['SiameseModel']
+        from Net.TensorFlow.siamese_network import SiameseNetwork
     elif framework.lower() == 'keras':
-        sys.path.append('Net/Keras')
         from Net.Keras.network import TrackingNetwork
     else:
         raise SystemExit(('%s not supported! Supported frameworks: Keras, TensorFlow') % (framework))
@@ -60,7 +62,7 @@ if __name__ == '__main__':
         from Motors.PTZ.motors import Motors
         motors_proxy = jdrc.getPTMotorsClient('FollowPerson.PTMotors')
     else:
-        raise SystemExit(('%s not supported! Supported frameworks: Kobuki, PTZ') % (device_type))
+        raise SystemExit(('%s not supported! Supported devices: Kobuki, PTZ') % (device_type))
 
 
 
@@ -72,6 +74,8 @@ if __name__ == '__main__':
     network.setCamera(cam)
     t_network = ThreadNetwork(network)
     t_network.start()
+
+    siamese_network = SiameseNetwork(siamese_model)
 
 
     app = QtWidgets.QApplication(sys.argv)
@@ -90,7 +94,7 @@ if __name__ == '__main__':
 
 
     motors = Motors(motors_proxy)
-    motors.setNetwork(network)
+    motors.setNetworks(network, siamese_network)
     if device_type.lower() == 'kobuki':
         motors.setDepth(depth)
     t_motors = ThreadMotors(motors)

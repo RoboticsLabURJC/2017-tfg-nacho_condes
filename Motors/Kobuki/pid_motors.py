@@ -3,7 +3,7 @@ from time import sleep
 from cprint import *
 
 
-class PIDMotors:
+class PIDCommander:
     ''' PID controller connected to a Turtlebot motors, which can command velocities
     avoiding sudden stops, and also handle loss situations (with a softer response). '''
     def __init__(self, func, Kc, Ki, Kd, K_loss, scaling_factor, limiter):

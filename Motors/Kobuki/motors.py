@@ -4,7 +4,7 @@ import rospy
 from kobuki_msgs.msg import Sound
 from time import sleep
 from datetime import datetime
-from Motors.Kobuki.pid_motors import PIDMotors
+from Motors.Kobuki.pid_motors import PIDCommander
 from cprint import *
 
 
@@ -15,7 +15,7 @@ class Motors():
     def __init__(self, motors):
         self.motors = motors
         # PID controllers:
-        self.w_PID = PIDMotors(
+        self.w_PID = PIDCommander(
                          func=self.motors.sendW,
                          Kc=7,
                          Ki=0.5,
@@ -24,7 +24,7 @@ class Motors():
                          scaling_factor=0.0003,
                          limiter=1)
 
-        self.v_PID = PIDMotors(
+        self.v_PID = PIDCommander(
                          func=self.motors.sendVX,
                          Kc=2,
                          Ki=0.1,
@@ -53,8 +53,9 @@ class Motors():
         sleep(0.5)
         # init_node not necessary (already called by comm)
 
-    def setNetwork(self, network):
-        self.network = network
+    def setNetworks(self, detection_network, siamese_network):
+        self.network = detection_network
+        self.siamese_network = siamese_network
         self.center_coords = (self.network.original_width/2, self.network.original_height/2)
 
     def setDepth(self, depth):
@@ -97,7 +98,9 @@ class Motors():
 
         if index is not None: # Found somebody
             cprint.info('           ---Person detected---')
-            '''
+
+
+
             ##################################################
             #################### DISTANCE ####################
             ##################################################
@@ -130,7 +133,9 @@ class Motors():
                 cprint.ok('  Distance: %d px (under control)' % (distance))
                 self.v_PID.resetError()
                 self.v_PID.brake()
-            '''
+
+
+
 
             ###################################################
             ###################### ANGLE ######################
