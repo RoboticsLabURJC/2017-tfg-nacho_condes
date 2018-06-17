@@ -15,7 +15,7 @@ class ThreadNetwork(threading.Thread):
     def __init__(self, network):
         ''' Threading class for Camera. '''
 
-        self.t_cycle = 100  # ms
+        self.t_cycle = 50  # ms
 
         self.network = network
 

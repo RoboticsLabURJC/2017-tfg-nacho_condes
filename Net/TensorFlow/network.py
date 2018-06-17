@@ -36,7 +36,9 @@ class TrackingNetwork():
                 tf.import_graph_def(od_graph_def, name='')
 
 
-        self.sess = tf.Session(graph=detection_graph)
+        self.sess = tf.Session(graph=detection_graph,
+                               config=tf.ConfigProto(log_device_placement=False))
+
         self.image_tensor = detection_graph.get_tensor_by_name('image_tensor:0')
         # NCHW conversion. not possible
         #self.image_tensor = tf.transpose(self.image_tensor, [0, 3, 1, 2])
@@ -67,11 +69,6 @@ class TrackingNetwork():
 
     def setDepth(self, depth):
         self.depth = depth
-    '''
-    def setMotors(self, motors):
-        self.motors = motors
-        self.limits = self.motors.getLimits()
-    '''
 
     def predict(self):
         input_image = self.cam.getImage()
@@ -79,18 +76,30 @@ class TrackingNetwork():
         (boxes, scores, predictions, _) = self.sess.run(
             [self.detection_boxes, self.detection_scores, self.detection_classes, self.num_detections],
             feed_dict={self.image_tensor: image_np_expanded})
+        boxes = np.squeeze(boxes)
+        scores = np.squeeze(scores)
+        predictions = np.squeeze(predictions)
 
         # We only keep the most confident predictions.
-        conf = scores > self.confidence_threshold # bool array
-        boxes = boxes[conf]
+        mask1 = scores > self.confidence_threshold # bool array
+
+        # We map the predictions into a mask (human or not)
+        mask2 = []
+        for idx in predictions:
+            mask2.append(self.classes[int(idx)] == 'person')
+
+        # Total mask: CONFIDENT PERSONS
+        mask = np.logical_and(mask1, mask2)
+        # Boxes containing only confident humans
+        boxes = boxes[mask]
         # aux variable for avoiding race condition while int casting
+        # Box format and reshaping...
         tmp_boxes = np.zeros([len(boxes), 4])
         tmp_boxes[:,[0,2]] = boxes[:,[1,3]] * self.original_width
         tmp_boxes[:,[3,1]] = boxes[:,[2,0]] * self.original_height
         self.boxes = tmp_boxes.astype(int)
 
-        self.scores = scores[conf]
-        predictions = predictions[conf].astype(int)
+        self.scores = scores[mask]
         self.predictions = []
-        for pred in predictions:
-            self.predictions.append(self.classes[pred])
+        for idx in predictions[mask]:
+            self.predictions.append(self.classes[idx])

@@ -17,6 +17,9 @@ from PyQt5 import QtWidgets
 import numpy as np
 import cv2
 
+from cprint import *
+
+
 class GUI(QtWidgets.QWidget):
 
     updGUI = QtCore.pyqtSignal()
@@ -140,27 +143,38 @@ class GUI(QtWidgets.QWidget):
 
     def renderModifiedImage(self):
         image_np = np.copy(self.im_prev)
-
         detection_boxes = self.network.boxes
-        detection_classes = self.network.predictions
         detection_scores = self.network.scores
-
-        for index in range(len(detection_classes)):
-            _class = detection_classes[index]
-            if _class == 'person':
-                try:
-                    score = detection_scores[index]
-                    rect = detection_boxes[index]
-                except:
-                    rect = [0, 0, 0, 0]
-                    print('EXCEPTED')
+        # These variables only contain detected persons
+        mom_box = self.motors.mom_box
+        for index in range(len(detection_boxes)):
+            score = detection_scores[index]
+            rect = detection_boxes[index]
+            # race conditions?
+            if mom_box is not None and np.allclose(rect, mom_box, atol=30):
                 xmin = rect[0]
                 ymin = rect[1]
                 xmax = rect[2]
                 ymax = rect[3]
-                cv2.rectangle(image_np, (xmin, ymax), (xmax, ymin), (0,255,0), 2)
+                cv2.rectangle(image_np, (xmin, ymax), (xmax, ymin), (0,255,0), 3)
 
-                label = "{0} ({1} %)".format(_class, int(score*100))
+                label = "MOM ({} %)".format(int(score*100))
+                [size, base] = cv2.getTextSize(label, self.font, self.scale, 1)
+
+                points = np.array([[[xmin, ymin + base],
+                                    [xmin, ymin - size[1]],
+                                    [xmin + size[0], ymin - size[1]],
+                                    [xmin + size[0], ymin + base]]], dtype=np.int32)
+                cv2.fillPoly(image_np, points, (0, 0, 0))
+                cv2.putText(image_np, label, (xmin, ymin), self.font, self.scale, (255, 255, 255), 2)
+            else:
+                xmin = rect[0]
+                ymin = rect[1]
+                xmax = rect[2]
+                ymax = rect[3]
+                cv2.rectangle(image_np, (xmin, ymax), (xmax, ymin), (255,255,0), 2)
+
+                label = "person ({} %)".format(int(score*100))
                 [size, base] = cv2.getTextSize(label, self.font, self.scale, 1)
 
                 points = np.array([[[xmin, ymin + base],
@@ -179,8 +193,10 @@ class GUI(QtWidgets.QWidget):
 
 
 
+
+
 class DepthGUI(GUI):
-    ''' This class inherites all the standard GUI behavioral, except the
+    ''' This class inherits all the standard GUI behavioral, except the
     configuration to additionally show the depth image from the XTION sensor. '''
 
     def __init__(self):
@@ -215,23 +231,38 @@ class DepthGUI(GUI):
     def renderModifiedImage(self):
         GUI.renderModifiedImage(self)
         image_np = np.copy(self.depth_prev)
-
         detection_boxes = self.network.boxes
-        detection_classes = self.network.predictions
         detection_scores = self.network.scores
-
-        for index in range(len(detection_classes)):
-            _class = detection_classes[index]
-            if _class == 'person':
-                score = detection_scores[index]
-                rect = detection_boxes[index]
+        # These variables only contain detected persons
+        mom_box = self.motors.mom_box
+        for index in range(len(detection_boxes)):
+            score = detection_scores[index]
+            rect = detection_boxes[index]
+            # race conditions?
+            if mom_box is not None and np.allclose(rect, mom_box, atol=30):
                 xmin = rect[0]
                 ymin = rect[1]
                 xmax = rect[2]
                 ymax = rect[3]
-                cv2.rectangle(image_np, (xmin, ymax), (xmax, ymin), (0,255,0), 2)
+                cv2.rectangle(image_np, (xmin, ymax), (xmax, ymin), (0,255,0), 3)
 
-                label = "{0} ({1} %)".format(_class, int(score*100))
+                label = "MOM ({} %)".format(int(score*100))
+                [size, base] = cv2.getTextSize(label, self.font, self.scale, 1)
+
+                points = np.array([[[xmin, ymin + base],
+                                    [xmin, ymin - size[1]],
+                                    [xmin + size[0], ymin - size[1]],
+                                    [xmin + size[0], ymin + base]]], dtype=np.int32)
+                cv2.fillPoly(image_np, points, (0, 0, 0))
+                cv2.putText(image_np, label, (xmin, ymin), self.font, self.scale, (255, 255, 255), 2)
+            else:
+                xmin = rect[0]
+                ymin = rect[1]
+                xmax = rect[2]
+                ymax = rect[3]
+                cv2.rectangle(image_np, (xmin, ymax), (xmax, ymin), (255,255,0), 2)
+
+                label = "person ({} %)".format(int(score*100))
                 [size, base] = cv2.getTextSize(label, self.font, self.scale, 1)
 
                 points = np.array([[[xmin, ymin + base],

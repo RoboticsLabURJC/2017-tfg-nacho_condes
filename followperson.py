@@ -75,7 +75,11 @@ if __name__ == '__main__':
     t_network = ThreadNetwork(network)
     t_network.start()
 
-    siamese_network = SiameseNetwork(siamese_model)
+
+
+    mom_path = cfg.getProperty('FollowPerson.Mom.ImagePath')
+
+    siamese_network = SiameseNetwork(siamese_model, mom_path)
 
 
     app = QtWidgets.QApplication(sys.argv)
@@ -96,6 +100,7 @@ if __name__ == '__main__':
     motors = Motors(motors_proxy)
     motors.setNetworks(network, siamese_network)
     if device_type.lower() == 'kobuki':
+        motors.setCamera(cam)
         motors.setDepth(depth)
     t_motors = ThreadMotors(motors)
     window.setMotors(motors, t_motors)
