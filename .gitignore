@@ -1,12 +1,9 @@
 *datasets*
 *pyc*
-misc*
-*MNIST_data*
-*results*
-*logs*
 *swp*
-.idea
-*mat
-*h5
 *pb
+*h5
 *jpg
+*aux
+*log
+*synctex.gz
