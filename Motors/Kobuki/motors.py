@@ -236,7 +236,6 @@ class Motors():
                 #print("Distance: %.3f" % (face_distances[idx]))
 
         cprint.info('\t........%d/%d faces detected........' % (len(self.faces), num_detections))
-        cprint.warn('Distances: \n {}'.format(face_distances))
         # Final assignation (to avoid empty values on GUI).
         self.faces = aux_faces
         self.total_faces = aux_total_faces
@@ -249,7 +248,7 @@ class Motors():
             mom_index = face_distances.tolist().index(min_distance)
             # Save the coordinates.
             self.mom_box = self.detection_boxes[mom_index]
-            #cprint.ok('\t\t  Mom found!')
+            cprint.ok('\t\t  Mom found!')
             self.patience = 0
 
             # Sound if mom was lost...
@@ -268,6 +267,7 @@ class Motors():
         else:
             mom_index = None
             self.mom_box = None
+            cprint.warn('\t\tDistances: {}'.format(np.sort(face_distances)))
             '''
             if self.last_mom_box is not None:
                 if self.patience < 10:

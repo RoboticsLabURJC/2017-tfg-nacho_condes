@@ -4,7 +4,7 @@ import cv2
 from tensorflow.python.platform import gfile
 from imageio import imread
 
-face_cascade = cv2.CascadeClassifier('resources/haarcascade_frontalface_default.xml')
+frontal_face_cascade = cv2.CascadeClassifier('resources/haarcascade_frontalface_default.xml')
 
 class SiameseNetwork:
     '''
@@ -43,7 +43,7 @@ class SiameseNetwork:
 
         print("Siamese network ready!")
 
-    def getFace(self, person_img, margin=44, square_size=160):
+    def getFace(self, person_img, margin=2, square_size=160):
         '''
         This method looks for a face in a given image, and returns it with a certain
         preprocessing.
@@ -80,9 +80,36 @@ class SiameseNetwork:
         image_size = np.asarray(person_img.shape)[0:2]
         # Gray conversion for the face detection.
         gray_img = cv2.cvtColor(person_img, cv2.COLOR_BGR2GRAY)
-        face_boxes = face_cascade.detectMultiScale(gray_img,
+
+        # We look for frontal faces
+        frontal_face_boxes = frontal_face_cascade.detectMultiScale(gray_img,
                                                    scaleFactor=1.1,
                                                    minNeighbors=2)
+        '''
+        n_front = len(frontal_face_boxes)
+
+        # Profile faces (not working properly)
+        profile_face_boxes = profile_face_cascade.detectMultiScale(gray_img,
+                                                    scaleFactor=1.1,
+                                                    minNeighbors=2)
+        n_prof = len(profile_face_boxes)
+
+        if n_front and n_prof:
+            # Both types detected. Appending...
+            print "both"
+            face_boxes = np.append(frontal_face_boxes, profile_face_boxes, axis=0)
+        elif n_front:
+            print "only frontal"
+            face_boxes = frontal_face_boxes
+        elif n_prof:
+            print "only profile"
+            face_boxes = profile_face_boxes
+        else:
+            face_boxes = []
+
+        n_faces = n_front + n_prof
+        '''
+        face_boxes = frontal_face_boxes
         n_faces = np.asarray(face_boxes).shape[0]
 
         if n_faces == 0:
@@ -112,10 +139,11 @@ class SiameseNetwork:
             box[3] = np.minimum(det[3] + margin/2, image_size[0])
             face = person_img[box[1]:box[3], box[0]:box[2], :]
             # Squared crop
-            square_face = cv2.resize(face, (square_size, square_size), interpolation=cv2.INTER_LINEAR)
+            square_face = cv2.resize(face, (square_size, square_size), interpolation=cv2.INTER_CUBIC)
+            blurred_face = cv2.blur(square_face, (5,5))
             # Now we normalize (whiten) the image
-            [mean, std] = [np.mean(square_face), np.std(square_face)]
-            whitened_face = np.multiply(np.subtract(square_face, mean), 1.0/std)
+            [mean, std] = [np.mean(blurred_face), np.std(square_face)]
+            whitened_face = np.multiply(np.subtract(blurred_face, mean), 1.0/std)
 
             return whitened_face, box
 
