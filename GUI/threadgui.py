@@ -20,8 +20,8 @@ class ThreadGUI(threading.Thread):
     def __init__(self, gui):
         ''' Threading class for GUI. '''
 
-        self.t_cycle = 50  # ms
-        
+        self.t_cycle = 100  # ms
+
         self.gui = gui
         threading.Thread.__init__(self)
 

@@ -111,7 +111,9 @@ class GUI(QtWidgets.QWidget):
 
 
     def update(self):
-        ''' Updates the GUI for every time the thread change '''
+        '''
+        Updates the GUI for every time the thread changes.
+        '''
         # We get the original image and display it.
         self.im_prev = self.cam.getImage()
         im = QtGui.QImage(self.im_prev.data, self.im_prev.shape[1], self.im_prev.shape[0],
@@ -138,25 +140,38 @@ class GUI(QtWidgets.QWidget):
 
     def updateOnce(self):
         self.t_network.runOnce()
+        self.t_motors.runOnce()
         self.renderModifiedImage()
 
 
     def renderModifiedImage(self):
         image_np = np.copy(self.im_prev)
-        detection_boxes = self.network.boxes
-        detection_scores = self.network.scores
+
+        detection_boxes = self.motors.detection_boxes
+        detection_scores = self.motors.detection_scores
+        detected_faces = self.motors.total_faces
         # These variables only contain detected persons
         mom_box = self.motors.mom_box
+
+        for face in detected_faces:
+            # We draw the faces on the image
+            xmin = face[0]
+            ymin = face[1]
+            xmax = face[2]
+            ymax = face[3]
+            cv2.rectangle(image_np, (xmin, ymax), (xmax, ymin), (255, 0, 0), 2)
+
         for index in range(len(detection_boxes)):
             score = detection_scores[index]
             rect = detection_boxes[index]
-            # race conditions?
-            if mom_box is not None and np.allclose(rect, mom_box, atol=30):
+            # Race conditions between motors and GUI
+            if mom_box is not None and np.allclose(rect, mom_box, atol=20):
+                # This rect belongs to mom
                 xmin = rect[0]
                 ymin = rect[1]
                 xmax = rect[2]
                 ymax = rect[3]
-                cv2.rectangle(image_np, (xmin, ymax), (xmax, ymin), (0,255,0), 3)
+                cv2.rectangle(image_np, (xmin, ymax), (xmax, ymin), (0,255,0), 5)
 
                 label = "MOM ({} %)".format(int(score*100))
                 [size, base] = cv2.getTextSize(label, self.font, self.scale, 1)
@@ -238,13 +253,13 @@ class DepthGUI(GUI):
         for index in range(len(detection_boxes)):
             score = detection_scores[index]
             rect = detection_boxes[index]
-            # race conditions?
-            if mom_box is not None and np.allclose(rect, mom_box, atol=30):
+            # This should not be approximated (TODO)
+            if mom_box is not None and np.allclose(rect, mom_box, atol=50):
                 xmin = rect[0]
                 ymin = rect[1]
                 xmax = rect[2]
                 ymax = rect[3]
-                cv2.rectangle(image_np, (xmin, ymax), (xmax, ymin), (0,255,0), 3)
+                cv2.rectangle(image_np, (xmin, ymax), (xmax, ymin), (0,255,0), 5)
 
                 label = "MOM ({} %)".format(int(score*100))
                 [size, base] = cv2.getTextSize(label, self.font, self.scale, 1)

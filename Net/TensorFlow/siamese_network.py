@@ -23,7 +23,7 @@ class SiameseNetwork:
                     tf.import_graph_def(graph_def, input_map=None, name='')
 
             # Instance of the session, placeholders and embeddings (output)
-            gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.4)
+            gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.1)
             self.sess = tf.Session(graph=siamese_graph,
                                    config=tf.ConfigProto(gpu_options=gpu_options,
                                                          log_device_placement=False))
@@ -33,42 +33,91 @@ class SiameseNetwork:
             self.embeddings = siamese_graph.get_tensor_by_name('embeddings:0')
 
         mom_img = imread(mom_path)
-        self.mom_face = self.getFace(mom_img)
+        self.mom_face, _ = self.getFace(mom_img)
+
+        # Dummy initialization...
+        dummy_tensor = np.zeros((160, 160, 3))
+        _ = self.distanceToMom(dummy_tensor)
+
+
 
         print("Siamese network ready!")
 
     def getFace(self, person_img, margin=44, square_size=160):
         '''
-        This method looks for a face in a given imagen, and returns it with a certain
+        This method looks for a face in a given image, and returns it with a certain
         preprocessing.
         '''
+
+        def highestIdx(face_boxes):
+            ''' Returns the index which belongs to the highest bounding box.'''
+            high_idx = None
+            high_y = np.infty
+
+            for idx in range(len(face_boxes)):
+                face = face_boxes[idx]
+                y = face[1]
+                if y < high_y:
+                    high_y = y
+                    high_idx = idx
+            return high_idx
+
+
+        def biggestIdx(face_boxes):
+            ''' Returns the index which belongs to the biggest bounding box.'''
+            bigg_idx = None
+            bigg_w, bigg_h = 0, 0
+
+            for idx in range(len(face_boxes)):
+                face = face_boxes[idx]
+                _, _, w, h = face
+                if w > bigg_w and h > bigg_h:
+                    bigg_w = w
+                    bigg_h = h
+                    bigg_idx = idx
+            return bigg_idx
+
         image_size = np.asarray(person_img.shape)[0:2]
-        face_boxes = face_cascade.detectMultiScale(person_img, 1.3, 5)
-        if len(face_boxes) != 1:
-            # No face/too many faces detected (not valid box)
-            return None
-        else:
-            dets = []
-            # Now we transform and store the detections
-            [dets.append([x, y, x+w, y+h]) for (x, y, w, h) in face_boxes]
+        # Gray conversion for the face detection.
+        gray_img = cv2.cvtColor(person_img, cv2.COLOR_BGR2GRAY)
+        face_boxes = face_cascade.detectMultiScale(gray_img,
+                                                   scaleFactor=1.1,
+                                                   minNeighbors=2)
+        n_faces = np.asarray(face_boxes).shape[0]
 
-            for det in dets:
-                box = np.zeros(4, dtype=np.int32)
-                # Check that the box+margin does not go outside of the image
-                box[0] = np.maximum(det[0] - margin/2, 0)
-                box[1] = np.maximum(det[1] - margin/2, 0)
-                box[2] = np.minimum(det[2] + margin/2, image_size[1])
-                box[3] = np.minimum(det[3] + margin/2, image_size[0])
+        if n_faces == 0:
+            # No face detected
+            return None, None
 
-                face = person_img[box[1]:box[3], box[0]:box[2], :]
-                # Squared crop
-                square_face = cv2.resize(face, (square_size, square_size), interpolation=cv2.INTER_LINEAR)
-                # Now we normalize (whiten) the image
-                [mean, std] = [np.mean(square_face), np.std(square_face)]
-                std_adj = np.maximum(std, 1.0/np.sqrt(person_img.size))
-                whitened_face = np.multiply(np.subtract(square_face, mean), 1.0/std_adj)
+        elif n_faces > 1:
+            # More than 1 detected face. We will keep
+            # the biggest one.
+            #idx = biggestIdx(face_boxes)
+            idx = highestIdx(face_boxes)
 
-            return whitened_face
+            n_faces = 1
+            # We imput the "1" value to enter on the next condition
+            face_boxes = face_boxes[idx]
+
+        if n_faces == 1:
+            # Now we transform the detection
+            x, y, w, h = np.squeeze(face_boxes)
+            det = [x, y, x+w, y+h]
+
+            box = np.zeros(4, dtype=np.int32)
+            # Check that the box+margin does not go outside of the image
+            box[0] = np.maximum(det[0] - margin/2, 0)
+            box[1] = np.maximum(det[1] - margin/2, 0)
+            box[2] = np.minimum(det[2] + margin/2, image_size[1])
+            box[3] = np.minimum(det[3] + margin/2, image_size[0])
+            face = person_img[box[1]:box[3], box[0]:box[2], :]
+            # Squared crop
+            square_face = cv2.resize(face, (square_size, square_size), interpolation=cv2.INTER_LINEAR)
+            # Now we normalize (whiten) the image
+            [mean, std] = [np.mean(square_face), np.std(square_face)]
+            whitened_face = np.multiply(np.subtract(square_face, mean), 1.0/std)
+
+            return whitened_face, box
 
 
     def compareFaces(self, face1, face2):

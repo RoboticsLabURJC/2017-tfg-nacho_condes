@@ -1,6 +1,6 @@
 import numpy as np
 from time import sleep
-from cprint import *
+from cprint import cprint
 
 
 class PIDDriver:
@@ -25,8 +25,8 @@ class PIDDriver:
     def _sendCommand(self, response):
         ''' This method sends a command to the motors, and updates the last command. '''
         # Soften movements:
-        if self.last_response == 0:
-            speeds = np.linspace(0, response, num=5)
+        if abs(response - self.last_response) > 0.2:
+            speeds = np.linspace(self.last_response, response, num=7)
             for speed in speeds:
                 self.func(speed)
                 sleep(0.1)

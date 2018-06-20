@@ -51,4 +51,4 @@ class ThreadMotors(threading.Thread):
 
     def runOnce(self):
         if not self.is_activated:
-            self.motors.moveCam()
+            self.motors.move()
