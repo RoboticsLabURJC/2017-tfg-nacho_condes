@@ -1,0 +1,67 @@
+\chapter{Introduction}
+Here, we will talk about current robotics applications, which can be really useful at daily tasks. These tasks are of greater interest when the behavioral of a robot tends to emulate the human one (without the human body limitations). This requires a polished (and somehow complex) behavioral.\\
+
+But, almost every time, a behavioral is a reactive response, triggered by a certain input (typically perceived by on-board sensors, among others). This raw data is generally mapped into a concrete response. At this point, we can take much benefit from \emph{Neural Networks}, which can yield a really effective, fast and \textbf{strong} response, specially when we are dealing with image processing.\\
+
+There are several processing tools based on Neural Networks at the JdeRobot robotics platform (Detection Suite, TFG David, Nuria, PFC Roberto Calvo [this one does not implement NNs]), which as we have just mentioned, can make such a brilliant tandem along with a reactive behavioral.\\
+
+As we will be able to see later, \textbf{robotics + deep learning rocks!}
+
+\chapter{Infrastructure}
+
+\section{TensorFlow}
+\subsection{CUDA}
+\section{Keras}
+\section{JdeRobot}
+\subsection{Digit Classifier}
+\subsection{Detection Suite}
+\section{OpenCV}
+\section{ROS}
+\subsection{OpenNIServer}
+\section{Hardware}
+\subsection{Asus Xtion}
+\subsection{Turtlebot / Kobuki}
+\subsection{Sony EVI D100P}
+
+
+
+
+\chapter{Objectives}
+
+
+With all this in mind, the objective of the present work has been to get a little further on \textbf{deep learning applied to robotics}, developing two sucessive components.
+\section{\texttt{ObjectDetector}}
+As it will be described on the suitable chapter, we have built a component (\texttt{Object Detector}) which implements \textbf{a generic object detection structure} on an image. This component is ready to work in \emph{real time} (processing a streaming video flow).\\
+
+\section{\texttt{FollowPerson}}
+
+The next milestone was to be able to connect this intelligent perception to a reactive behavioral, translated into a robot following a certain person. This requires of two main abilities:
+\begin{itemize}
+	\item Object detection and discrimination: this is just what we achieved with the previous component. We only have to constrain the detections to only keep persons.
+	\item People reidentification: as it will be seen, the component is able to track a certain person (which is called \emph{mom}). This is achieved with a person-by-person face comparison with a reference face (which belongs to \emph{mom}). This process is performed by a \emph{siamese neural network}, which is inspired by [tfm marcos pieras].
+\end{itemize}
+
+With these capabilities, we can perform a neural control over physical actuators. Its main avail is the significant strength that a \emph{convolutional neural network} can keep on variable light conditions, which is the main Damocles sword on the image processing field.
+
+
+
+\chapter{\texttt{Object Detector}}
+\section{Description}
+\section{Functional architecture}
+\section{Neural Network processing}
+
+
+\chapter{\texttt{Follow Person}}
+\section{Description}
+\section{Functional architecture}
+\section{Neural Network processing}
+\section{Face detection and identification}
+\section{Tracking algorithm (physical response)}
+
+
+
+\chapter{Conclusions}
+
+\chapter{Future research lines}
+
+\chapter{Bibliography}
