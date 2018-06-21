@@ -8,11 +8,14 @@ There are several processing tools based on Neural Networks at the JdeRobot robo
 As we will be able to see later, \textbf{robotics + deep learning rocks!}
 
 \chapter{Infrastructure}
-
+\section{Python 2.7}
+\subsection{\texttt{threading} library}
 \section{TensorFlow}
 \subsection{CUDA}
 \section{Keras}
 \section{JdeRobot}
+\subsection{\texttt{comm}}
+\subsection{\texttt{PyQt5}}
 \subsection{Digit Classifier}
 \subsection{Detection Suite}
 \section{OpenCV}
@@ -24,16 +27,14 @@ As we will be able to see later, \textbf{robotics + deep learning rocks!}
 \subsection{Sony EVI D100P}
 
 
+\chapter{Objectives and Methodology}
 
-
-\chapter{Objectives}
-
-
+\section{Objectives}
 With all this in mind, the objective of the present work has been to get a little further on \textbf{deep learning applied to robotics}, developing two sucessive components.
-\section{\texttt{ObjectDetector}}
+\subsection{Detection: \texttt{ObjectDetector}}
 As it will be described on the suitable chapter, we have built a component (\texttt{Object Detector}) which implements \textbf{a generic object detection structure} on an image. This component is ready to work in \emph{real time} (processing a streaming video flow).\\
 
-\section{\texttt{FollowPerson}}
+\subsection{Reactive behavioral: \texttt{FollowPerson}}
 
 The next milestone was to be able to connect this intelligent perception to a reactive behavioral, translated into a robot following a certain person. This requires of two main abilities:
 \begin{itemize}
@@ -43,6 +44,12 @@ The next milestone was to be able to connect this intelligent perception to a re
 
 With these capabilities, we can perform a neural control over physical actuators. Its main avail is the significant strength that a \emph{convolutional neural network} can keep on variable light conditions, which is the main Damocles sword on the image processing field.
 
+\section{Methodology}
+\subsection{TensorFlow Convolutional Neural Network (\emph{CNN})}
+
+\subsubsection{SSD Detector}
+\subsubsection{Network Architecture}
+\subsubsection{Load of different models}
 
 
 \chapter{\texttt{Object Detector}}
