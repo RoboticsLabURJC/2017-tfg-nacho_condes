@@ -63,8 +63,8 @@ backref=page]{hyperref}
 	\include{0-cover}
 	%%%%%%% INDEX, LISTS %%%%%%%%%
 	\tableofcontents
-	\listoffigures
-	\listoftables
+	%\listoffigures
+	%\listoftables
 	
 	%%%%%% SUMMARY %%%%%%%%%
 	\include{0-summary}	
@@ -73,11 +73,17 @@ backref=page]{hyperref}
 	\include{1-introduction}
 	
 	
-	\include{0-skeleton}
+	%%%%%% OBJECTIVES %%%%%%
+	\include{2-objectives}
+	
+	%%%%% INFRASTRUCTURE %%%%%
+	\include{3-infrastructure}
+	
+	\include{skeleton}
 	
 	
 	%%%%%%%%% BIBLIOGRAPHY %%%%%%%%%
 	\section{Bibliography}
 	\bibliography{bibliography}
-	\bibliographystyle{plain}
+	\bibliographystyle{unsrt}
 \end{document}
