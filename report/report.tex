@@ -1,10 +1,83 @@
-\documentclass[12pt, openright, a4paper]{book}
+\documentclass[12pt, openany, a4paper]{book}
 %\usepackage[spanish]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
+\usepackage{subcaption}
+
+\usepackage{listings}
+\usepackage[a4paper,top=3cm, bottom=3cm, inner=2.5cm, outer=2.5cm]{geometry}
+\usepackage[colorlinks=true, 
+linkcolor = black,
+urlcolor  = blue,
+citecolor = black,
+anchorcolor = blue,
+backref=page]{hyperref}
+\usepackage{subcaption}
+\usepackage{color}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstset{frame=single,
+	language=Python,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	numbers=none,
+	backgroundcolor=\color{backcolour},   
+	commentstyle=\color{codegreen},
+	keywordstyle=\color{blue},
+	numberstyle=\color{codepurple},
+	stringstyle=\color{magenta},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3
+}
+
+\usepackage[acronym,nomain]{glossaries}
+\newacronym{ai}{AI}{Artificial Intelligence}
+\makeglossaries
+
+
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+
+\tikzset{basic/.style={draw,fill=blue!20,text width=1em,text badly centered}}
+\tikzset{input/.style={basic,circle}}
+\tikzset{weights/.style={basic,rectangle}}
+\tikzset{functions/.style={basic,circle,fill=blue!10}}
+
+
+
+
+
+%\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
 
 \begin{document}
+	%%%%%%% COVER %%%%%%%%
 	\include{0-cover}
+	%%%%%%% INDEX, LISTS %%%%%%%%%
+	\tableofcontents
+	\listoffigures
+	\listoftables
+	
+	%%%%%% SUMMARY %%%%%%%%%
+	\include{0-summary}	
+	
+	%%%%%% INTRODUCTION %%%%%%%%
+	\include{1-introduction}
+	
 	
 	\include{0-skeleton}
+	
+	
+	%%%%%%%%% BIBLIOGRAPHY %%%%%%%%%
+	\section{Bibliography}
+	\bibliography{bibliography}
+	\bibliographystyle{plain}
 \end{document}
