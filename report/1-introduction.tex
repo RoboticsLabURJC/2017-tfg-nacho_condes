@@ -38,7 +38,7 @@ This way, several applications have arisen on people recognition and conversatio
 \section{Machine learning}
 Almost every time, the mentioned behavioral is one or more reactive responses, triggered by a certain input (typically perceived by on-board sensors, among others). This raw data, which, is typically retrieved on a simple way (images, audio) is processed and mapped into a concrete response. At this point, we can bring up the key question: \emph{how do we process the raw input to obtain a suitable action for the current requirements, or needings?} The answer for that question is \textbf{machine learning}: the computer science field that pursues the capacity of machines to learn the suitable response to a previously unknown input. This is achieved by performing a training with a dataset of examples, which need to be properly formatted: the system has to previously know what to look for and evaluate, what is typically called \textbf{features}, and learn the proper parameters for an optimum output.\\
 
-Generally, machine learning problems can be split into two types of response (\autoref{fig:1_class_vs_det}):
+Generally, machine learning applications on image processing can be split into two types of response (\autoref{fig:1_class_vs_det}):
 
 \begin{itemize}
 	\item \textbf{Classification:} given a set of possible classes $\{c_1, c_2, ..., c_n\}$ to which an image $x_i$ can belong, we select the class $c_i$ where $x_i$ fits the best, given a set of features extracted from it.
@@ -150,6 +150,15 @@ We can solve both problems simultaneously with an easy procedure: we will not pr
 
 \begin{figure}[h]
 	\centering
+	\includegraphics[width=0.9\linewidth]{images/activation_maps}
+	\caption{Activation maps of a detection CNN searching for dogs on different images \cite{activation-maps}.}
+	\label{fig:1_cnn}
+\end{figure}
+
+
+
+\begin{figure}[h]
+	\centering
 	\includegraphics[width=0.9\linewidth]{images/cnn}
 	\caption{Schematic of a CNN.}
 	\label{fig:1_cnn}
@@ -159,10 +168,10 @@ We can solve both problems simultaneously with an easy procedure: we will not pr
 
 So, as we have been describing, Deep Learning can be of a great interest on the image processing field, as it allows to implement an easy and really robust AI algorithm.\\
 
-JdeRobot\footnote{\url{https://jderobot.org}} is a software development suite, developed from inside this University, and among all the developed software/investigation inside it, we can find some interesting programs/projects for our purposes:
+JdeRobot\footnote{\url{https://jderobot.org}} is an open-source software development suite, built from  this University, and among all the developed software/investigation inside it, we can find some interesting programs/projects for our purposes:
 
 \begin{itemize}
-	\item \texttt{Detection Suite}\footnote{\url{https://github.com/JdeRobot/dl-DetectionSuite}}: it is a C++ application, suitable to load/benchmark \textbf{detection} models, against different databases. It is also capable, through a Python$\rightarrow$C++ interface, to load TensorFlow/Keras models as well.
+	\item \texttt{Detection Suite}\footnote{\url{https://github.com/JdeRobot/dl-DetectionSuite}}: it is a C++ application, suitable to load/benchmark \textbf{detection} Darknet/YOLO\footnote{\url{https://pjreddie.com/darknet/}} models, against different databases. It is also capable, through a Python$\rightarrow$C++ interface, to load TensorFlow/Keras models as well.
 	
 	\begin{figure}[h]
 		\centering
@@ -179,7 +188,7 @@ JdeRobot\footnote{\url{https://jderobot.org}} is a software development suite, d
 		\label{fig:1_digitclassifier}
 	\end{figure}
 	
-	\item MsC project of Marcos Pieras \cite{marcospieras}: On this interesting thesis, an application implementing two neural networks (as we will do) has been developed. One of them allows us to \textbf{detect} people on an image, and the other one (a siamese network, as we will describe later) can track features of each person, to keep every detected individual identified on a surveillance image system (and possibly trace the route followed by each person).
+	\item MsC project of Marcos Pieras \cite{marcospieras}: On this master thesis, an application implementing two neural networks (as we will do) has been developed. One of them allows us to \textbf{detect} people on an image, and the other one (a siamese network, as we will describe later) can track features of each person, to keep every detected individual identified on a surveillance image system (and possibly trace the route followed by each person).
 	\begin{figure}[h]
 		\centering
 		\includegraphics[width=4in]{images/people_tracker}

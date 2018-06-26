@@ -1,14 +1,3 @@
-\subsection{Reactive behavioral}
-
-The next milestone was to be able to connect this intelligent perception to a reactive behavioral, translated into a robot following a certain person. This requires of two main abilities:
-\begin{itemize}
-	\item Object detection and discrimination: this is just what we achieved with the previous component. We only have to constrain the detections to only keep persons.
-	\item People reidentification: as it will be seen, the component is able to track a certain person (which is called \emph{mom}). This is achieved with a person-by-person face comparison with a reference face (which belongs to \emph{mom}). This process is performed by a \emph{siamese neural network}, which is inspired by [tfm marcos pieras].
-\end{itemize}
-
-With these capabilities, we can perform a neural control over physical actuators. Its main avail is the significant strength that a \emph{convolutional neural network} can keep on variable light conditions, which is the main Damocles sword on the image processing field.
-
-
 \subsubsection{SSD Detector}
 \subsubsection{Network Architecture}
 \subsubsection{Load of different models}
