@@ -1,5 +1,6 @@
 \chapter{Introduction}
-This introductory chapter aims to present the general context which wraps this project, going in some depth inside \textbf{deep learning and robotics}. We will also amble along some of the latest advances and most useful current applications of the junction  these two fields. Lastly, we will situate this project on the previously described context. After this chapter, each key aspect of the work flow will be further explained.\\
+
+This introductory chapter aims to present the general context which wraps this project, going in some depth inside \textbf{deep learning and robotics}. We will also amble along some of the latest advances and most useful current applications of the junction between these two fields. Lastly, we will situate this project on the previously described context. After this chapter, each key aspect of the work flow will be further explained.\\
 
 \section{Robots}
 
@@ -7,7 +8,7 @@ Robotics applications can be really useful at daily tasks. These tasks are of gr
 \begin{itemize}
 	\item \textbf{Teleoperated robots:} this kind of robots are capable of perform certain actions, which are \textbf{remotely controlled by a human operator}. This application is the one with most weight on the hazardousness (\autoref{fig:1_pioneer}) \cite{chernobyl-robot} or precision \cite{teleop-surgery} factor. Thus, some advances are made nowadays improving the teleoperation function, implementing \emph{feedbacks} from the robot, such as haptic feedback \cite{teleop-haptic}, or VR (\emph{Virtual Reality}) sensation, to allow that person to sense the environment as if it was in front of her.	
 	
-	\item \textbf{Autonomous robots:} these robots are much more complex machines, as they are distinguished for implementing a response by itself, independently of any kind of remote operator. This is seeked on certain scenarios, where the time to perform an action or the cost of mantaining a critical link with a base, are factors with a considerable weight in the design \cite{ai-space}. This is the kind of robots that concern us on this work: the state-of-the-art techniques try to emulate \emph{human behavioral}(\autoref{fig:1_pepper}), so some actions can begin to be performed with a certain intelligence, as we will describe below.
+	\item \textbf{Autonomous robots:} these robots are much more complex machines, as they are distinguished for implementing a response by itself, independently of any kind of remote operator. This is seeked on certain scenarios, where the time elapsed performing an action or the cost of mantaining a critical link with a base, are factors with a considerable weight in the design \cite{ai-space}. This is the kind of robots that concern us on this work: the state-of-the-art techniques try to emulate \emph{human behavioral}(\autoref{fig:1_pepper}), so some actions can begin to be performed with a certain intelligence, as we will describe below.
 \end{itemize}
 
 
@@ -35,7 +36,7 @@ The important advances on the last decades on the image processing and audio rec
 
 This way, several applications have arisen on people recognition and conversational behaviors, and it has been spread to everyday purposes, from personal assistants\footnote{\href{https://www.standard.co.uk/tech/google-smart-home-future-stay-a3868591.html}{Google Smart Home}}, to autonomous driving\footnote{\href{https://electrek.co/2018/06/18/what-tesla-autopilot-see-understand/}{Tesla Autopilot}}.\\
 
-\section{Machine learning}
+\section{Machine Learning}
 Almost every time, the mentioned behavioral is one or more reactive responses, triggered by a certain input (typically perceived by on-board sensors, among others). This raw data, which, is typically retrieved on a simple way (images, audio) is processed and mapped into a concrete response. At this point, we can bring up the key question: \emph{how do we process the raw input to obtain a suitable action for the current requirements, or needings?} The answer for that question is \textbf{machine learning}: the computer science field that pursues the capacity of machines to learn the suitable response to a previously unknown input. This is achieved by performing a training with a dataset of examples, which need to be properly formatted: the system has to previously know what to look for and evaluate, what is typically called \textbf{features}, and learn the proper parameters for an optimum output.\\
 
 Generally, machine learning applications on image processing can be split into two types of response (\autoref{fig:1_class_vs_det}):
@@ -68,7 +69,7 @@ Generally, machine learning applications on image processing can be split into t
 \section{Deep Learning}
 \emph{Deep learning} is the piece of machine learning that is capable to \textbf{automatically learn the features that the system could use from primary data} (pixels on images, samples on audio, words in text processing, etc.).\\
 \subsection{Neural Networks}
-This has turned deep learning into the cornerstone of current applications of \emph{AI}, which don't need complex dataset with a lot of preprocessing (that require important human effort) anymore. That simplicity is achieved through the use of \emph{Neural Networks}. A Neural Network is the representation of an algebraic algorithm which implements non-linear calculus models \cite{dl-nature}. It is composed by several processing \textbf{layers}, which are made up of \emph{perceptrons}, that are generally called \textbf{neurons}. This is because these neural structures \textbf{emulate the human brain}, formed by a huge set of interconnected neurons, which are disposed on the already mentioned layers (\autoref{fig:1_neural_network}).\\
+This has turned deep learning into the cornerstone of current \emph{AI} applications, which don't need complex dataset with a lot of preprocessing (that require important human effort) anymore. That simplicity is achieved through the use of \emph{Neural Networks}. A Neural Network is the representation of an algebraic algorithm which implements non-linear calculus models \cite{dl-nature}. It is composed by several processing \textbf{layers}, which are made up of \emph{perceptrons}, that are generally called \textbf{neurons}. This is because these neural structures \textbf{emulate the human brain}, formed by a huge set of interconnected neurons, which are disposed on the already mentioned layers (\autoref{fig:1_neural_network}).\\
 
 \begin{figure}[htpb]
 	\centering
@@ -141,18 +142,33 @@ This is typically called a \textbf{fully connected layer}, and the fact of relat
 \end{figure}
 
 \subsection{Convolutional Neural Networks (\emph{CNNs})}
+\label{sec:1_cnn}
 
 Finally, this leads us to the last concept we will study on this dissertation. As we have said before, we can connect a big set of neurons between themselves to extract more abstract and complex features, of increasing interest with the number of neurons and layers.\\
  
-If we aim to apply this processing to images, we have to take into account that, if we want to input an image into a neural network, each pixel has to be taken as an input, and also the fact that an RGB image is composed of 3 channels (1 channel per color), so, for an image with a dimensions of $m$ pixels wide and $n$ pixels high, we will need $m\cdot n \cdot 3$ input neurons. Besides this considerable number, we will have to take into account the neurons resulting on the additional deeper layers that we will add to have an high enough abstraction level for our application. This drives to absurd numbers of simultaneous neurons working, that are difficultly handable during a feed-forward execution, but absolutely unfeasible on a training process. An additional problem can be a moving object/region on the image: we must be capable to detect the shape of a car on the right side of the image, or in the left one.\\
+If we aim to apply this processing to images (\textbf{Computer Vision}), we have to take into account that, if we want to input an image into a neural network, each pixel has to be taken as an input, and also the fact that an RGB image is composed of 3 channels (1 channel per color), so, for an image with a dimensions of $m$ pixels wide and $n$ pixels high, we will need $m\cdot n \cdot 3$ input neurons. Besides this considerable number, we will have to take into account the neurons resulting on the additional deeper layers that we will add to have an high enough abstraction level for our application. This drives to absurd numbers of simultaneous neurons working, that are difficultly handable during a feed-forward execution, but absolutely unfeasible on a training process. An additional problem can be a moving object/region on the image: we must be capable to detect the shape of a car on the right side of the image, or in the left one.\\
 
-We can solve both problems simultaneously with an easy procedure: we will not process the entire image at one time. Instead of that \textbf{we will perform a convolution operation between the inputs of our network, and different regions of the image}. This will output \emph{activation maps}, which symbolize the response of that portion of the image to the input weigths. This can be performed, as we have said before, a few times to obtain features with a higher degree of abstraction. As we want to keep the computational complexity low, we can alternate these layers with \textbf{pooling layers}, which subsample the resulting maps, to keep it simple (if we keep only 1 of each 3 pixels of an activation map, selecting it carefully to retain the maximum information, we can reduce the number of necessary neurons on the next layer on a factor of $\frac{1}{3} \cdot \frac{1}{3} = \frac{1}{9}$). This is reflected on \autoref{fig:1_cnn}, where the process of convolution-pooling can be repeated a few times, and then the result (which should not have considerably big dimensions) are inputted into a fully connected layers, to extract and handle the relations between the features and the possible classes (on a classification scenario).
+We can solve both problems simultaneously with an easy procedure: we will not process the entire image at one time. Instead of that \textbf{we will perform a convolution operation (\autoref{fig:1_convolution}) between the inputs of our network, and different regions of the image}, sliding and multiplying a \emph{parameterized mask} along the whole image. This operation is performed with the objective of the product returning a high value on the interesting regions of the image. This will output \emph{activation maps}, which symbolize the response of that portion of the image to the weight mask. This can be performed, as we have said before, a few times with different masks to obtain features with a higher degree of abstraction. As we want to keep the computational complexity low, we can alternate these layers with \textbf{pooling layers}, which subsample the resulting maps, to keep it simple (if we keep only 1 of each 3 pixels of an activation map, selecting it carefully to retain the maximum information, we can reduce the number of necessary neurons on the next layer on a factor of $\frac{1}{3} \cdot \frac{1}{3} = \frac{1}{9}$). This is reflected on \autoref{fig:1_cnn}, where the process of convolution-pooling can be repeated a few times, and then the result (which should not have considerably big dimensions) are inputted into a fully connected layers, to extract and handle the relations between the features and the possible classes (on a classification scenario).\\
+
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=4in]{images/convolution}
+	\caption{Convolution operation applied on an image (image from \cite{image-convolution}).}
+	\label{fig:1_convolution}
+\end{figure}
+
+
+
+
+
+But, \emph{how do we find the best value for each weight, and for each layer?} That's the process we call \textbf{training a network}. Using a technique called \emph{back propagation}, we can compute 
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.9\linewidth]{images/activation_maps}
 	\caption{Activation maps of a detection CNN searching for dogs on different images \cite{activation-maps}.}
-	\label{fig:1_cnn}
+	\label{fig:1_activation_maps}
 \end{figure}
 
 
@@ -165,7 +181,7 @@ We can solve both problems simultaneously with an easy procedure: we will not pr
 \end{figure}
 
 \section{Deep Learning on JdeRobot}
-
+\label{sec:dl_jderobot}
 So, as we have been describing, Deep Learning can be of a great interest on the image processing field, as it allows to implement an easy and really robust AI algorithm.\\
 
 JdeRobot\footnote{\url{https://jderobot.org}} is an open-source software development suite, built from  this University, and among all the developed software/investigation inside it, we can find some interesting programs/projects for our purposes:
@@ -180,25 +196,31 @@ JdeRobot\footnote{\url{https://jderobot.org}} is an open-source software develop
 		\label{fig:1_detectionsuite}
 	\end{figure}
 
-	\item Final project of David Pascual \cite{dpascualhe} and Nuria Oyaga \cite{noyaga}: a further study of Deep Learning, applied on Python (Keras and Caffe frameworks, respectively) to \textbf{digit classification} implementing a CNN as it has been seen.
+	\item Final project of David Pascual \cite{dpascualhe} and Nuria Oyaga \cite{noyaga}: a further study of Deep Learning, applied on Python (Keras and Caffe frameworks, respectively) to \textbf{digit classification} (\autoref{fig:1_digitclassifier}) implementing a CNN as it has been seen.
+	
 	\begin{figure}[h]
 		\centering
-		\includegraphics[width=4in]{images/digitclassifier}
-		\caption{\texttt{DigitClassifier} working.}
-		\label{fig:1_digitclassifier}
+		\begin{subfigure}[h]{0.45\linewidth}
+			\centering
+			\includegraphics[width=2.7in]{images/digitclassifier}
+			\caption{\texttt{DigitClassifier} working.}
+			\label{fig:1_digitclassifier}
+		\end{subfigure}
+		\qquad
+		\begin{subfigure}[h]{0.45\linewidth}
+			\centering
+			\includegraphics[width=3.7in]{images/people_tracker}
+			\caption{\texttt{PeopleTracker} working.}
+			\label{fig:1_people_tracker}
+		\end{subfigure}
+		\caption{Some JdeRobot student projects on action.}
+		\label{fig:1_jderobot_projects}
 	\end{figure}
-	
-	\item MsC project of Marcos Pieras \cite{marcospieras}: On this master thesis, an application implementing two neural networks (as we will do) has been developed. One of them allows us to \textbf{detect} people on an image, and the other one (a siamese network, as we will describe later) can track features of each person, to keep every detected individual identified on a surveillance image system (and possibly trace the route followed by each person).
-	\begin{figure}[h]
-		\centering
-		\includegraphics[width=4in]{images/people_tracker}
-		\caption{\texttt{PeopleTracker} working.}
-		\label{fig:1_people_tracker}
-	\end{figure}
-	
+
+	\item MsC project of Marcos Pieras \cite{marcospieras}: On this master thesis, an application implementing two neural networks (as we will do) has been developed. One of them allows us to \textbf{detect} people on an image, and the other one (a siamese network, as we will describe later) can track features of each person, to keep every detected individual identified on a surveillance image system (and possibly trace the route followed by each person) (\autoref{fig:1_people_tracker}).
 \end{itemize}
 
-In conclusion, as we have been mentioned, and we have already taken a glance on the possible applications, Deep Learning can make such a brilliant tandem along with a reactive behavioral, as we will demonstrate on this project.\\
+In conclusion, as we have been mentioning and been taking a glance on the possible applications, Deep Learning can make such a brilliant tandem along with a reactive behavioral. We have taken a glance on a few possible applications, and the following dissertation will struggle to demonstrate it.\\
 
 \begin{center}
 	\textbf{Robotics + deep learning rock!}
