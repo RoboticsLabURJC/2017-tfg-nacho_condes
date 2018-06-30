@@ -34,10 +34,11 @@ class TrackingNetwork():
                 tf.import_graph_def(od_graph_def, name='')
 
 
-        gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.7)
+        #gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.7)
         self.sess = tf.Session(graph=detection_graph,
                                config=tf.ConfigProto(log_device_placement=False,
-                                                     gpu_options=gpu_options))
+                                                     #gpu_options=gpu_options))
+                                                     ))
 
         self.image_tensor = detection_graph.get_tensor_by_name('image_tensor:0')
         # NCHW conversion. not possible

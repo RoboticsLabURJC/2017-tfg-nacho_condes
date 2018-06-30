@@ -14,7 +14,7 @@ class SiameseNetwork:
     def __init__(self, model_name, mom_path):
         # Load the siamese network model
         model_path = 'Net/TensorFlow/' + model_name + '.pb'
-        with tf.device('/gpu:0'):
+        with tf.device('/cpu:0'):
             siamese_graph = tf.Graph()
             with siamese_graph.as_default():
                 graph_def = tf.GraphDef()
@@ -22,10 +22,13 @@ class SiameseNetwork:
                     graph_def.ParseFromString(fid.read())
                     tf.import_graph_def(graph_def, input_map=None, name='')
 
+                aa_writer = tf.summary.FileWriter('/home/nacho/LOGS')
+                aa_writer.add_graph(siamese_graph)
+
             # Instance of the session, placeholders and embeddings (output)
-            gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.1)
+            #gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.05)
             self.sess = tf.Session(graph=siamese_graph,
-                                   config=tf.ConfigProto(gpu_options=gpu_options,
+                                   config=tf.ConfigProto(#gpu_options=gpu_options,
                                                          log_device_placement=False))
 
             self.inputs_tensor = siamese_graph.get_tensor_by_name('input:0')
@@ -36,6 +39,8 @@ class SiameseNetwork:
         self.mom_face, _ = self.getFace(mom_img)
 
         # Dummy initialization...
+
+
         dummy_tensor = np.zeros((160, 160, 3))
         _ = self.distanceToMom(dummy_tensor)
 
@@ -43,7 +48,19 @@ class SiameseNetwork:
 
         print("Siamese network ready!")
 
-    def getFace(self, person_img, margin=2, square_size=160):
+    def prewhiten(self, face, square_size=160):
+        ''' Function to preprocess a certain face, to be fed to the
+        siamese network. '''
+        # Squared crop
+        square_face = cv2.resize(face, (square_size, square_size), interpolation=cv2.INTER_CUBIC)
+        blurred_face = cv2.blur(square_face, (5,5))
+        # Now we normalize (whiten) the image
+        [mean, std] = [np.mean(blurred_face), np.std(square_face)]
+        whitened_face = np.multiply(np.subtract(blurred_face, mean), 1.0/std)
+
+        return whitened_face
+
+    def getFace(self, person_img, margin=2):
         '''
         This method looks for a face in a given image, and returns it with a certain
         preprocessing.
@@ -63,20 +80,6 @@ class SiameseNetwork:
             return high_idx
 
 
-        def biggestIdx(face_boxes):
-            ''' Returns the index which belongs to the biggest bounding box.'''
-            bigg_idx = None
-            bigg_w, bigg_h = 0, 0
-
-            for idx in range(len(face_boxes)):
-                face = face_boxes[idx]
-                _, _, w, h = face
-                if w > bigg_w and h > bigg_h:
-                    bigg_w = w
-                    bigg_h = h
-                    bigg_idx = idx
-            return bigg_idx
-
         image_size = np.asarray(person_img.shape)[0:2]
         # Gray conversion for the face detection.
         gray_img = cv2.cvtColor(person_img, cv2.COLOR_BGR2GRAY)
@@ -85,41 +88,17 @@ class SiameseNetwork:
         frontal_face_boxes = frontal_face_cascade.detectMultiScale(gray_img,
                                                    scaleFactor=1.1,
                                                    minNeighbors=2)
-        '''
-        n_front = len(frontal_face_boxes)
 
-        # Profile faces (not working properly)
-        profile_face_boxes = profile_face_cascade.detectMultiScale(gray_img,
-                                                    scaleFactor=1.1,
-                                                    minNeighbors=2)
-        n_prof = len(profile_face_boxes)
-
-        if n_front and n_prof:
-            # Both types detected. Appending...
-            print "both"
-            face_boxes = np.append(frontal_face_boxes, profile_face_boxes, axis=0)
-        elif n_front:
-            print "only frontal"
-            face_boxes = frontal_face_boxes
-        elif n_prof:
-            print "only profile"
-            face_boxes = profile_face_boxes
-        else:
-            face_boxes = []
-
-        n_faces = n_front + n_prof
-        '''
         face_boxes = frontal_face_boxes
         n_faces = np.asarray(face_boxes).shape[0]
 
         if n_faces == 0:
             # No face detected
-            return None, None
+            return [], []
 
         elif n_faces > 1:
             # More than 1 detected face. We will keep
-            # the biggest one.
-            #idx = biggestIdx(face_boxes)
+            # the highest one.
             idx = highestIdx(face_boxes)
 
             n_faces = 1
@@ -138,12 +117,7 @@ class SiameseNetwork:
             box[2] = np.minimum(det[2] + margin/2, image_size[1])
             box[3] = np.minimum(det[3] + margin/2, image_size[0])
             face = person_img[box[1]:box[3], box[0]:box[2], :]
-            # Squared crop
-            square_face = cv2.resize(face, (square_size, square_size), interpolation=cv2.INTER_CUBIC)
-            blurred_face = cv2.blur(square_face, (5,5))
-            # Now we normalize (whiten) the image
-            [mean, std] = [np.mean(blurred_face), np.std(square_face)]
-            whitened_face = np.multiply(np.subtract(blurred_face, mean), 1.0/std)
+            whitened_face = self.prewhiten(face)
 
             return whitened_face, box
 
@@ -156,17 +130,22 @@ class SiameseNetwork:
         img_list = [face1, face2]
         images = np.stack(img_list)
         feed_dict = {self.inputs_tensor: images, self.phase_train_placeholder: False}
-        with tf.device('/gpu:0'):
+        with tf.device('/cpu:0'):
             emb = self.sess.run(self.embeddings, feed_dict=feed_dict)
         # Compute the distance between the output features
         dist = np.sqrt(np.sum(np.square(np.subtract(emb[0,:], emb[1,:]))))
 
         return dist
 
-    def distanceToMom(self, face_query):
+    def distanceToMom(self, face_query, preprocess=True):
         '''
         Checks if a given face corresponds to mom's.
         '''
-        dist = self.compareFaces(face_query, self.mom_face)
+        if preprocess:
+            target = self.prewhiten(face_query)
+        else:
+            target = face_query
+
+        dist = self.compareFaces(target, self.mom_face)
 
         return dist
