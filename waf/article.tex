@@ -4,7 +4,7 @@
 \usepackage{url}
 
 
-\title{Tracking and following a person using Deep Learning on RGBD sensors}
+\title{Person following behavior in a robot using Deep Learning}
 \author{Ignacio Condés \\
 		Universidad Rey Juan Carlos \\
 		\texttt{ignacio.condes.m@gmail.com} \and José María Cañas \\
@@ -16,22 +16,19 @@
 	\maketitle
 	
 	\begin{abstract}
-		During the last decades, robotics have been evolving hand in hand with \emph{machine learning} techniques \cite{speech-pattern-recognition} \cite{slam-feature-extraction}. All of these techniques share their fundamental need of a heavily complex preprocessing of the input, to perform a \emph{feature extraction}, specially on the \emph{Computer Vision}  field \cite[pp.~30--38]{slam-feature-extraction}. These features are the descriptors subsequently fed to the response algorithm.\\
+		During the last decades, robotics has evolved hand in hand with \emph{machine learning} techniques. All of them share their fundamental need of a complex preprocessing of the input, to perform a \emph{feature extraction}, specially on \emph{Computer Vision}. These features are the descriptors subsequently fed to the response algorithm. What we seek with this is to get \emph{automatic, fast and efficient} algorithms to detect certain objects inside an image.\\
 		
-		But, what if we make \emph{deep learning} be a part of this intelligence system? It would yield us an immediate benefit, as we would not need a heavy feature transformation/extraction algorithms if a deep neural network could \emph{learn to do it itself on the optimum way}.\\
+		This work proposes to address person detection using \emph{deep learning}, deploying a CNN (\emph{Convolutional Neural Network}) to process the incoming images. The main benefit compared to traditional methods is the \emph{robustness} that deep learning can yield. The main objective has been to find the optimum trade-off between the mentioned robustness and a real-time response.\\
 		
-		This work proposes to address person detection with a deep neural network, gathering  a RGBD sensor image. This valuable and confident information allow to track a single person, thanks to carrying out a facial identification process, and a spatial distance estimation with the depth information from the RGBD sensor.\\
+		The proposed system achieves it thank to a pretrained SSD (\emph{Single Shot Multibox Detector}) person detection CNN we have deployed on TensorFlow. Additionally, in order to increase the robustness, we have implemented a \emph{person tracking} system that eliminates the effect of false positives/negatives in the detection process. The next stage in the system pipeline was a \emph{face detection} block (using \emph{Haar Cascade} detectors on OpenCV), in order to retrieve the face for every detected person. The extracted faces (tracked as well for each person) were lastly analyzed by a \emph{siamese network} (on TensorFlow as well), in order to find the chased person.\\
 		
-		The proposed system has been successfully deployed on a real Turtlebot robot, drawing upon an Asus Xtion conventional RGBD camera, and a real-time detection CNN (\emph{Convolutional Neural Network}) implemented on TensorFlow.
+		This described pipeline allows to certainly tell which of the seen persons is the one to follow, even on a poorly lightened scenario (one of the worst Computer Vision enemies). This information can be combined with a depth image from an infrared sensor, to obtain a fine estimation of the relative position to the person. Lastly, we implement a case-based \emph{PID} controller for a reactive smooth response, moving the robot towards the objective person.
+		
+		
+		
+		The entire system has been experimentally validated on a real Turtlebot robot, drawing upon an Asus Xtion conventional RGBD camera, with successful results.
 	\end{abstract}
-	
-	
-	
-	
 
-\bibliographystyle{unsrt}	
-\bibliography{bibliography}
-	
 	
 	
 \end{document}
