@@ -1,17 +1,15 @@
 The proposed following behavior has been developed com-
-bining a perception module and a controller module.
-The perception module addresses person detection using a Convolutional
-Neural Network to process the incoming images. Its main benefit over
-traditional methods is the robustness, but care has to be put on not
-losing a real-time operation. This module uses a pretrained TensorFlow
-SSD person detection CNN. In order to increase the robustness, we have
-also implemented a person tracker that eliminates the effect of false pos-
-itives/negatives. It also has a face detection block. The extracted faces
-are analyzed by a siamese network, in order to reidentify the tracked in-
-dividual person. This perception module tells which person in the image
-is the one to follow, even on poorly lightened scenarios. This is combined
-with depth readings, to obtain the relative position of the person. The
-control module implements a case-based PID controller for a reactive
-smooth response, moving the robot towards the target person. The en-
-tire system has been experimentally validated on a real Turtlebot robot,
-with an Asus Xtion conventional RGBD camera.
+bining a perception and control modules. The perception module ad-
+dresses person detection on the incoming images using a pretrained Ten-
+sorFlow SSD person detection Convolutional Neural Network, offering
+robustness over traditional methods, although care has to be put on not
+losing real-time operation. This is also supported by a person tracker that
+eliminates the effect of false positives/negatives. It also has a face detec-
+tion block, which extracts faces to be analyzed by a siamese network, in
+order to reidentify the tracked individual person. This perception mod-
+ule tells which person in the image is the one to follow, even on poorly
+lightened scenarios. This is combined with depth readings, to obtain the
+relative position of the person. The control module implements a case-
+based PID controller for a reactive smooth response, moving the robot
+towards the target person. The entire system has been experimentally
+validated on a real Turtlebot robot, with an Asus Xtion RGBD camera.
