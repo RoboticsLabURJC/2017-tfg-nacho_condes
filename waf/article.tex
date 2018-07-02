@@ -1,32 +1,31 @@
-\documentclass[11pt, a4paper]{article}
-
+\documentclass[11pt, a4paper]{svproc}
 \usepackage[utf8]{inputenc}
-\usepackage{url}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{footmisc}
 
-
-\title{Person following behavior in a robot using Deep Learning}
-\author{Ignacio Condés \\
-		Universidad Rey Juan Carlos \\
-		\texttt{ignacio.condes.m@gmail.com} \and José María Cañas \\
-		Universidad Rey Juan Carlos\\
-		\texttt{jmplaza@gsyc.es}}
-
+\title{Person following robot behavior using Deep Learning}
+\author{Ignacio Condés
+		\and José María Cañas}
+\institute{Universidad Rey Juan Carlos}
 
 \begin{document}
 	\maketitle
 	
 	\begin{abstract}
-		During the last decades, robotics has evolved hand in hand with \emph{machine learning} techniques. All of them share their fundamental need of a complex preprocessing of the input, to perform a \emph{feature extraction}, specially on \emph{Computer Vision}. These features are the descriptors subsequently fed to the response algorithm. What we seek with this is to get \emph{automatic, fast and efficient} algorithms to detect certain objects inside an image.\\
+		The proposed following behavior has been developed combining a \emph{perception module} and a \emph{controller module}.\\
 		
-		This work proposes to address person detection using \emph{deep learning}, deploying a CNN (\emph{Convolutional Neural Network}) to process the incoming images. The main benefit compared to traditional methods is the \emph{robustness} that deep learning can yield. The main objective has been to find the optimum trade-off between the mentioned robustness and a real-time response.\\
+		The perception module addresses person detection using a \emph{Convolutional Neural Network} to process the incoming images. The main benefit over traditional methods is the \emph{robustness} that deep learning can yield, but an eye must be kept on not losing a real-time operation.\\
 		
-		The proposed system achieves it thank to a pretrained SSD (\emph{Single Shot Multibox Detector}) person detection CNN we have deployed on TensorFlow. Additionally, in order to increase the robustness, we have implemented a \emph{person tracking} system that eliminates the effect of false positives/negatives in the detection process. The next stage in the system pipeline was a \emph{face detection} block (using \emph{Haar Cascade} detectors on OpenCV), in order to retrieve the face for every detected person. The extracted faces (tracked as well for each person) were lastly analyzed by a \emph{siamese network} (on TensorFlow as well), in order to find the chased person.\\
+		This scheme uses a pretrained SSD person detection CNN we have deployed on TensorFlow. In order to increase the robustness of the perception system, we have also implemented a \emph{person tracker} that eliminates the effect of false positives/negatives. The perception module also has a \emph{face detection} block (using \emph{Haar Cascade} detectors). The extracted faces are then analyzed by a \emph{siamese network}, in order to reidentify the tracked individual person.
 		
-		This described pipeline allows to certainly tell which of the seen persons is the one to follow, even on a poorly lightened scenario (one of the worst Computer Vision enemies). This information can be combined with a depth image from an infrared sensor, to obtain a fine estimation of the relative position to the person. Lastly, we implement a case-based \emph{PID} controller for a reactive smooth response, moving the robot towards the objective person.
+		This perception pipeline tells which of the persons in the image is the one to follow, even on poorly lightened scenarios. This information is combined with depth readings, to obtain a fine estimation of the relative position of the person.\\
+		
+		The controller module implements a case-based \emph{PID} controller for a reactive smooth response, moving the robot towards the objective person.
 		
 		
 		
-		The entire system has been experimentally validated on a real Turtlebot robot, drawing upon an Asus Xtion conventional RGBD camera, with successful results.
+		The entire system has been experimentally validated on a real Turtlebot robot, with an Asus Xtion conventional RGBD camera.
 	\end{abstract}
 
 	
