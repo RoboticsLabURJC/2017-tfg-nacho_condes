@@ -6,20 +6,23 @@ The final objective is to enrich the JdeRobot platform on its Computer Vision as
 
 \section{Main objectives}
 
-	\begin{itemize}
-		\item \textit{Classification:} our first objective (and the first task to tackle) will be to upgrade the support of the digit classification tool already present in JdeRobot, \texttt{DigitClassifier} (\autoref{sec:3_digitclassifier_jderobot}). This will allow us to make the scope of this component bigger, due to the support for the new framework, TensorFlow (\autoref{sec:3_tensorflow}). This is a good starting point to achieve some initial skills building and training Convolutional Neural Networks on TensorFlow (it will be the main framework used all along the project).
+		\subsection{Classification}
+			Our first objective (and the first task to tackle) will be to upgrade the support of the digit classification tool already present in JdeRobot, \texttt{DigitClassifier} (\autoref{sec:3_digitclassifier_jderobot}). This will allow us to make the scope of this component bigger, due to the support for the new framework, TensorFlow (\autoref{sec:3_tensorflow}). This is a good starting point to achieve some initial skills building and training Convolutional Neural Networks on TensorFlow (it will be the main framework used all along the project).\\
 		
 		
-		\item \textit{Detection:} As it will be described on the suitable chapter, we will build a component (\texttt{ObjectDetector}) which deploys \textit{a generic object detection algorithm} on an incoming video stream. This component will be ready to work in \emph{real time}.
+		\subsection{Detection}
+			As it will be described on the suitable chapter, we will build a component (\texttt{ObjectDetector}) which deploys \textit{a generic object detection algorithm} on an incoming video stream. This component will be ready to work in \emph{real time}. It will also be compatible with new network models (e.g. a new detection model trained by us), which will be loaded transparently at runtime.\\
+			
+			As it can be inferred, it will not provide a response \textit{per se}. Its visible output will be to draw \emph{bounding boxes} surrounding each detected object, indicating as well the class where that particular object belongs (person, airplane, dog, etc.), and its score (confidence in \%).\\
 		
-		As it can be inferred, it will not provide a response \textit{per se}. Its visible output will be to draw \emph{bounding boxes} surrounding each detected object, indicating as well the class where that particular object belongs (person, airplane, dog, etc.), and its score (confidence in \%).
-		
-		\item \textit{Tracking and following:} As an example of the plethora of possible applications of the previous described objective/milestone (object detection on an image), we want to implement a ``person following" behavioral. Our main objective here is to \textit{identify and track} the person to follow, which will semantically be called \emph{mom}. The component that comprehends the previous detection behavioral and this new one will be named \texttt{FollowPerson}. The great advantage here is the strength a CNN can achieve under variable light conditions. That makes this technique perfectly suitable to command physical actuators on a robot.
-		
-		We will make use of the detected people (with the technique followed on the previously described node and constraining the result to only retain people detection), and look for the face of each one of them. Later, we will make use of another neural network technique, called a \emph{siamese network} (it will be properly explained later) to identify them. It will allow us to find \emph{mom}, in case it is being seen by the camera, and command a proper response to the robot with the objective of following \emph{mom}.
-	\end{itemize}
+		\subsection{Tracking and following}
+			As an example of the plethora of possible applications of the previous described objective/milestone (object detection on an image), we want to implement a ``person following" behavioral. Our main objective here is to \textit{identify and track} the person to follow, which will semantically be called \emph{mom}. The component that comprehends the previous detection behavioral and this new one will be named \texttt{FollowPerson}. The great advantage here is the strength a CNN can achieve under variable light conditions. That makes this technique perfectly suitable to command physical actuators on a robot.\\
+			
+			We will make use of the detected people (with the technique followed on the previously described node and constraining the result to only retain people detection), and look for the face of each one of them. Later, we will make use of another neural network technique, called a \emph{siamese network} (it will be properly explained later) to identify them. It will allow us to find \emph{mom}, in case it is being seen by the camera, and command a proper response to the robot with the objective of following \emph{mom}.\\
+			
+			\vspace{1in}
 
-As we have said before, these two nodes/components are successive. Thus, they will share an important part of the global objectives.\\
+As we have said before, these two last nodes/components are successive. Thus, they will share an important part of the global objectives.\\
 
 We will start breaking down the common objectives between both applications, into three functional blocks:
 
@@ -39,7 +42,7 @@ We will start breaking down the common objectives between both applications, int
 	
 	\begin{figure}[h]
 		\centering
-		\includegraphics[width=3in]{images/tasks_threads}
+		\includegraphics[width=4in]{images/tasks_threads}
 		\caption{Parallel tasks to perform, and data exchange between them.}
 		\label{fig:2_tasks}
 	\end{figure}
