@@ -7,8 +7,6 @@ def pxBetweenBoxes(bb1, bb2):
     bounding boxes, to judge wether they are
     approximately in the same place.
     '''
-    #print "type1 -> ", type(bb1)
-    #print "type2 -> ", type(bb2)
     bb1 = bb1.astype(np.int32)
     bb2 = bb2.astype(np.int32)
     center1 = np.divide([bb1[3] + bb1[1], bb1[2] + bb1[0]], 2)
@@ -41,7 +39,7 @@ class FaceTracker:
     position inside each person.
     '''
 
-    def __init__(self, patience=5, same_face_thr=50):
+    def __init__(self, patience=3, same_face_thr=70):
         self.patience = patience
         self.same_face_thr = same_face_thr
 
@@ -131,7 +129,7 @@ class Person:
 
 
 class PersonTracker:
-    def __init__(self, patience=5, mom_dist_thr=1.00, same_person_thr=50):
+    def __init__(self, patience=1, mom_dist_thr=1.00, same_person_thr=180):
         self.patience = patience
         self.mom_dist_thr = mom_dist_thr
         self.same_person_thr = same_person_thr
@@ -189,6 +187,7 @@ class PersonTracker:
                 if pxBetweenBoxes(d_person, t_person.coords) < self.same_person_thr:
                     # Tracked person found in the same place (approximately).
                     # Updating person.
+                    print "updating"
                     self.tracked_persons[idx] = Person(d_person,
                                                        d_score,
                                                        min(t_person.counter, self.patience) + 2,
@@ -196,6 +195,8 @@ class PersonTracker:
                                                        t_person.is_mom)
                     found = True
                     break
+                else:
+                    print "ko"
 
             # Person not tracked. Is it a candidate?
             for idx in range(len(self.candidate_persons)):

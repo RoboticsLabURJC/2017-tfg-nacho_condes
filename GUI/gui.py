@@ -83,8 +83,8 @@ class GUI(QtWidgets.QWidget):
         self.logo_label.setPixmap(QtGui.QPixmap.fromImage(logo_img))
         self.logo_label.show()
 
-        self.font = cv2.FONT_HERSHEY_SIMPLEX
-        self.scale = 0.6
+        self.font = cv2.FONT_HERSHEY_PLAIN
+        self.scale = 2.0
 
 
     def setCamera(self, cam, t_cam):
@@ -162,14 +162,14 @@ class GUI(QtWidgets.QWidget):
                 ymax = face[3]
                 cv2.rectangle(image_np, (xmin, ymax), (xmax, ymin), (255, 0, 0), 2)
 
+
+        img_shape = image_np.shape
+
         for index in range(len(detected_persons)):
             person = detected_persons[index]
             score = person.score
 
-            xmin = person[0]
-            ymin = person[1]
-            xmax = person[2]
-            ymax = person[3]
+            [xmin, ymin, xmax, ymax] = person
 
             if person.is_mom:
                 # This rect belongs to mom
@@ -180,7 +180,9 @@ class GUI(QtWidgets.QWidget):
                 label = "person ({} %)".format(int(score*100))
 
 
-            [size, base] = cv2.getTextSize(label, self.font, self.scale, 1)
+            [size, base] = cv2.getTextSize(label, self.font, self.scale, 3)
+            xmin = max(xmin, 0)
+            ymin = max(ymin, base + ymin + size[1])
 
             points = np.array([[[xmin, ymin + base],
                                 [xmin, ymin - size[1]],
@@ -189,7 +191,7 @@ class GUI(QtWidgets.QWidget):
             cv2.fillPoly(image_np, points, (0, 0, 0))
             cv2.putText(image_np, label, (xmin, ymin), self.font, self.scale, (255, 255, 255), 2)
 
-        im = QtGui.QImage(image_np.data, image_np.shape[1], image_np.shape[0],
+        im = QtGui.QImage(image_np.data, img_shape[1], img_shape[0],
                           QtGui.QImage.Format_RGB888)
 
         im_drawn = im.scaled(self.im_label.size())
@@ -239,8 +241,7 @@ class DepthGUI(GUI):
     def update(self):
         depth_total = self.depth.getImage()
         layers = cv2.split(depth_total)
-        self.depth_prev = cv2.cvtColor(layers[0], cv2.COLOR_GRAY2BGR)
-
+        self.depth_prev = cv2.applyColorMap(cv2.cvtColor(layers[0], cv2.COLOR_GRAY2BGR), cv2.COLORMAP_JET)
 
         depth = QtGui.QImage(self.depth_prev, self.depth_prev.shape[0], self.depth_prev.shape[1],
                              QtGui.QImage.Format_RGB888)

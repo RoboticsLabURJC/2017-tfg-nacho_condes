@@ -16,6 +16,8 @@ class PIDDriver:
         self.scaling_factor = scaling_factor
         self.limiter = limiter
 
+        self.lost_limiter = limiter / 3.0
+
         # Internal parameters for the response calculation
         self.prev_error = 0
         self.cumulative_error = 0
@@ -26,10 +28,10 @@ class PIDDriver:
         ''' This method sends a command to the motors, and updates the last command. '''
         # Soften movements:
         if abs(response - self.last_response) > 0.2:
-            speeds = np.linspace(self.last_response, response, num=7)
+            speeds = np.linspace(self.last_response, response, num=5)
             for speed in speeds:
                 self.func(speed)
-                sleep(0.1)
+                sleep(0.05)
         else:
             self.func(response)
 
@@ -37,21 +39,19 @@ class PIDDriver:
 
 
     def brake(self):
-        ''' Braking progressively on 10 steps until 0 (blocking function). '''
+        ''' Braking progressively on 4 steps until 0 (blocking function). '''
         if self.last_response != 0:
-            speeds = np.linspace(self.last_response, 0, num=10)
-
+            speeds = np.linspace(self.last_response, 0, num=4)
             for speed in speeds:
                 # Send speed to the motors
                 self._sendCommand(speed)
-                # Wait 100 ms
-                sleep(0.1)
+
 
     def lostResponse(self):
         ''' Send a softened response from the last sent speed. '''
         response = self.K_loss * self.last_response
-        if abs(response) > self.limiter:
-            response = np.sign(response) * self.limiter
+        if abs(response) > self.lost_limiter:
+            response = np.sign(response) * self.lost_limiter
 
         self._sendCommand(response)
         # Return for printing

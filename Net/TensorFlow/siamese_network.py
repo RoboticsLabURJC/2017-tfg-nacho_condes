@@ -22,9 +22,6 @@ class SiameseNetwork:
                     graph_def.ParseFromString(fid.read())
                     tf.import_graph_def(graph_def, input_map=None, name='')
 
-                aa_writer = tf.summary.FileWriter('/home/nacho/LOGS')
-                aa_writer.add_graph(siamese_graph)
-
             # Instance of the session, placeholders and embeddings (output)
             #gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.05)
             self.sess = tf.Session(graph=siamese_graph,

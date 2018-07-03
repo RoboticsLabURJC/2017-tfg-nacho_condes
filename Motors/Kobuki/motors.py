@@ -41,7 +41,7 @@ class Motors():
         self.w_center = 0
         self.w_margin = 60
 
-        self.v_center = 60
+        self.v_center = 70
         self.v_margin = 10
         # Overswitching avoidance flag
         self.margin_expanded = False
@@ -51,6 +51,8 @@ class Motors():
         self.face_thres = 1.0
 
         self.mom_coords = None
+        self.prev_error = None
+        self.faces = []
 
         # Interface for turtlebot sounds
         #self.sound_publisher = rospy.Publisher('/mobile_base/commands/sound', Sound, queue_size=10)
@@ -120,39 +122,47 @@ class Motors():
             distance, grid = self.estimateDepth(mom_depth)
             # V error processing (go forward/backward)
             error = distance - self.v_center
-            if error < -self.v_margin:
-                # Too far
-                v = self.v_PID.processError(error, verbose=False)
-                cprint.warn('  Distance: %d px (too near) >> VX = %.3f m/s' % (distance, v))
-                # Avoid overswitching
-                if not self.margin_expanded:
-                    self.v_margin = self.v_margin - 5
-                    self.margin_expanded = True
-
-                self.margin_expanded = True
-                #cprint.info("New margin: %d" % (self.v_margin))
-
-            elif error > self.v_margin:
-                # Too near
-                v = self.v_PID.processError(error, verbose=False)
-                cprint.warn('  Distance: %d px (too far) >> VX = %.3f m/s' % (distance, v))
-                # Avoid overswitching
-                if not self.margin_expanded:
-                    self.v_margin = self.v_margin - 5
-                    self.margin_expanded = True
-                #cprint.info("New margin: %d" % (self.v_margin))
-
+            if self.prev_error is not None:
+                d_error = abs(error - self.prev_error)
             else:
-                # Inside range (OK)
-                cprint.ok('  Distance: %d px (under control)' % (distance))
-                self.v_PID.resetError()
-                self.v_PID.brake()
+                d_error = 0
+            # Avoid jumps
+            if d_error < 10.0:
+                if error < -self.v_margin:
+                    # Too far
+                    v = self.v_PID.processError(error, verbose=False)
+                    cprint.warn('  Distance: %d px (too near) >> VX = %.3f m/s' % (distance, v))
+                    # Avoid overswitching
+                    if not self.margin_expanded:
+                        self.v_margin = self.v_margin - 5
+                        self.margin_expanded = True
 
-                if self.margin_expanded and error < self.original_v_margin:
-                    # The margin can be restored...
-                    cprint.info("Margin restored.")
-                    self.v_margin = self.original_v_margin
-                    self.margin_expanded = False
+                    self.margin_expanded = True
+                    cprint.info("New margin: %d" % (self.v_margin))
+
+                elif error > self.v_margin:
+                    # Too near
+                    v = self.v_PID.processError(error, verbose=False)
+                    cprint.warn('  Distance: %d px (too far) >> VX = %.3f m/s' % (distance, v))
+                    # Avoid overswitching
+                    if not self.margin_expanded:
+                        self.v_margin = self.v_margin - 5
+                        self.margin_expanded = True
+                    cprint.info("New margin: %d" % (self.v_margin))
+
+                else:
+                    # Inside range (OK)
+                    cprint.ok('  Distance: %d px (under control)' % (distance))
+                    self.v_PID.resetError()
+                    self.v_PID.brake()
+
+                    if self.margin_expanded and error < self.original_v_margin:
+                        # The margin can be restored...
+                        cprint.info("Margin restored.")
+                        self.v_margin = self.original_v_margin
+                        self.margin_expanded = False
+
+            self.prev_error = error
 
             # Now, we compute the necessary turning
             ################################
@@ -220,9 +230,9 @@ class Motors():
 
         # If mom is being tracked, we move the robot towards it.
         if mom_found_now:
-            print "Mom found"
+            cprint.ok("\t\t  Mom found")
             goToMom(self.mom_coords)
         else:
-            print "Looking for mom..."
+            cprint.warn("\t\t  Looking for mom...")
             self.v_PID.lostResponse()
             self.w_PID.lostResponse()
