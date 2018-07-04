@@ -142,8 +142,8 @@
 			\end{subfigure}
 			\begin{subfigure}[h]{0.4\linewidth}
 				\includegraphics[width=2.3in]{images/real_turtlebot_2}
-				\caption{Rear view.}
-				\label{fig:3_turtlebot_rear}
+				\caption{Side view.}
+				\label{fig:3_turtlebot_side}
 			\end{subfigure}
 			\caption{Turtlebot development kit.}
 			\label{fig:3_turtlebot}
@@ -393,7 +393,7 @@ In the same way than OpenCV, this is a numerical library widely adopted between 
 	
 	In our project, support has been provided to use this framework (selecting it on the YML configuration file), although our main interest has been TensorFlow due to the significative difference of processing speed between both frameworks (being TensorFlow twice as fast as Keras).
 \section{PyQt}
-	Qt\footnote{\url{https://www.qt.io/}} is an cross-platform object-oriented framework, originally developed by a Nokia department. It is distributed under a commercial license, although it has a standard GPL license for open-source projects.\\
+	Qt\footnote{\url{https://www.qt.io/}} is an cross-platform object-oriented framework for building GUIs (\emph{Graphical User Interfaces}), originally developed by a Nokia department. It is distributed under a commercial license, although it has a standard GPL license for open-source projects.\\
 	
 	A third party company (RiverBank Computing) developed PyQt, a set of Python bindings to interact with Qt (originally written in C++). It is structured in units called \emph{Widgets}, which contain blocks (\emph{Labels}).\\
 	
@@ -473,29 +473,9 @@ class MyThread(threading.Thread):
 			dt = end_time - start_time
 			
 			# If it did not take the refresh time, it sleeps until it arrives.
-			if dtms < self.t_cycle:
+			if dt < self.t_cycle:
 				sleep(self.t_cycle - dt)
 				
 	\end{lstlisting}
 	
 In addition, as we can see, it is possible to control the update period of the thread, so we can decide how much time it will be elapsed between two consecutive executions of the thread task (and of course this is a tunable parameter).\\
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
