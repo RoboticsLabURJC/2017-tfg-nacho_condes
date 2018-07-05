@@ -380,7 +380,7 @@ In the same way than OpenCV, this is a numerical library widely adopted between 
 		\label{fig:3_tf_graph}
 	\end{figure}
 	
-	All these possibilities make TensorFlow a very optimized ecosystem to implement \emph{deep learning} models (Deep Neural Networks). In addition, it is optimized for parallel GPU hardware. This gives a network the opportunity to experiment a performance boost, since it can reduce significantly the time it takes to make an inference (and even work on a system with a cluster of GPUs, although this is focused to more exigent systems than the one we create on this work).\\
+	All these possibilities make TensorFlow a very optimized ecosystem to implement \emph{deep learning} models (Deep Neural Networks). In addition, it is optimized for parallel GPU hardware. This gives a network the opportunity to experiment a performance boost, since it can reduce significantly the time it takes to make an inference (and even work on a system with a cluster of GPUs, although this is focused to more exigent systems than the one we create on this work). For our\\
 	
 	Since it was launched (November 2015), it has been adopted by many big companies which have used TensorFlow as the base for their Artificial Intelligence applications, such as Twitter, Intel, Google, eBay, Xiaomi, Nvidia, etc.\\
 	
@@ -435,6 +435,7 @@ if __name__ == '__main__':
 	As it is the last available version at the time this is developed, we will use the version 5 of Qt. Hence, our binding library is \texttt{PyQt5}.\\
 	
 \section{Threading}
+	\label{sec:3_threading}
 	\texttt{Threading}\footnote{\url{https://docs.python.org/2/library/threading.html}} is a Python standard library which offer a high-level API for threading processes. This means to run programs on more than one single job for the CPU, which allows to be capable of perform several tasks on a simultaneous way.\\
 	
 	This is very convenient for our purpose, as we want to stick to a multiprocessing paradigm (\autoref{fig:2_tasks}). So, this way we can have dedicated threads to grab the new camera images, update the GUI, and make the Neural Network to load new inferences on the last image detected.\\
