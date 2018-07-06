@@ -21,7 +21,7 @@
 		
 		As it can be seen it the \emph{README} file\footnote{\url{https://github.com/JdeRobot/dl-digitclassifier/blob/master/README.md}} in the repository, configuring the component is made pretty simple thanks to the YML file, so the reader is asked to feel encouraged to give it a try.\\
 		
-	\section{Functional infrastructure}
+	\section{Node architecture}
 		As specified in \autoref{fig:2_tasks}, we divide the entire node functionality into individual tasks. These tasks have been implemented invoking a dedicated thread (using the \texttt{threading} library) for each one.\\
 		
 		\begin{figure}[h]
@@ -36,8 +36,10 @@
 		This establishes the first functional difference with the previous version, which was powered by only 2 threads (for the camera and the GUI), performing on-demand (blocking) inferences on the neural network. Implementing a new thread dedicated to the neural network allows to have an instantaneous output digit from the network, ready to be grabbed on an easy and non-blocking way.\\
 		
 		Using the specified \texttt{threading} library, this deployment is as easy as:
-		
-		\begin{lstlisting}
+		\begin{figure}[h!]
+			\centering
+
+			\begin{lstlisting}
 import Camera, ThreadCamera
 import GUI, ThreadGUI
 import Network, ThreadNetwork
@@ -66,8 +68,12 @@ t_net.start()
 
 gui.show()
 
-
-		\end{lstlisting}
+	
+			\end{lstlisting}
+			
+			\caption{Schematic code to instantiate the components of the node.}
+			\label{fig:4_digitclassifier_code}
+		\end{figure}
 		Nevertheless, care has to be put on respecting parallelism between threads. This infrastructure is optimum for asynchronism, which means that one component does not depend on any others (e.g. the GUI component does not need the network to finish the next inference and return the classified digit in order to refresh the interface: it grabs the last inference made by the network \emph{from the own network}, which will be automatically updated when a newer one is available).
 		
 		This implies a respect to the independence between threads. It is the key for an asynchronous behavioral, as we want the component to yield the best possible performance.\\
@@ -97,7 +103,7 @@ gui.show()
 		\end{figure}
 
 	\section{Digit classification CNN}
-
+		\label{sec:4_classif_cnn}
 		The implementation of this convolutional neural network consists of a concatenation of layers, following the scheme shown on \autoref{fig:4_digitclassifier_neural_structure}. These layers are disposed in a serial structure, so the output of one layer (a vector containing what each neural activation function yields) acts as the input for the next one.
 		
 		For this reason, we need a first input layer, where all the pixels of the input image are mapped to a input neuron, on a bijective way.\\
@@ -265,7 +271,7 @@ train_step = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
 			
 
 		\subsection{Dataset augmentation}
-			David \cite{dpascualhe} and Nuria \cite{noyaga} performed what is called a \emph{data augmentation} over the MNIST dataset, with the objective of \emph{pretend} to have a bigger number of samples to train.\\
+			David Pascual \cite{dpascualhe} and Nuria Oyaga \cite{noyaga} performed what is called a \emph{data augmentation} over the MNIST dataset, with the objective of \emph{pretend} to have a bigger number of samples to train.\\
 			
 			It consists of taking the existing images (on the standard MNIST dataset) and apply to it random (although controlled) transformations: each image suffers \emph{translations, rotations and zooms}, in addition to \emph{gaussian noise}. This has a double purpose: to \emph{get a bigger number of samples} (which is always a good thing), and to \emph{make a better model to process real world images}. As this network will classify real incoming digits from a camera, these digits will have most probably suffered noise (because of the camera and light conditions) and various geometrical transformations (as it can be shown to the camera with a slight tilt, or on a different background, etc.). Thus, we need to create a neural network which is ready to deal these harsh conditions. That is the main reason to augment the dataset performing these transformations.\\
 			
