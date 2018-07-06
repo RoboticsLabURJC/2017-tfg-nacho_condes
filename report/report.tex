@@ -3,7 +3,6 @@
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{subcaption}
-
 \usepackage{wrapfig}
 
 \usepackage{listings}
@@ -16,7 +15,7 @@ anchorcolor = blue,
 backref=page]{hyperref}
 \usepackage{subcaption}
 \usepackage{color}
-
+\usepackage{multirow}
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
@@ -57,7 +56,7 @@ backref=page]{hyperref}
 
 
 
-%\usepackage{helvet}
+%\usepackage[scaled]{helvet}
 \renewcommand{\familydefault}{\sfdefault}
 
 \begin{document}
@@ -66,7 +65,7 @@ backref=page]{hyperref}
 	%%%%%%% INDEX, LISTS %%%%%%%%%
 	\tableofcontents
 	\listoffigures
-	%\listoftables
+	\listoftables
 	
 	%%%%%% SUMMARY %%%%%%%%%
 	\include{0-summary}	
@@ -84,11 +83,9 @@ backref=page]{hyperref}
 	%%%% DIGIT CLASSIFIER %%%
 	\include{4-digitclassifier}
 	
-	
-	
+	%%%% OBJECT DETECTOR %%%
+	\include{5-objectdetector}
 	\include{skeleton}
-	
-	
 	%%%%%%%%% BIBLIOGRAPHY %%%%%%%%%
 	\bibliography{bibliography}
 	\bibliographystyle{unsrt}

@@ -223,6 +223,7 @@ y = tf.nn.softmax(class_tendences)
 			
 
 		\subsection{Training the network}
+		\label{sec:4_train}
 			The reviewed pipeline is performed on an image, since it enters on the neural network until it goes out, passing through all the defined layers performing what is called \emph{feed-forward} propagation. However, the values of the activation maps and, hence, of the dense layer outputs (which determine the resulting class) depend on a relatively huge number of neurons, each one with its own weights and biases (for each class). As we can see, that is a ridiculous number of parameters to tune manually, hence we tune it automatically performing what is called \emph{backpropagation}.\\
 			
 			This backpropagation algorithm \cite{Rumelhart1986} performs a standard feedforward propagation (as described before) on what we call \emph{training set} (labeled images that will be used \emph{exclusively} for this purpose), which the system takes as examples which to learn of. Then, it compares the obtained output class ($argmax(softmax())$) for each input, and adjusts all the weights of the network, seeking to ensure that the difference between the \emph{desired} output (the \emph{ground truth} labels) and the \emph{obtained} result is minimum. This difference is computed and represented by a value which we call \emph{loss/cost} (the higher its value is, the worse, as there is a bigger difference between the correct and the obtained output).\\
