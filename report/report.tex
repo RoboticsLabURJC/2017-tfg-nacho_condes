@@ -56,36 +56,41 @@ backref=page]{hyperref}
 
 
 
-%\usepackage[scaled]{helvet}
+\usepackage[scaled]{helvet}
 \renewcommand{\familydefault}{\sfdefault}
 
 \begin{document}
 	%%%%%%% COVER %%%%%%%%
-	\include{0-cover}
+%	\include{0-cover}
 	%%%%%%% INDEX, LISTS %%%%%%%%%
 	\tableofcontents
-	\listoffigures
-	\listoftables
+%	\listoffigures
+%	\listoftables
 	
 	%%%%%% SUMMARY %%%%%%%%%
-	\include{0-summary}	
+%	\include{0-summary}	
 	
 	%%%%%% INTRODUCTION %%%%%%%%
-	\include{1-introduction}
+%	\include{1-introduction}
 	
 	
 	%%%%%% OBJECTIVES %%%%%%
-	\include{2-objectives}
+%	\include{2-objectives}
 	
 	%%%%% INFRASTRUCTURE %%%%%
-	\include{3-infrastructure}
+%	\include{3-infrastructure}
 	
-	%%%% DIGIT CLASSIFIER %%%
-	\include{4-digitclassifier}
+	%%% DIGIT CLASSIFIER %%%
+%	\include{4-digitclassifier}
 	
 	%%%% OBJECT DETECTOR %%%
-	\include{5-objectdetector}
-	\include{skeleton}
+%	\include{5-objectdetector}
+	%%%%%%%%% FOLLOW PERSON %%%%%%%%%
+	\include{6-followperson}
+	
+	
+	%%%%%%%%% CONCLUSIONS %%%%%%%%%%%
+	\include{7-conclusions}
 	%%%%%%%%% BIBLIOGRAPHY %%%%%%%%%
 	\bibliography{bibliography}
 	\bibliographystyle{unsrt}
