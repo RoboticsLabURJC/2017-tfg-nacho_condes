@@ -264,7 +264,7 @@ distance = facenet.compareFaces(face1, face2)
 			\caption{Tracking process for a face.}
 			\label{fig:6_face_tracker}
 		\end{subfigure}
-		\caption{Scheme followed by the trackers.}
+		\caption{Schema followed by the trackers.}
 		\label{fig:6_trackers}
 	\end{figure}
 
@@ -282,38 +282,211 @@ distance = facenet.compareFaces(face1, face2)
 		\end{wrapfigure}
 		Once we have detected, tracked and identified \emph{mom}, we have to keep a certain intelligence, or behavioral schema, to know what to do on each possible scenario. The \emph{flow chart} of the implemented behavioral is represented on \autoref{fig:6_followperson_flow_chart}, where we can see that \emph{it is enough for us to identify mom once}. Given that it will be tracked, we can automatically update its position,  without the need to see its face again to confirm that it is mom indeed. If we are following mom without seeing its face, and we find its face on another detected person, the role of \emph{mom} will swap to this new person, who will be followed from that moment.\\
 
+		In last place, if we don't see \emph{mom} our robot stays in its place, slowly turning towards last \emph{mom} tracked position, in order to find it again.
+
 	\subsection{Position calculation}
 		The fact of knowing, thank to  all the previous blocks, where \emph{mom} is inside the image lets us know where (relatively to the robot) it is, given that the RGBD sensor is aligned with the Turtlebot frontal face. This means that, what is seen along the center of the image will be just in front of the robot, on a straight line. Thus, we will be able to act in consequence on both of the motors interfaces that the Turtlebot offers:
 		
 		\begin{itemize}
 			\item \emph{Angular}: the first thing we have to figure out is if the robot has to rotate towards \emph{mom}. This can be computed with the bare \emph{mom}'s bounding box. If we compute its center, we can know the horizontal distance from it to the entire image center. This will give us the \emph{horizontal error} (measured in pixels, as it is a relative amount) (\autoref{fig:6_h_error}).
 			
-			\begin{figure}[h]
+			\item \emph{Distance}: the other error to compute is the distance one. This one is figured out on a slightly different way. As explained at \autoref{sec:3_xtion}, a \emph{registration} process carried out by the driver maps the depth pixels into the RGB ones. So, if we know \emph{mom}'s position in the RGB image (its bounding box), \emph{its depth measures will be right inside the same box in the depth image}. That is the source of the measure. The implemented approach to obtain a single value (as we need it to send the proper command to the motors) is to perform a \emph{spatial depth sampling} inside the depth slice, cropped with the bounding box. To be cautious, we keep the depth image inside a safety margin of 10\% of the image (to be sure we sample inside the person). Then, we create a 10$\times$10 \emph{grid} inside this new crop, and retrieve the depth values measured on those points (a total of 100 measures). The total estimated distance will be the median\footnote{We choose the median for being generally more robust than the mean, as it is not affected by the value of outlier measures (an accidental sample on a background surface would alter the mean on a significant way).} of that set of measures (\autoref{fig:6_distance_to_mom}).
+		\end{itemize}
+		
+		\begin{figure}[h]
+			\centering
+				\begin{subfigure}[b]{0.4\linewidth}
 				\centering
-				\includegraphics[width=3.5in]{images/h_error}
+				\includegraphics[width=3in]{images/h_error}
 				\caption{Horizontal error estimation.}
 				\label{fig:6_h_error}
-			\end{figure}
-			
-			\item \emph{Distance}: the other error to compute is the distance one. This one is figured out on a slightly different way. As explained at \autoref{sec:3_xtion}, a \emph{registration} process carried out by the driver maps the depth pixels into the RGB ones. So, if we know \emph{mom}'s position in the RGB image (its bounding box), \emph{its depth measures will be right inside the same box in the depth image}. That is the source of the measure. The implemented approach to obtain a single value (as we need it to send the proper command to the motors) is to perform a \emph{spatial depth sampling} inside the depth slice, cropped with the bounding box. To be cautious, we keep the depth image inside a safety margin of 10\% of the image (to be sure we sample inside the person). Then, we create a 10$\times$10 \emph{grid} inside this new crop, and retrieve the depth values measured on those points (a total of 100 measures). The total estimated distance will be the median\footnote{We choose the median for being generally more robust than the mean, as it is not affected by the value of outlier measures (an accidental sample on a far wall would alter the mean on a significant way).} of that set of measures (\autoref{fig:6_distance_to_mom}).
-			
-			
-			\begin{figure}[h]
+			\end{subfigure}
+			\hfill
+			\begin{subfigure}[b]{0.5\linewidth}
 				\centering
-				\includegraphics[width=6in]{images/distance_error}
+				\includegraphics[width=3.7in]{images/distance_error}
 				\caption{Computation of the median distance to \emph{mom}.}
 				\label{fig:6_distance_to_mom}
-			\end{figure}
-		\end{itemize}
+			\end{subfigure}
+
+			\caption{Computations of both errors.}
+			\label{fig:6_errors}
+		\end{figure}
+
 	
 	
 	
 	\subsection{PID controller}
-		Once we know the relative \emph{mom}'s relative position from the robot, we have to send the proper commands to the robot, to make it follow \emph{mom}. On the first place, we have to know when to act and when to stop the motors. As we don't want the robot to go to the exact place where \emph{mom} is, we have to establish a \emph{dead zones}, where we the robot won't move further towards \emph{mom}.
+		Once we know the relative \emph{mom}'s relative position from the robot, we have to send the proper commands to the robot, to make it follow \emph{mom}. On the first place, we have to know when to act and when to stop the motors. As we don't want the robot to go to the exact place where \emph{mom} is, we have to establish a \emph{safe/dead zones}, where we the robot won't move further towards \emph{mom}. These zones are represented in \autoref{fig:6_followperson_safe_zones}.\\
+		
+		\begin{figure}[h]
+			\centering
+			\includegraphics[width=4in]{images/followperson_movement_schema}
+			\caption{Safe zones. The robot will consider \emph{mom} as correctly followed inside them (on a separate way for each dimension).}
+			\label{fig:6_followperson_safe_zones}
+		\end{figure}
+	
+			As our desirable relative position is to be aligned (the center of the bounding box in the center of the image) and at a safe distance (at $\pm$ 10 px from the reference distance), we will rotate and/or move in a straight line in consequence, trying to carry \emph{mom} inside the safe zones. Hence, we have to \emph{compute a proper response} to move the robot towards the correct direction (independent responses on the angular and linear dimensions). Instead of computing just a response on a proportional way to the current error, we can implement a \emph{closed loop feedback system}, which keeps in mind the previous readings and responses computed, to get a better fitting to the ideal response in that moment\footnote{Otherwise, we can suffer oscillations and peaks on the response, as this application is a system affected by noise and possible errors in the measure. That is the reason why we implemented all the past softening blocks.}. Concretely, we will implement a \emph{PID} controller \cite{pid:}, which is the most common form of feedback at industrial applications (more than 95\% of the control loops are of this kind). PID stands for \emph{Proportional, Integral and Derivative} control, and computes a total response ($u(t)$) following the next formula (modified for discrete time, as we are on a digital system):
+			
+			\begin{equation}
+			u[n] = k_p e[n] \ \ + \ \ k_i \sum_{i=0}^{n}e[i] \ \ + \ \ k_d (e[n] - e[n-1])
+			\label{eq:6_pid}
+			\end{equation}
+			
+			For those who did not stop reading, we will analyze this formula, which combines three sub-responses:
+			
+			\begin{itemize}
+				\item \emph{Proportional}: $k_p e[n]$. This is the basic component, that computes a response directly proportional to the measured error.
+				
+				\item \emph{Integral}: $k_i \sum_{i=0}^{n}e[i]$. Here we compute an additional response, equivalent to the summation of the total error until now. This way, although a proportional response is not enough and the error gets stabilized in a non-zero value, the system will accumulate that error, getting \emph{annoyed} with the time. So, we will get a bigger response the bigger the total error is\footnote{When the monitored variable goes into the tolerated zone again, the total error has to be reseted, as it won't be necessary for now.}.
+				
+				\item \emph{Derivative}: $k_d (e[n] - e[n-1])$. This part stands for the \emph{difference} between the last measured error and the current one, and it quantifies how is the system responding\footnote{On systems without inertia, this contribution is generally ignored, having a simple PI control loop instead.}. If the difference has a high value, that means that the system is on a far state/position with respect to the last iteration. So, in order to eliminate the \emph{inertia} the system could have acquired (which might bring oscillations and overshooting), the derivative part acts, braking or accelerating the command depending on the observed response to the previous one.
+			\end{itemize}
+			
+			As we can see, the combination of the three responses can achieve a much faster and steadier response (\autoref{fig:6_pids}), bringing back the system under control on a fast and efficient way. Each contribution is parameterized by its corresponding constant ($k_c, k_i, k_d$), so a critical task is to find the optimum value for each one of them.\\
+			
+			For our implementation, as we have implemented two independent PID controllers (for linear and angular speeds, respectively), we have experimentally looked for the most suitable values for each one of the parameters, obtaining the combination on \autoref{tab:6_pids}. It is important to mention that these are not the final values that regulate the movement (as the angular and linear errors move in different scales, a difference of 1 pixel in the angular error means almost nothing, but much more in the linear one). For this reason, and to keep reasonable values, they are scaled by internal constants inside of each PID controller.
+			
+			\begin{table}[h]
+				\centering
+				\begin{tabular}{|c|c|c|}
+					\hline
+					\textbf{} & \textbf{Linear} & \textbf{Angular} \\ \hline
+					$k_p$     & 2               & 7                \\ \hline
+					$k_d$     & 0.1             & 0.5              \\ \hline
+					$k_i$     & 3               & 10               \\ \hline
+				\end{tabular}
+				\caption{Optimal found values for the parameters in each PID controller.}
+				\label{tab:6_pids}
+			\end{table}
+			
+			As the rule that governs the controller is the same (\autoref{eq:6_pid}), we have created a generic class (\texttt{PIDDriver}), which controls a motor with a PID closed loop, adding extra functionalities as soft reactive responses (to avoid abrupt movements), and limiters in the response, to mantain control over the robot.\\
+			
+			
+			
+			
+			 \begin{figure}[h]
+			 	\centering
+			 	\begin{subfigure}[b]{0.3\linewidth}
+			 		\centering
+			 		\includegraphics[width=2.2in]{images/pid_p}
+			 		\caption{Proportional.}
+			 		\label{fig:6_pid_p}
+			 	\end{subfigure}
+			 	\hfill
+			 	\begin{subfigure}[b]{0.3\linewidth}
+			 		\centering
+			 		\includegraphics[width=2.2in]{images/pid_pi}
+			 		\caption{PI.}
+			 		\label{fig:6_pid_pi}
+			 	\end{subfigure}
+			 	\hfill
+			 	\begin{subfigure}[b]{0.3\linewidth}
+			 		\centering
+			 		\includegraphics[width=2.2in]{images/pid_pid}
+			 		\caption{Full PID.}
+			 		\label{fig:6_pid_pid}
+			 	\end{subfigure}
+			 	\caption{Different controllers response along time.}
+			 	\label{fig:6_pids}		 	
+			 \end{figure}
+		
+	This way, we compute a suitable response with a PID controller for each dimension, and the mentioned class sends it directly to the motors (thank to the possibility of passing the move function as an argument to the generic controller).\\
+	
+	So finally, we have the final code schema of the functionality added in top of \emph{ObjectDetector}:
 	
 	
-	
-	
-	As our desirable relative position is to be aligned (the center of the bounding box in the center of the image), we will rotate in consequence, trying to transport the image center to mom's center.
+	\begin{lstlisting}
+...
+# jdrc is the comm communicator.
+
+# We create the client to move the robot:
+motors_publisher = jdrc.getMotorsClient('FollowPerson.Motors')
+w_function = motors_publisher.motors.sendW
+v_function = motors_publisher.motors.sendVX
+
+# Controllers creation:
+w_PID = PIDController(w_function,
+                      Kp=_,
+                      Ki=_,
+                      Kd=_,
+                      scaling_factor=_,
+                      limiter=_)
+
+w_PID = PIDController(w_function,
+                      Kp=_,
+                      Ki=_,
+                      Kd=_,
+                      scaling_factor=_,
+                      limiter=_)
+...
+
+# Measure of the errors:
+angular_error = [subtract centers]
+linear_error = [sample depth of person]
+
+# Computation of the response (PID controllers):
+w = w_PID.computeResponse(angular_error)
+v = v_PID.computeResponse(linear_error)
+
+# The controllers automatically send the response on a
+# reactive but soft way.
+	\end{lstlisting}
+
+	At the end of the each iteration, we get the robot moved towards \emph{mom} (the target person to follow), making use of all the previously defined blocks (\autoref{fig:6_followperson_final}), as it can be seen on the final result, posted on the project Wiki\footnote{\url{http://jderobot.org/Naxvm-tfg}}.
+
+
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=5in]{images/followperson_general_schema}
+		\caption{Functional diagram of the \texttt{FollowPerson} node.}
+		\label{fig:6_followperson_final}
+	\end{figure}
+
 \section{Experiment: PTZ Camera}
-\label{sec:follow_ptz}
+	\label{sec:follow_ptz}
+	As an alternative experiment or approach, we can implement this tracking and following system on a PTZ camera. As explained in \autoref{sec:3_ptz}, these cameras are supported by servo motors on vertical and horizontal axis, that allow the camera to move as a \emph{mechanical neck}.\\
+	
+	We can consider an alternative system, which implements the previous pipeline (with slight modifications), using this camera (Sony EVI D100P, on \autoref{fig:3_evi}) as the \emph{actuator device}. Thank to the Python distribution easiness using packages, this case can be implemented as an additional package, being able to modify as less as possible. So, \texttt{FollowPerson} commutes pertinent functions between the Turtlebot and the PTZ packages in runtime, just selecting the used device in the YML file.\\
+	
+	The movement commands are now destinated to pure \emph{rotations} of the neck, so the movement update on each axis (vertical/horizontal) has to be computed on a similar way than the horizontal case on the Turtlebot (\autoref{fig:6_h_error}). So, our approach in this case follows the computation on \autoref{fig:6_ptz_error}
+	
+	
+	\begin{figure}[h]
+		\centering
+		\begin{subfigure}[b]{0.6\linewidth}
+			\centering
+			\includegraphics[width=4in]{images/ptz_error_comp}
+			\caption{Error computation on each axis.}
+			\label{fig:6_ptz_error}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}[b]{0.5\linewidth}
+			\centering
+			\includegraphics[width=4in]{images/ptz_dead_zone}
+			\caption{Dead zone of actuation (radius of 60 px).}
+			\label{fig:6_ptz_dead_zone}
+		\end{subfigure}
+		\caption{Error computation parameters on the PTZ case.}
+		\label{fig:6_ptz_parameters}
+	\end{figure}
+	
+	However, as the movement commands are stored in a queue buffer, we are limited to perform \emph{differential} pose updates (e.g. move 1 or 2 degrees on each axis towards the objective per iteration), as described in \autoref{fig:3_ptz_movements}. Hence, a PID controller does not make sense here, as the set of feasible outputs is discrete and non adjustable:
+	\begin{itemize}
+		\item $0$ if the error stays inside the dead zone (\autoref{fig:6_ptz_dead_zone}).
+		
+		\item $\pm 1$ if the system lost \emph{mom} (in order to slowly move looking for it).
+		
+		\item $\pm 2$ if mom is being tracked. The camera performs an increment of that magnitude towards mom in each axis.
+	\end{itemize}
+	
+
+	Finally, we can take advantage of the most of the standard \texttt{FollowPerson} total algorithm, obtaining the schematic algorithm on \autoref{fig:6_ptz_total}.
+	
+	
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=5.5in]{images/ptz_general_schema}
+		\caption{Total schema followed in the PTZ case.}
+		\label{fig:6_ptz_total}
+	\end{figure}
