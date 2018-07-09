@@ -1,3 +1,61 @@
 \chapter{Conclusions}
-	\section{Conclusions}
-	\section{Future research lines}
+\section{Conclusions}
+	This final chapter will be destined to revisit the initially proposed objectives (\autoref{chap:2_objectives}). With a complete coverage of the performed tasks, as it has been described on the previous pages, we can contrast what has been achieved on each one of these objectives.\\
+	
+	\begin{description}
+		\item[Classification] \hfill
+			\vspace{0.2in} \\
+			The first objective required to upgrade the scope for an existing JdeRobot component, \texttt{DigitClassifier}, designed to perform \emph{classification} tasks using \emph{deep learning} techniques.\\
+			
+			Its functionality was emulated using the \emph{deep learning} framework TensorFlow (core of this project), obtaining satisfactory results on the real-time digit classification task, training an \emph{in-house} neural network on our own, and obtaining initial knowledge about the framework and enough deep learning skills to move forward to more complex tasks.\\
+			
+			In light of the excellent achieved performance, the brand new TensorFlow implementation and the previous one (made with the Keras framework) were merged into an \emph{official JdeRobot} component\footnote{\url{https://github.com/JdeRobot/dl-digitclassifier}}, capable of commuting between both frameworks.
+		
+		\item[Detection] \hfill
+			\vspace{0.2in} \\		
+			After having accomplished a basic domain on \emph{deep learning} with \emph{classification} tasks, we tackled a more ambitious milestone: \emph{detecting objects on a real-time operation} (where there was no previous reference in the JdeRobot environment).\\
+			
+			Although the process of training a detection network was ruled out of the scope of the project (because of computational issues, as stated previously), we addressed the detection task using publicly available \emph{pretrained networks}. So, we developed a wrapping TensorFlow environment to \emph{abstract} the model (architecture, dataset on which it was trained, output format, etc.), and moved the neural network processing to a \emph{GPU environment} (to achieve the optimum refresh rate for a real-time operation).\\
+			
+			This remarkably efficient detection framework was demonstrated to be capable of real-time processing, so we have developed an entire node, \texttt{ObjectDetector}, to visually perform this task on an \emph{incoming image stream} (abstracting the source).\\
+			
+			Hence, the final result  has been a node displaying the bare current image, and aside the same one with the detected objects overlaid, indicating its location making use of a \emph{bounding box}, in addition to the decided \emph{class} the object belongs, and the \emph{score} (standing for the reliability level that prediction has).\\
+			
+			Once more, the excellent performance on real-time (using detectors with a SSD architecture under the shield) has driven us to integrate this node\footnote{\url{https://github.com/JdeRobot/dl-objectdetector}} in the JdeRobot environment as well, developing another package to do the same in Keras. This has enabled us again to be able to abstract the frameworks, and toggle one of them through the YML file. This component can be taken as a passage to \emph{alternative implementations} making use of the robust detection performance that \emph{deep learning} can yield (and not only drawing the results over the image). In addition, this has given us the capability of \emph{benchmarking} new models, as they can be transparently loaded into the created environment.
+			
+			
+		\item[Tracking and following] \hfill
+			\vspace{0.2in} \\
+			The two previous milestones allowed us to accomplish \emph{state-of-the-art} purposes in the \emph{Computer Vision} field. As it has just been stated, \texttt{ObjectDetector} is a powerful tool to take advantage of a real-time detection system.\\
+			
+			So, as the final research objective, we have considered an \emph{actuation} system, which uses a powerful \emph{neural network} to accomplish an extra objective. In order to overlap our research with the prosperous field of \emph{robotics}, we have developed a component capable of \emph{following} a specific person (\emph{mom}). This has been achieved ringing into our set of tools concepts like a \emph{PID} controller, or behavioral schemes, which have throw in some extra knowledge.\\
+			
+			Additionally, this has demonstrated the possibility of finding \emph{synergies} between \emph{deep learning} and another kind of scientific fields, as it is currently made in tasks like processing sound, words, medical images, advertising, etc.
+		
+		\item[Personal fields] \hfill
+			\vspace{0.2in} \\
+			The previously described infrastructure we have created has allowed a novice investigator to check how important a \emph{correct coordination} is, when it is necessary dealing with tasks like a \emph{conjoint} development (as it had to be done at certain moments).\\
+			
+			In addition, a telecommunication engineer must know how to multiplex resources, even itself. The closest approach a human can achieve to this is \emph{TDMA}, so it's a key factor to be able to \emph{make a correct time assignment over incoming tasks}. This has allowed to learn the importance of keeping work tidiness and rigor, as well as a suitable level of \emph{compromise} (sustained through motivation to attainment), in order to be adaptive and be ready for a change of plans, or a readjustment of the requirements. All of these capacities make the difference between a long-term research project, and a simple homework task.\\
+			
+			On the other hand, in this kind of project it is important to keep a decent trace of the made work. This is essential in order to be able to go back in any moment, to revert some undesired effect, or just for consulting a past detail which we need to bring back. For this purpose, it has been very convenient to maintain the \emph{project's Wiki page}, for being able to have a glance on the achieved advances, and keep a trace of the temporal progress of the whole project.\\
+			
+			
+			In the professional point of view, it has been essential to acquire further skills about \emph{version control systems}, as Git. If we take a look back, carrying through all the progress we made would have been no other thing than a hell. This can be an important benefit, as every development project in a corporate environment makes use of this kind of controls.
+		
+	\end{description}
+\section{Future research lines}
+	The proposed milestones on this project have been successfully achieved using a useful and innovative tool as \emph{deep learning}. Hence, it opens some interesting doors to future researches or improvements:
+	
+	\begin{itemize}
+		\item \emph{Upgrade DigitClassifier:} for now, this component looks for the digit in a fixed window inside the image (the central square). Another module could be implemented to perform a \emph{character detection} in the image, using \emph{deep learning} as it is a really efficient implementation.
+		
+		\item \emph{Translate the nodes to a compiled language:} one of the main handicaps of Python is the fact that it is an interpreted language (much slower than a compiled one). So, a \emph{translation} to a lower level language as \texttt{C++} would be very interesting, as it is a widely supported language in this framework, and there are already very efficient \emph{deep learning} implementations on it (as \emph{Darknet/YOLO}).
+		
+		\item \emph{Use a deep learning face detector in FollowPerson:} the main advantage of the \emph{deep learning} systems is the robustness on the operation, so a facial detection system implemented with this technology could be a powerful resource to be able of performing a facial detection/validation in harshly lightened environments.
+		
+		\item \emph{Multimodal person detection/tracking:} some extra functionality could be squeezed of a RGBD sensor, like \emph{tracking a person in complete darkness}. As \emph{deep learning} systems offer good results distinguishing a person silhouette, we can perform people detection on a depth image (in fact, that is just what is being made in \autoref{fig:1_detectionsuite}).
+		
+		
+		\item \emph{Add a navigation algorithm to FollowPerson:} the only movement commands sent to the Turtlebot are controlled by the relative position of the person with the robot. However, as the robot incorporates a laser sensor, we can add an \emph{obstacle avoidance} system, in order to perform a non-blind navigation towards the person.
+	\end{itemize}
