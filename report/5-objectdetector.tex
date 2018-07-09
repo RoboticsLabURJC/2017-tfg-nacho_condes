@@ -176,9 +176,35 @@ Another thing to mention is the fact that, defining a \texttt{Writer} on the loa
 
 
 \section{Experiment: testing different architectures}
-	Lorem ipsum.
+	The implemented generic class (\texttt{DetectionNetwork}) allows to load on runtime a pretrained TensorFlow model of neural network. We can take advantage of this to perform a quantitative timing benchmark of different architectures and/or datasets, among the available models on the TensorFlow Detection Zoo\footnote{\url{https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md}}. As this node is a implementation on a real time video streaming, measures can't be taken on \emph{precision} terms. However, a deeper analysis of that kind can be performed with the JdeRobot tool \texttt{DetectionSuite} (described on \autoref{sec:dl_jderobot}), which allows to measure performance in terms of advanced markers, as \emph{Jaccard Index}, precision and recall.\\
+	
+	The timing tests (\autoref{tab:5_tests}) have been performed under the described available hardware, computing the mean inference time on a people walking video (\autoref{fig:5_benchmark_screen}). Notice that the frame rate and/or resolution are not relevant, as every image experiments a reshaping before being feed-forwarded through the network.
+	
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=4in]{images/net_benchmarking_screenshot}
+		\caption{Screenshot taken from the video used on the benchmark.}
+		\label{fig:5_benchmark_screen}
+	\end{figure}
 	
 	
+	
+	
+	\begin{table}[h]
+		\centering
+		\begin{tabular}{|c|c|c|c|}
+			\hline
+			\textbf{Architecture} & \textbf{Base network} & \textbf{Dataset} & \textbf{Mean inference time} \\ \hline
+			a  & b  & c & d \\ \hline
+			a  & b  & c & d \\ \hline
+			a  & b  & c & d \\ \hline
+			a  & b  & c & d \\ \hline
+			a  & b  & c & d \\ \hline
+		\end{tabular}
+		\caption{Timing performance tests for several modes.}
+		\label{tab:5_tests}
+	\end{table}
+		
 	
 	
 	
