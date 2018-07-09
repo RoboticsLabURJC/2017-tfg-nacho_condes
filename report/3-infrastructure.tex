@@ -2,6 +2,7 @@
 
 \section{Hardware}
 	\subsection{Sony EVI D100P}
+	\label{sec:3_ptz}
 		\begin{figure}[h]
 			\centering
 			\begin{subfigure}[h]{0.4\linewidth}
@@ -149,7 +150,7 @@
 			\label{fig:3_turtlebot}
 		\end{figure}
 		
-		It is a research platform, composed by a structure jointed to a Kobuki robot (mobile base)\footnote{\url{http://kobuki.yujinrobot.com/about2/}}. According to its technical specifications\footnote{\url{https://www.robotnik.es/web/wp-content/uploads/2014/04/TB_robot.pdf}}, it can catch up speeds of $700 \ mm/s$ (on straight line), and $180\ deg/sec$ (turning).\\
+		It is a research platform, composed by a structure jointed to a Kobuki robot (mobile base)\footnote{\url{http://kobuki.yujinrobot.com/about2/}}. According to its technical specifications\footnote{\url{https://www.robotnik.es/web/wp-content/uploads/2014/04/TB_robot.pdf}}, it can catch up speeds of $700 \ mm/s$ (on straight line), and $180\ deg/s$ (turning).\\
 		
 		Into the attached structure, we can find mounted an Asus Xtion sensor (in the original model of the Turtlebot 2, it is a Microsoft Kinect instead), and a laser sensor, which is not used on this project (nevertheless, it could be a continuation, as a navigation algorithm could be added to this project, on a similar way than in \cite{rocapal}).\\
 	
@@ -337,13 +338,15 @@ PTMotors.setPTMotorsData(new_pan, new_tilt, max_pan_speed, max_tilt_speed)
 		
 		\texttt{comm} consists on a collection of bindings to easily create a link between two components, or between a device and a component. On the lowest level, we can use it relying on ROS (through topics as it was explained before on \autoref{sec:3_ros}), or through an ICE proxy. ICE\footnote{\url{https://zeroc.com/products/ice}} is an object-oriented middleware that, in our purpose, allows to abstract a data flow to a TCP/IP endpoint (an address/hostname, and a port), which can even support a communication between two or more programs inside the same machine.\\
 		
-		To create a communicator with \texttt{comm}, it needs the specification for that link (underlying middleware, topic/endpoint, etc.), so it uses the JdeRobot standard: YML\footnote{Legible data serialization format.} configuration files, which can be like in \autoref{fig:3_yml_format}.
+		To create a communicator with \texttt{comm}, it needs the specification for that link (underlying middleware, topic/endpoint, etc.), so it uses the JdeRobot standard: YML\footnote{Legible data serialization format.} configuration files, which must follow a similar format to  \autoref{fig:3_yml_format}.
 		\begin{figure}[h]
 			\centering
 			\includegraphics[width=4in]{images/yml_format}
 			\caption{YML format required by \texttt{comm}.}
 			\label{fig:3_yml_format}
 		\end{figure}
+		
+		In the previous example (\ref{sec:3_evicam_driver}) we can see an example of an instantiation of a global communicator through \texttt{comm} (which then provides the clients to interact with the device).
 		
 \section{OpenCV}
 	OpenCV (\emph{Open Source Computer Vision}) is a C++/Python/Java open-source library\footnote{\url{https://opencv.org/}} (natively written in C++) for Computer Vision purposes. Among the classic/\emph{state-of-the-art} methods it bundles, we can find functions suitable for face recognition, image stitching, eye movements following, establishing markers for augmented reality, etc.\\
