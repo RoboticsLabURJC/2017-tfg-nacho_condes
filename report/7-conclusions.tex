@@ -3,7 +3,7 @@
 	This final chapter will be destined to revisit the initially proposed objectives (\autoref{chap:2_objectives}). With a complete coverage of the performed tasks, as it has been described on the previous pages, we can contrast what has been achieved on each one of these objectives.\\
 	
 	\begin{description}
-		\item[Classification] \hfill
+		\item[Classification tool, for processing live images.] \hfill
 			\vspace{0.2in} \\
 			The first objective required to upgrade the scope for an existing JdeRobot component, \texttt{DigitClassifier}, designed to perform \emph{classification} tasks using \emph{deep learning} techniques.\\
 			
@@ -11,7 +11,7 @@
 			
 			In light of the excellent achieved performance, the brand new TensorFlow implementation and the previous one (made with the Keras framework) were merged into an \emph{official JdeRobot} component\footnote{\url{https://github.com/JdeRobot/dl-digitclassifier}}, capable of commuting between both frameworks.
 		
-		\item[Detection] \hfill
+		\item[Application of neural detection inside a robotic behavioral.] \hfill
 			\vspace{0.2in} \\		
 			After having accomplished a basic domain on \emph{deep learning} with \emph{classification} tasks, we tackled a more ambitious milestone: \emph{detecting objects on a real-time operation} (where there was no previous reference in the JdeRobot environment).\\
 			
@@ -22,8 +22,7 @@
 			Hence, the final result  has been a node displaying the bare current image, and aside the same one with the detected objects overlaid, indicating its location making use of a \emph{bounding box}, in addition to the decided \emph{class} the object belongs, and the \emph{score} (standing for the reliability level that prediction has).\\
 			
 			Once more, the excellent performance on real-time (using detectors with a SSD architecture under the shield) has driven us to integrate this node\footnote{\url{https://github.com/JdeRobot/dl-objectdetector}} in the JdeRobot environment as well, developing another package to do the same in Keras. This has enabled us again to be able to abstract the frameworks, and toggle one of them through the YML file. This component can be taken as a passage to \emph{alternative implementations} making use of the robust detection performance that \emph{deep learning} can yield (and not only drawing the results over the image). In addition, this has given us the capability of \emph{benchmarking} new models, as they can be transparently loaded into the created environment.
-			
-			
+		
 		\item[Tracking and following] \hfill
 			\vspace{0.2in} \\
 			The two previous milestones allowed us to accomplish \emph{state-of-the-art} purposes in the \emph{Computer Vision} field. As it has just been stated, \texttt{ObjectDetector} is a powerful tool to take advantage of a real-time detection system.\\
@@ -32,18 +31,21 @@
 			
 			Additionally, this has demonstrated the possibility of finding \emph{synergies} between \emph{deep learning} and another kind of scientific fields, as it is currently made in tasks like processing sound, words, medical images, advertising, etc.
 		
-		\item[Personal fields] \hfill
-			\vspace{0.2in} \\
-			The previously described infrastructure we have created has allowed a novice investigator to check how important a \emph{correct coordination} is, when it is necessary dealing with tasks like a \emph{conjoint} development (as it had to be done at certain moments).\\
-			
-			In addition, a telecommunication engineer must know how to multiplex resources, even itself. The closest approach a human can achieve to this is \emph{TDMA}, so it's a key factor to be able to \emph{make a correct time assignment over incoming tasks}. This has allowed to learn the importance of keeping work tidiness and rigor, as well as a suitable level of \emph{compromise} (sustained through motivation to attainment), in order to be adaptive and be ready for a change of plans, or a readjustment of the requirements. All of these capacities make the difference between a long-term research project, and a simple homework task.\\
-			
-			On the other hand, in this kind of project it is important to keep a decent trace of the made work. This is essential in order to be able to go back in any moment, to revert some undesired effect, or just for consulting a past detail which we need to bring back. For this purpose, it has been very convenient to maintain the \emph{project's Wiki page}, for being able to have a glance on the achieved advances, and keep a trace of the temporal progress of the whole project.\\
-			
-			
-			In the professional point of view, it has been essential to acquire further skills about \emph{version control systems}, as Git. If we take a look back, carrying through all the progress we made would have been no other thing than a hell. This can be an important benefit, as every development project in a corporate environment makes use of this kind of controls.
-		
 	\end{description}
+	The previously described infrastructure we have created has allowed a novice investigator to check how important a \emph{correct coordination} is, when it is necessary to deal with tasks like a \emph{conjoint} development (as it had to be done at certain moments).\\
+	
+	
+	In addition, a telecommunication engineer must know how to multiplex resources, even itself. The closest approach a human can achieve to this is \emph{TDMA}, so it's a key factor to be able to \emph{make a correct time assignment over incoming tasks}. This has allowed to learn the importance of keeping work tidiness and rigor, as well as a suitable level of \emph{compromise} (sustained through motivation to attainment), in order to be adaptive and be ready for a change of plans, or a readjustment of the requirements. All of these capacities make the difference between a long-term research project, and a simple homework task (this is fundamental to knwo for a novice investigator).\\
+	
+	
+	On the other hand, in this kind of project it is important to keep a decent trace of the made work. This is essential in order to be able to go back in any moment, to revert some undesired effect, or just for consulting a past detail which we need to bring back. For this purpose, it has been very convenient to maintain the \emph{project's Wiki page}, for being able to have a glance on the achieved advances, and keep a trace of the temporal progress of the whole project.\\
+	
+	
+	In addition, this project has allowed an interested person in \emph{deep learning} to learn about a cornucopia of concepts and experience. A while ago, when it was decided to evolve towards creating a reactive behavioral, it was motivating to make the most of a possible synergy between two different fields of knowledge, as \emph{deep learning} and \emph{robotics} are. It has to be remarked that implementing the development solutions has always been possible, so it has been easy to discern when and where it was needed to turn up a notch.
+	
+	
+	In the professional point of view, it has been essential to acquire further skills about \emph{version control systems}, as Git. If we take a look back, carrying through all the progress we made would have been no other thing than a hell. This can be an important benefit, as every development project in a corporate environment makes use of this kind of controls.
+
 \section{Future research lines}
 	The proposed milestones on this project have been successfully achieved using a useful and innovative tool as \emph{deep learning}. Hence, it opens some interesting doors to future researches or improvements:
 	

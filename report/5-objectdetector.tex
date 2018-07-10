@@ -150,7 +150,7 @@ Another thing to mention is the fact that, defining a \texttt{Writer} on the loa
 		
 		\begin{figure}[h!]
 			\centering
-			\includegraphics[width=4in]{images/detection_iou}
+			\includegraphics[width=3.7in]{images/detection_iou}
 			\caption{\emph{Jaccard similarity coefficient} on a detection (performance indicator used for training a detector).}
 			\label{fig:5_iou}
 		\end{figure}
@@ -167,18 +167,18 @@ Another thing to mention is the fact that, defining a \texttt{Writer} on the loa
 		
 		Therefore, as described at \autoref{sec:5_node_architecture} the GUI instance grabs the last detection data the network left on the shared placeholder, and draws it on the visible user interface (\autoref{fig:5_whole_pipeline}).
 		
-		\begin{figure}[h]
+		\begin{figure}[h!]
 			\centering
 			\includegraphics[width=5in]{images/objectdetector_network_yield}
 			\caption{Information flow through the whole pipeline.}
 			\label{fig:5_whole_pipeline}
 		\end{figure}
 
-
+\vspace{3.5in}
 \section{Experiment: testing different architectures}
 	The implemented generic class (\texttt{DetectionNetwork}) allows to load on runtime a pretrained TensorFlow model of neural network. We can take advantage of this to perform a quantitative timing benchmark of different architectures and/or datasets, among the available models on the TensorFlow Detection Zoo\footnote{\url{https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md}}. As this node is a implementation on a real time video streaming, measures can't be taken on \emph{precision} terms. However, a deeper analysis of that kind can be performed with the JdeRobot tool \texttt{DetectionSuite} (described on \autoref{sec:dl_jderobot}), which allows to measure performance in terms of advanced markers, as \emph{Jaccard Index}, precision and recall.\\
 	
-	The timing tests (\autoref{tab:5_tests}) have been performed under the described available hardware, computing the mean inference time on a people walking video (\autoref{fig:5_benchmark_screen}). Notice that the frame rate and/or resolution are not relevant, as every image experiments a reshaping before being feed-forwarded through the network.
+	The timing tests (\autoref{tab:5_tests}) have been performed under the described available hardware, computing the mean inference time over 200 inferences on a people walking video (\autoref{fig:5_benchmark_screen}). Notice that the frame rate and/or resolution are not relevant, as every image experiments a reshaping before being feed-forwarded through the network.
 	
 	\begin{figure}[h]
 		\centering
@@ -194,21 +194,33 @@ Another thing to mention is the fact that, defining a \texttt{Writer} on the loa
 		\centering
 		\begin{tabular}{|c|c|c|c|}
 			\hline
-			\textbf{Architecture} & \textbf{Base network} & \textbf{Dataset} & \textbf{Mean inference time} \\ \hline
-			a  & b  & c & d \\ \hline
-			a  & b  & c & d \\ \hline
-			a  & b  & c & d \\ \hline
-			a  & b  & c & d \\ \hline
-			a  & b  & c & d \\ \hline
+			\textbf{Architecture} & \textbf{Base network} & \textbf{Dataset} & \textbf{Mean inference time} (ms) \\ \hline
+			ResNet  & Inception  & COCO & 820.71 \\ \hline
+			SSD  & MobileNet  & COCO & 107.43 \\ \hline
+			ResNet  & 101  & COCO & 786.49 \\ \hline
+			ResNet  & 50  & COCO & 515.28 \\ \hline
+			Inception  & *  & COCO & 349.13 \\ \hline
+			ResNet  & 101  & COCO & 63.97 \\ \hline
+			Faster-RCNN  & ImageNet  & ILSVRC2014 & 703.99 \\ \hline
+			Faster-RCNN  & Inception  & COCO & 352.20 \\ \hline
+			ResNet  & 50  & COCO & 793.87 \\ \hline
+			*  & MobileNet  & COCO & 106.93 \\ \hline
+			SSD  & MobileNet  & COCO & 102.85 \\ \hline
+			ResNet  & 101  & COCO & 898.59 \\ \hline
+			Inception  & ResNet  & OID & 792.42 \\ \hline
+			\textbf{SSD Lite}  & \textbf{MobileNet}  & \textbf{COCO} & \textbf{68.13} \\ \hline
+			ResNet  & 101  & Kitti & 111.29 \\ \hline
+			Inception  & ResNet  & OID & 667.76 \\ \hline
 		\end{tabular}
-		\caption{Timing performance tests for several modes.}
+		\caption{Timing performance tests for several modes. The selected implementation appears in \textbf{boldface}.}
+		(*): Not specified.
 		\label{tab:5_tests}
 	\end{table}
 		
 	
 	
 	
-	
+	As it can be seen, the vast majority of other implementations (different network architectures) are significantly bigger, which would make impossible to accomplish real-time operation.\\
 	
 	
 	

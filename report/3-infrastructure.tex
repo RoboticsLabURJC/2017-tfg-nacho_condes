@@ -20,20 +20,20 @@
 			\label{fig:3_evi}
 		\end{figure} 
 		
-		The first hardware element that we use is the Sony EVI D100P\footnote{\url{https://pro.sony/en_IN/products/ptz-network-cameras/evi-d100-d100p-pal-}}. It is a \emph{PTZ} cam (which stands for \emph{Pan Tilt Zoom}). It is a camera which, originally thought and designed for videoconferences, is equipped with a bunch of precision motors. This allows it to be teleoperated, performing a soft and steady two-dimensional movement on demand:
+		The first hardware element that we use is the Sony EVI D100P\footnote{\url{https://pro.sony/en_IN/products/ptz-network-cameras/evi-d100-d100p-pal-}}. It is a \emph{PTZ} cam (which stands for \emph{Pan Tilt Zoom}) which, originally thought and designed for videoconferences, is equipped with a bunch of precision servo motors. This allows it to be teleoperated, performing a soft and steady two-dimensional movement on demand:
 		\begin{itemize}
-			\item \emph{Pan:} horizontal movement. It can take values from $-164º$ to $164º$ from the centered position. This movement can be performed at a certain speed, which can be setted between $1$ and $24$.
+			\item \emph{Pan:} horizontal movement. It can take values on a range from $-164$ to $164$ from the centered position. This movement can be performed at a certain speed, which can be set between $1$ and $24$.
 
-			\item \emph{Tilt:} vertical movement. Its range goes from $-30º$ to $30º$, and the movement speed can be also varied between $1$ and $20$.
+			\item \emph{Tilt:} vertical movement. Its range goes from $-30$ to $30$, and the movement speed can be also varied between $1$ and $20$.
 		\end{itemize}
 
-		The low-level implementation of the movement commands is the \emph{VISCA} protocol, a proprietary solution from the manufacturer (Sony). It is received by the cam through a RS-232C (the traditional low-rate serial interface before USB extended), so we can connect it to a modern computer with a RS232-USB interface.
+		The low-level implementation of the movement commands is the \emph{VISCA} protocol, a proprietary solution from the manufacturer (Sony). It is received by the cam through a RS-232C (the traditional low-rate serial interface before USB spread), so we can connect it to a modern computer with a RS232-USB interface.
 
-		However, the driver that controls this camera (\ref{sec:3_evicam_driver}) does not offer support for a \emph{zoom} movement, but it is not very relevant for this application.\\
+		However, the driver that controls this camera (\autoref{sec:3_evicam_driver}) does not offer support for a \emph{zoom} movement, but it is not very relevant for this application.\\
 
-		As the video sensor is an analogue device, we need to convert it to a digital format. We achieve this with a video capture device, which outputs video in a digital format. This image flow is processed by a ROS driver (\autoref{sec:3_usb_cam}), that will be later explained.\\
+		As the video sensor is an analogue device, we need to convert its information to a digital format. We achieve this with a video capture device, which outputs digital video. This image flow is processed by a ROS driver (\autoref{sec:3_usb_cam}), that will be later explained.\\
 
-		Something remarkable about this device is that it is a bidirectional device: we \textit{receive} images from its camera, and, at the same time, we \textit{send} it commands to move the motors.\\
+		Something remarkable about this device is that it is bidirectional: we \textit{receive} images from its camera, and, at the same time, we \textit{send} it commands to move the motors.\\
 		
 		As we can infer from the described technical specifications, this is a relatively old device, so we have to be careful on the movement commands. This is due to the short period of position update: even if we command the motion action at the maximum available speed, the movement won't complete before the next update is commanded. In addition, the camera maintains a buffer of the pending commands to be updated. Hence, sending absolute movement commands (\autoref{fig:3_ptz_wrong}) will result in a chaotic behavior of the camera.\\
 		
@@ -59,7 +59,7 @@
 		\end{figure}
 		
 
-		This is the device we use on our first approximation to the sensing+actuating node (\autoref{sec:follow_ptz}), where the only response is moving the camera.\\
+		This is the device we use on our alternative approach to the \emph{detection + robotic behavioral} node (\autoref{sec:follow_ptz}), where the only response is moving the camera.\\
 
 	\subsection{Asus Xtion Pro Live}
 		\label{sec:3_xtion}
@@ -332,7 +332,7 @@ print(PTMotors.motors.data) # Shows the current values for pan, tilt
 PTMotors.setPTMotorsData(new_pan, new_tilt, max_pan_speed, max_tilt_speed)
 	\end{lstlisting}
 	
-	\subsection{\texttt{comm}}
+	\subsection{\texttt{comm} library}
 		\label{sec:3_comm}
 		\texttt{comm} is the basic library included on JdeRobot to perform communications between different components. It is what supports all the data flows in a typical scenario (\autoref{fig:3_jderobot_hal}).\\
 		
@@ -348,14 +348,14 @@ PTMotors.setPTMotorsData(new_pan, new_tilt, max_pan_speed, max_tilt_speed)
 		
 		In the previous example (\ref{sec:3_evicam_driver}) we can see an example of an instantiation of a global communicator through \texttt{comm} (which then provides the clients to interact with the device).
 		
-\section{OpenCV}
+\section{OpenCV library}
 	OpenCV (\emph{Open Source Computer Vision}) is a C++/Python/Java open-source library\footnote{\url{https://opencv.org/}} (natively written in C++) for Computer Vision purposes. Among the classic/\emph{state-of-the-art} methods it bundles, we can find functions suitable for face recognition, image stitching, eye movements following, establishing markers for augmented reality, etc.\\
 	
 	Its general focus is \emph{efficiency and real-time functionality}, thank to low-level optimizations on the system hardware (i.e. integration with Nvidia CUDA and OpenCL GPU processing libraries). Thus, the excellent performance achieved by this open source library has turned it into the \emph{de facto} standard between every kind of users (from researchers to big companies or even governmental bodies, as their website stands).\\
 	
 	The main benefit we will grab from this library will be mainly for image analysis (such as \emph{Haar Cascade} classifiers, or edge detectors).\\
 
-\section{NumPy}
+\section{NumPy library}
 	NumPy\footnote{\url{http://www.numpy.org/}} (\emph{Numeric Python}) is a library for Python (written in C++), born to extend the numerical abilities of this language.\\
 	
 	It provides a powerful \texttt{array} class, which allows to keep a N-dimensional collection of values/objects in a really handy way (in comparison with Python's standard \emph{lists}). It also provides a rich interface to describe the arrays (such as advanced indexing, shaping, data formatting, etc.).\\
@@ -370,11 +370,11 @@ In the same way than OpenCV, this is a numerical library widely adopted between 
 
 
 
-\section{TensorFlow}
+\section{TensorFlow framework}
 	\label{sec:3_tensorflow}
-	TensorFlow\footnote{\url{https://www.tensorflow.org/}}, which is the core component of this project, is an open-source software library for high performance numerical computation. It was originally created by the Google Brain team, and it offers an excellent background for \emph{machine learning} tasks.\\
+	TensorFlow\footnote{\url{https://www.tensorflow.org/}}, which is the core component of this project, is an open-source software framework for high performance numerical computation. It was originally created by the Google Brain team, and it offers an excellent background for \emph{machine learning} tasks.\\
 	
-	Its internal functionality is based on \emph{graphs}, composed by nodes which operate and exchange data values establishing \emph{a flow of tensors} (as previously described, a tensor is the general term to describe a multidimensional structure). These tensors can be formed of different data types (images, words, poses, numbers, etc.), which is the key for the versatility it offers for a large variety of projects\footnote{\url{https://github.com/jtoy/awesome-tensorflow}}.\\
+	Its internal functionality is based on \emph{graphs}, composed by nodes which operate and exchange data values establishing \emph{a flow of tensors} (as previously described, a tensor is the general term to describe a multidimensional structure). These tensors are handled in the backend of TensorFlow, so performing operations with tensors is really fast, in comparison with high-level mathematical libraries (NumPy). A tensor can be formed of different data types (images, words, poses, numbers, etc.), which is the key for the versatility it offers for a large variety of projects\footnote{\url{https://github.com/jtoy/awesome-tensorflow}}.\\
 	
 	\begin{figure}[h]
 		\centering
@@ -387,15 +387,17 @@ In the same way than OpenCV, this is a numerical library widely adopted between 
 	
 	Since it was launched (November 2015), it has been adopted by many big companies which have used TensorFlow as the base for their Artificial Intelligence applications, such as Twitter, Intel, Google, eBay, Xiaomi, Nvidia, etc.\\
 	
-	As we will see later in the specific components, it allows to \emph{train} a neural network (for its later use) or even \emph{load} a specific model (kept on a Google Protobuf\footnote{Google's open source mechanism to serialize structured data.} \texttt{.pb} file). This is a really interesting feature, given that we are able to retrieve a bunch of pretrained models and embed them into a generic neural network.
+	As we will see later in the specific components, it allows to \emph{train} a neural network (for its later use) or even \emph{load} a specific model (kept on a Google Protobuf\footnote{Google's open source mechanism to serialize structured data.} \texttt{.pb} file). This is a really interesting feature, given that we are able to retrieve a bunch of pretrained models and embed them into a generic neural network.\\
+	
+	We will also take advantage of an included tool, \emph{TensorBoard}, which allows to \emph{visualize} interesting contents about a neural network, from a log trace of its execution. It is possible to visualize the \emph{graph} (including nodes, tensor shapes, operations, etc.). Also, it is possible to analyze the obtained weights for each layer, on advanced analysis techniques, as PCA (\emph{Principal Component Analysis}). We will use it to visualize any of the networks we will design or import.
 
-\section{Keras}
-	As it is stated in \cite{dpascualhe}, Keras is a high-level \emph{neural network library}, written in Python and capable of running on top of either TensorFlow or Theano (another \emph{deep learning} library).\\
+\section{Keras framework}
+	As it is stated in \cite{dpascualhe}, Keras is a high-level \emph{neural network framework}, written in Python and capable of running on top of either TensorFlow or Theano (another \emph{deep learning} library).\\
 	
 	Hence, it is an abstraction with the goal of programming and handling a neural network on an simpler way, relying on a powerful library (treated as \emph{backend}) as TensorFlow to perform all the numeric operations. As well as TensorFlow, it is capable of loading previously compiled and saved models, on the serialization standard HDF5\footnote{Hierarchical Data Format (v.5): general purpose format to store and manage data.} (\texttt{.h5} files).\\
 	
 	In our project, support has been provided to use this framework (selecting it on the YML configuration file), although our main interest has been TensorFlow due to the significative difference of processing speed between both frameworks (being TensorFlow twice as fast as Keras).
-\section{PyQt}
+\section{PyQt framework}
 	Qt\footnote{\url{https://www.qt.io/}} is an cross-platform object-oriented framework for building GUIs (\emph{Graphical User Interfaces}), originally developed by a Nokia department. It is distributed under a commercial license, although it has a standard GPL license for open-source projects.\\
 	
 	A third party company (RiverBank Computing) developed PyQt, a set of Python bindings to interact with Qt (originally written in C++). It is structured in units called \emph{Widgets}, which contain blocks (\emph{Labels}).\\
@@ -437,7 +439,7 @@ if __name__ == '__main__':
 	
 	As it is the last available version at the time this is developed, we will use the version 5 of Qt. Hence, our binding library is \texttt{PyQt5}.\\
 	
-\section{Threading}
+\section{\texttt{threading }library}
 	\label{sec:3_threading}
 	\texttt{Threading}\footnote{\url{https://docs.python.org/2/library/threading.html}} is a Python standard library which offer a high-level API for threading processes. This means to run programs on more than one single job for the CPU, which allows to be capable of perform several tasks on a simultaneous way.\\
 	
