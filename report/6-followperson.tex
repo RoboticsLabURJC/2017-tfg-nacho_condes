@@ -1,4 +1,4 @@
-\chapter{\texttt{FollowPerson} node}
+\chapter{FollowPerson application}
 \label{chap:followperson}
 \section{Description}
 	The previous node, \texttt{ObjectDetector}, shows such a fine real-time detection system, for several classes of objects (up to 90 in the COCO dataset case). It conforms an inert node, but that can act as a starting point for a ton of interesting applications to come up with.\\
@@ -12,8 +12,8 @@
 		\label{fig:6_followperson}
 	\end{figure}
 	
-\section{Node architecture}
-	On the previous components, we had to support similar tasks, as the only radical change was the inner structure of the neural network. However, on this new component, we have to add a new element to the previous scheme, as we have a new task: \emph{command movements to the wheels of the robot}. This has to be on an independent fashion, according to our design requirements (we can not implement blocking calls, so we need an asynchronous operation). So, the solution to make this possible is simply to implement \emph{another thread}, which will be responsible of controlling the motors, based on the last network output. This way, we will have a schema similar to the one on \autoref{fig:6_followperson_architecture}.
+\section{Application architecture}
+	On the previous components, we had to support similar tasks, as the only radical change was the inner structure of the neural network. However, on this new component, we have to add a new element to the previous schema, as we have a new task: \emph{command movements to the wheels of the robot}. This has to be on an independent fashion, according to our design requirements (we can not implement blocking calls, so we need an asynchronous operation). So, the solution to make this possible is simply to implement \emph{another thread}, which will be responsible of controlling the motors, based on the last network output. This way, we will have a schema similar to the one on \autoref{fig:6_followperson_architecture}.
 	
 	\begin{figure}[h]
 		\centering
@@ -143,7 +143,7 @@ correct_scores = scores[mask]
 			\label{eqn:6_l2}
 		\end{equation}
 		
-		The advantage of this system in comparison with other approaches relies on the fact that it offers \emph{strength}, as it runs a deep neural network underneath: the embeddings are optimized through a standard training process (using Stochastic Gradient Descent, with batches of tenths to hundreds of examples\footnote{Again, we can notice that it is a simple process in comparison with non-deep-learning techniques, since we only need images of the faces labeled with their identity.}), based on a particular cost function, called \emph{triplet loss} (\autoref{fig:6_facenet_triplet_loss}). What is achieved is a minimum distance between the computed embeddings for images of the same face, and a maximum distance between faces of different individuals. This makes of it a really robust system, since these kind of networks, trained with images on different lighting and pose conditions, offer an excellent performance on real environments. In addition, it is a simple system, as the resultant embeddings are just 128-bytes values (easier to handle than other state-of-the-art system which implement PCA analysis, SVM classifications, etc.). Some other approaches, as \emph{siamese networks} consist on a real-time comparison between two faces. This would make less sense in this scenario, as we will compare the current face with a \emph{static} one, so it would be a waste of efficiency to compute the same values all the time for the reference face (\emph{mom's}).\\
+		The advantage of this system in comparison with other approaches relies on the fact that it offers \emph{strength}, as it runs a deep neural network underneath: the embeddings are optimized through a standard training process (using Stochastic Gradient Descent, with batches of tenths to hundreds of examples\footnote{Again, we can notice that it is a simple process in comparison with non-deep-learning techniques, since we only need images of the faces labeled with their identity.}), based on a particular cost function, called \emph{triplet loss} (\autoref{fig:6_facenet_triplet_loss}). What is achieved is a minimum distance between the computed embeddings for images of the same face, and a maximum distance between faces of different individuals. This makes of it a really robust system, since these kind of networks, trained with images on different lighting and pose conditions, offer an excellent performance on real environments. In addition, it is a simple system, as the resultant embeddings are just 128-bytes values (easier to handle than other state-of-the-art system which implement PCA analysis, SVM classifications, etc.). Some other approaches, as \emph{siamese networks}, consist on a real-time comparison between two faces. This would make less sense in this scenario, as we will compare the current face with a \emph{static} one, so it would be a waste of efficiency to compute the same values all the time for the reference face (\emph{mom's}).\\
 
 		
 		\begin{figure}[h]
@@ -274,9 +274,9 @@ distance = facenet.compareFaces(face1, face2)
 		
 	\subsection{Follow algorithm}
 		
-		\begin{wrapfigure}{r}{7cm}
+		\begin{wrapfigure}{r}{8cm}
 			\centering
-			\includegraphics[width=7cm]{images/followperson_flowchart_cropped}
+			\includegraphics[width=8cm]{images/followperson_flowchart}
 			\caption{Following behavioral (flow chart).}
 			\label{fig:6_followperson_flow_chart}
 		\end{wrapfigure}
@@ -445,11 +445,40 @@ v = v_PID.computeResponse(linear_error)
 
 \section{Experiment: PTZ Camera}
 	\label{sec:follow_ptz}
-	As an alternative experiment or approach, we can implement this tracking and following system on a PTZ camera. As explained in \autoref{sec:3_ptz}, these cameras are supported by servo motors on vertical and horizontal axis, that allow the camera to move as a \emph{mechanical neck}.\\
+	As an alternative experiment or approach, we can implement this tracking and following system on a PTZ camera. As explained in \autoref{sec:3_ptz}, these cameras are supported by servo motors on vertical and horizontal axis, that allow the camera to move as a \emph{mechanical neck}\footnote{Demonstration videos available on the MediaWiki page (\url{https://jderobot.org/Naxvm-tfg}).}.\\
 	
 	We can consider an alternative system, which implements the previous pipeline (with slight modifications), using this camera (Sony EVI D100P, on \autoref{fig:3_evi}) as the \emph{actuator device}. Thank to the Python distribution easiness using packages, this case can be implemented as an additional package, being able to modify as less as possible. So, \texttt{FollowPerson} commutes pertinent functions between the Turtlebot and the PTZ packages in runtime, just selecting the used device in the YML file.\\
 	
 	The movement commands are now destinated to pure \emph{rotations} of the neck, so the movement update on each axis (vertical/horizontal) has to be computed on a similar way than the horizontal case on the Turtlebot (\autoref{fig:6_h_error}). So, our approach in this case follows the computation on \autoref{fig:6_ptz_error}
+	
+	
+	 This is due to the short period of position update: even if we command the motion action at the maximum available speed, the movement won't complete before the next update is commanded. In addition, the camera maintains a buffer of the pending commands to be updated. Hence, sending absolute movement commands (\autoref{fig:3_ptz_wrong}) will result in a chaotic behavior of the camera.\\
+	 
+	 So, we need an alternative approach, consisting of \emph{incremental} movements (\autoref{fig:3_ptz_right}). This has the objective of ensuring its completion before the next iteration comes in, so the camera performs them at the maximum available speed.
+	 
+	 \begin{figure}[h]
+	 	\centering
+	 	\begin{subfigure}[h]{0.4\linewidth}
+	 		\centering
+	 		\includegraphics[width=2.7in]{images/ptz_wrong_movement}
+	 		\caption{Wrong motion update (too long movements).}
+	 		\label{fig:3_ptz_wrong}
+	 	\end{subfigure}
+	 	\qquad
+	 	\begin{subfigure}[h]{0.4\linewidth}
+	 		\centering
+	 		\includegraphics[width=2.7in]{images/ptz_correct_movement}
+	 		\caption{Correct motion update (short differential movements).}
+	 		\label{fig:3_ptz_right}
+	 	\end{subfigure}
+	 	\caption{Comparison between possible approaches for Pan/Tilt angle updates.}
+	 	\label{fig:3_ptz_movements}
+	 \end{figure}
+	 
+	
+	
+	
+	
 	
 	
 	\begin{figure}[h]
@@ -471,7 +500,7 @@ v = v_PID.computeResponse(linear_error)
 		\label{fig:6_ptz_parameters}
 	\end{figure}
 	
-	However, as the movement commands are stored in a queue buffer, we are limited to perform \emph{differential} pose updates (e.g. move 1 or 2 degrees on each axis towards the objective per iteration), as described in \autoref{fig:3_ptz_movements}. Hence, a PID controller does not make sense here, as the set of feasible outputs is discrete and non adjustable:
+	However, as the movement commands are stored in a queue buffer, we are limited to perform \emph{incremental} pose updates (e.g. move 1 or 2 degrees on each axis towards the objective per iteration), as described in \autoref{fig:3_ptz_movements}. Hence, a PID controller does not make sense here, as the set of feasible outputs is discrete and non adjustable:
 	\begin{itemize}
 		\item $0$ if the error stays inside the dead zone (\autoref{fig:6_ptz_dead_zone}).
 		

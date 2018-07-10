@@ -1,7 +1,7 @@
-\chapter{\texttt{DigitClassifier} node}
+\chapter{DigitClassifier tool}
 	\label{chap:4_digitclassifier}
 	\section{Description}
-		This JdeRobot component was originally designed by David Pascual \cite{dpascualhe} and Nuria Oyaga \cite{noyaga}, and it was used on this project to land on the concept of neural networks.\\
+		This JdeRobot component (\autoref{sec:3_digitclassifier_jderobot}) was used on this project to land on the concept of neural networks.\\
 	
 		Its design aims to \textit{classify handwritten numbers} with the use of a Convolutional Neural Network (\autoref{sec:1_cnn}), which classifies the incoming images from a video source.\\
 		
@@ -15,13 +15,13 @@
 		This kind of application (handwritten digits classification) is the typical first milestone to achieve in the domain of deep learning concepts and neural networks architectures, so lots of documentation are available online (a basic domain of the framework can be successfully achieved on the official TensorFlow tutorials\footnote{\url{https://www.tensorflow.org/tutorials/layers}} which, as said, teach how to deploy a handwritten digit classification system).\\
 
 
-		As we mentioned, previous existing implementations were written in Keras \cite{dpascualhe} and Caffe \cite{noyaga} (Python libraries to implement Deep Learning algorithms), so we made the same on TensorFlow (\autoref{sec:3_tensorflow}), to accomplish an initial domain of this Machine Learning framework.\\
+		As we mentioned, previous existing implementations were written in Keras \cite{dpascualhe} and Caffe \cite{noyaga} (Python libraries to implement Deep Learning algorithms), so we made the same on TensorFlow (\autoref{sec:3_tensorflow}), to accomplish an initial domain of this Machine Learning framework\footnote{Demonstration videos available on the MediaWiki page (\url{https://jderobot.org/Naxvm-tfg}).}.\\
 		
 		After this, Keras and TensorFlow versions were merged on a single JdeRobot component: \texttt{dl-digitclassifier}\footnote{\url{https://github.com/JdeRobot/dl-digitclassifier}}, which has the scope to be functional on both libraries and, in addition, supports image streams from ICE endpoints or ROS topics (thanks to the \texttt{comm} library).\\
 		
 		As it can be seen it the \emph{README} file\footnote{\url{https://github.com/JdeRobot/dl-digitclassifier/blob/master/README.md}} in the repository, configuring the component is made pretty simple thanks to the YML file, so the reader is asked to feel encouraged to give it a try.\\
 		
-	\section{Node architecture}
+	\section{Tool architecture}
 		As specified in the requirements (\autoref{sec:2_requirements}), we divide the entire node functionality into individual tasks. These tasks have been implemented invoking a dedicated thread (using the \texttt{threading} library) for each one.\\
 		
 		\begin{figure}[h]
@@ -93,7 +93,7 @@ gui.show()
 			\item Lastly, we \emph{extract the edges} of the image. This is not trivial, as the information we want to observe for the digits are the \emph{edges}. Otherwise, images on different contrast conditions would not be supported, as that would imply very different weights on the network for each situation. For this edge extraction, we apply a Sobel operator (which can be seen like computing the directional gradient/derivative in the image, as stated in \cite{sobel}) on each direction (vertical/horizontal), in order to detect the existing edges, and add them together in a single edge image, which is the final output of the pipeline.
 		\end{enumerate}
 		
-		As a result, we obtain a softened shape map (even from different images, as seen on \autoref{fig:4_preprocessing}), which is a good start for the neural network to infer. This pipeline will be applied to every image (in the training process and while performing a new inference).
+		As a result, we obtain a softened shape map (even from different images, as seen on \autoref{fig:4_preprocessing}), which is a good start for the neural network to infer. This image is  shown in the GUI. This pipeline will be applied to every image (in the training process and while performing a new inference).
 		
 		\begin{figure}[h]
 			\centering
@@ -104,7 +104,7 @@ gui.show()
 
 	\section{Digit classification CNN}
 		\label{sec:4_classif_cnn}
-		The implementation of this convolutional neural network consists of a concatenation of layers, following the scheme shown on \autoref{fig:4_digitclassifier_neural_structure}. These layers are disposed in a serial structure, so the output of one layer (a vector containing what each neural activation function yields) acts as the input for the next one.
+		The implementation of this convolutional neural network consists of a concatenation of layers, following the schema shown on \autoref{fig:4_digitclassifier_neural_structure}. These layers are disposed in a serial structure, so the output of one layer (a vector containing what each neural activation function yields) acts as the input for the next one.
 		
 		For this reason, we need a first input layer, where all the pixels of the input image are mapped to a input neuron, on a bijective way.\\
 		

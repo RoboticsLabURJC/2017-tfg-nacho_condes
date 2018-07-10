@@ -1,7 +1,7 @@
-\chapter{\texttt{ObjectDetector} node}
+\chapter{ObjectDetector tool}
 
 \section{Description}
-	Once we have some initial knowledge on CNNs applied to image processing, thank to the \texttt{DigitClassifier} component, we develop a new deep learning component, \texttt{ObjectDetector}, which is capable of \emph{detect objects in a real-time image stream}\footnote{For a better compatibility with future usages for this component, it is able to process images from a local video/webcam directly using OpenCV (so \texttt{comm} is not required for the execution), specifying this in the YML configuration file.}.\\
+	Once we have some initial knowledge on CNNs applied to image processing, thank to the \texttt{DigitClassifier} component, we develop a new deep learning component, \texttt{ObjectDetector}\footnote{Demonstration videos available on the MediaWiki page (\url{https://jderobot.org/Naxvm-tfg}).}, which is capable of \emph{detect objects in a real-time image stream}\footnote{For a better compatibility with future usages for this component, it is able to process images from a local video/webcam directly using OpenCV (so \texttt{comm} is not required for the execution), specifying this in the YML configuration file.}.\\
 
 	This component has a generic functionality, as the real-time processing capability is only used to display on the image where the objects are, wrapping them on what is called \emph{bounding boxes}. These boxes are the rectangles inside of which, theoretically the detected object is contained, and are delivered along the \emph{detection score}, and the corresponding \emph{class} detected. We will go further on this later.\\
 	\begin{figure}[h]
@@ -58,7 +58,7 @@ This way, we have successfully loaded the graph with its weights on the TensorFl
 
 Another thing to mention is the fact that, defining a \texttt{Writer} on the load process, we can inspect the graph structure on TensorBoard, as we will do later.
 
-\section{Node architecture}
+\section{Tool architecture}
 	\label{sec:5_node_architecture}
 	\begin{figure}[h]
 		\centering
@@ -146,7 +146,7 @@ Another thing to mention is the fact that, defining a \texttt{Writer} on the loa
 	As this is suitable for real-time performance, we are now capable, on a standard computer hardware, to feed it with a video streaming (a file, or live camera images).
 	
 	\subsection{Importing a pretrained model}
-		We have mentioned the training process of this kind of CNNs. It is not complicated from the point of view of the entire system (\emph{black box}), it only needs a dataset containing images with classes and \emph{ground truth boxes}\footnote{\emph{Ground truth}: what the network knows to trust, what is told it to be the true position of the object to detect.} (Microsoft's COCO, Pascal VOC, etc.). With these images, the SSD architecture learns to perform a better \emph{regression}, to achieve a better fitting of the boxes with respect to the original ones, evaluating it using the \emph{Jaccard similarity coefficient}, or IoU (\emph{Intersection over Union}). This measure evaluates how good the overlap between the true and the estimated boxes is (\autoref{fig:5_iou}). Additionally, it performs a standard \emph{back-propagation} process similar to the one we executed on the previous component (\autoref{sec:4_train}).
+		We have mentioned the training process of this kind of CNNs. It is not complicated from the point of view of the entire system (\emph{black box}), it only needs a dataset containing images with classes and \emph{ground truth boxes}\footnote{\emph{Ground truth}: what the network knows to trust, what is told it to be the true position of the object to detect.} (Microsoft's COCO, Pascal VOC, etc.). With these images, the SSD architecture learns to perform a better \emph{regression}, to achieve a better fitting of the boxes with respect to the original ones, evaluating it using the \emph{Jaccard similarity coefficient}, or IoU (\emph{Intersection over Union}). This measure evaluates how good the overlap between true and estimated boxes is (\autoref{fig:5_iou}). Additionally, it performs a standard \emph{back-propagation} process similar to the one we executed on the previous component (\autoref{sec:4_train}).
 		
 		\begin{figure}[h!]
 			\centering
@@ -178,7 +178,7 @@ Another thing to mention is the fact that, defining a \texttt{Writer} on the loa
 \section{Experiment: testing different architectures}
 	The implemented generic class (\texttt{DetectionNetwork}) allows to load on runtime a pretrained TensorFlow model of neural network. We can take advantage of this to perform a quantitative timing benchmark of different architectures and/or datasets, among the available models on the TensorFlow Detection Zoo\footnote{\url{https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md}}. As this node is a implementation on a real time video streaming, measures can't be taken on \emph{precision} terms. However, a deeper analysis of that kind can be performed with the JdeRobot tool \texttt{DetectionSuite} (described on \autoref{sec:dl_jderobot}), which allows to measure performance in terms of advanced markers, as \emph{Jaccard Index}, precision and recall.\\
 	
-	The timing tests (\autoref{tab:5_tests}) have been performed under the described available hardware, computing the mean inference time over 200 inferences on a people walking video (\autoref{fig:5_benchmark_screen}). Notice that the frame rate and/or resolution are not relevant, as every image experiments a reshaping before being feed-forwarded through the network.
+	The timing tests (\autoref{tab:5_tests}) have been performed under the described available hardware (section \ref{sec:2_available_hw}), computing the \emph{mean inference time} over 200 frames on a people walking video (\autoref{fig:5_benchmark_screen}). Notice that the frame rate and/or resolution are not relevant, as the frames are processed one at a time, and experiment a reshaping before being feed-forwarded through the network.
 	
 	\begin{figure}[h]
 		\centering
