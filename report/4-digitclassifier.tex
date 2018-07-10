@@ -1,6 +1,5 @@
 \chapter{DigitClassifier tool}
 	\label{chap:4_digitclassifier}
-	\section{Description}
 		This JdeRobot component (\autoref{sec:3_digitclassifier_jderobot}) was used on this project to land on the concept of neural networks.\\
 	
 		Its design aims to \textit{classify handwritten numbers} with the use of a Convolutional Neural Network (\autoref{sec:1_cnn}), which classifies the incoming images from a video source.\\
@@ -33,9 +32,50 @@
 		
 		
 		
-		This establishes the first functional difference with the previous version, which was powered by only 2 threads (for the camera and the GUI), performing on-demand (blocking) inferences on the neural network. Implementing a new thread dedicated to the neural network allows to have an instantaneous output digit from the network, ready to be grabbed on an easy and non-blocking way.\\
+		This establishes the first functional difference with the previous version, which was powered by only 2 threads (for the camera and the GUI), performing on-demand (blocking) inferences on the neural network. Implementing a new thread dedicated to the neural network allows to have an instantaneous output digit from the network, ready to be easily grabbed. Nevertheless, care has to be put on respecting parallelism between threads. This infrastructure is optimum for asynchronism, which means that one component does not depend on any others (e.g. the GUI component does not need the network to finish the next inference and return the classified digit in order to refresh the interface: it grabs the last inference made by the network \emph{from the own network}, which will be automatically updated when a newer one is available). This implies a respect to the independence between threads. It is the key for an asynchronous behavioral, as we want the component to yield the best possible performance.\\
 		
-		Using the specified \texttt{threading} library, this deployment is as easy as:
+		
+		Using the specified \texttt{threading} library, this deployment is as easy as making a custom definition of the \texttt{\_\_init\_\_()} and \texttt{run()} methods:
+		
+		
+		\begin{lstlisting}
+...
+import threading
+from datetime import datetime
+...
+
+class MyThread(threading.Thread):
+
+	def __init__(self, foo, bar):
+		'''
+		This is the method which will be called at the creation of the thread.
+		'''
+		self.my_foo = foo
+		self.my_bar = bar
+		self.time_cycle = 100 # ms
+		threading.Thread.__init__(self)  # Rest of the initialization.
+	
+	
+	def run(self):
+		'''
+		This is the task the thread will perform once.
+		If we put an infinite loop inside, we have a periodic thread.
+		'''
+		while True:
+		start_time = datetime.now()
+		# Grab an image, or run an inference on the neural network...
+		self.my_foo.doMyStuff(self.my_bar)
+		end_time = datetime.now()
+		dt = end_time - start_time
+		
+		# If it did not take the refresh time, it sleeps until it arrives.
+		if dt < self.t_cycle:
+		sleep(self.t_cycle - dt)
+		
+		\end{lstlisting}
+		
+		So, we can create versions of this generic class, and then instantiate them, as performed on \autoref{fig:4_digitclassifier_code}. This way, we have already created and started the parallel threads performing their own tasks on an asynchronous way. In addition, it is possible to control the update period of the thread, so we can decide how much time it will be elapsed between two consecutive executions of the task (and of course this is a tunable parameter).
+		
 		\begin{figure}[h!]
 			\centering
 
@@ -74,9 +114,7 @@ gui.show()
 			\caption{Schematic code to instantiate the components of the node.}
 			\label{fig:4_digitclassifier_code}
 		\end{figure}
-		Nevertheless, care has to be put on respecting parallelism between threads. This infrastructure is optimum for asynchronism, which means that one component does not depend on any others (e.g. the GUI component does not need the network to finish the next inference and return the classified digit in order to refresh the interface: it grabs the last inference made by the network \emph{from the own network}, which will be automatically updated when a newer one is available).
-		
-		This implies a respect to the independence between threads. It is the key for an asynchronous behavioral, as we want the component to yield the best possible performance.\\
+
 		
 	\section{Image processing}
 		For every digit recognition system using a CNN, the approach is the same: \emph{processing a 28$\times$28 px image}\footnote{This particular shape is due to the used dataset, as it will be seen later.} containing a binary image of the digit itself. In addition to this, our system aims to a robust and correct classification at every feasible situation. Handwritten digits can often be found in visually harsh environments (poor quality sensor or lighting, trace indistinguishable of the background, etc.). Given this, before inserting an image on the network, we have to subject it to a \emph{preprocessing} pipeline:
@@ -280,18 +318,18 @@ train_step = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
 
 
 
-			\begin{figure}[h]
+			\begin{figure}[h!]
 				\centering
-				\begin{subfigure}[h]{0.45\linewidth}
+				\begin{subfigure}[h]{0.4\linewidth}
 					\centering
-					\includegraphics[width=2.7in]{images/training}
+					\includegraphics[width=2.3in]{images/training}
 					\caption{Standard MNIST dataset.}
 					\label{fig:4_mnist_standard}
 				\end{subfigure}
 				\qquad
 				\begin{subfigure}[h]{0.45\linewidth}
 					\centering
-					\includegraphics[width=3.5in]{images/training_augm}
+					\includegraphics[width=3.2in]{images/training_augm}
 					\caption{Augmented MNIST dataset.}
 					\label{fig:4_mnist_augmented}
 				\end{subfigure}

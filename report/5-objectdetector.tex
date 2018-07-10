@@ -1,6 +1,5 @@
 \chapter{ObjectDetector tool}
 
-\section{Description}
 	Once we have some initial knowledge on CNNs applied to image processing, thank to the \texttt{DigitClassifier} component, we develop a new deep learning component, \texttt{ObjectDetector}\footnote{Demonstration videos available on the MediaWiki page (\url{https://jderobot.org/Naxvm-tfg}).}, which is capable of \emph{detect objects in a real-time image stream}\footnote{For a better compatibility with future usages for this component, it is able to process images from a local video/webcam directly using OpenCV (so \texttt{comm} is not required for the execution), specifying this in the YML configuration file.}.\\
 
 	This component has a generic functionality, as the real-time processing capability is only used to display on the image where the objects are, wrapping them on what is called \emph{bounding boxes}. These boxes are the rectangles inside of which, theoretically the detected object is contained, and are delivered along the \emph{detection score}, and the corresponding \emph{class} detected. We will go further on this later.\\
@@ -157,7 +156,7 @@ Another thing to mention is the fact that, defining a \texttt{Writer} on the loa
 	
 		The much heavier complexity of this task is not our point where to focus, so we will \emph{embed pretrained models}, available thank to the TensorFlow team on the previously mentioned \emph{Detection Model Zoo}\footnote{\url{https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md}}.\\
 		
-		In our case, we have selected a \emph{SSD detector}, with a \emph{MobileNet v2} feature extraction base network, trained on the \emph{COCO} dataset \footnote{\url{http://cocodataset.org}}. As this dataset support 90 object types (\emph{person, dog, airplane, toothbrush, apple, cellphone, etc.}, those are the classes we are able to detect. It provides a lightweight structure which performs inferences at a framerate of approximately 14 fps (on the currently available hardware).\\
+		In our case, we have selected a \emph{SSD detector}, with a \emph{MobileNet v2} feature extraction base network, trained on the \emph{COCO} dataset \footnote{\url{http://cocodataset.org}}. As this dataset support 90 object types (\emph{person, dog, airplane, toothbrush, apple, cellphone, etc.}, those are the classes we are able to detect. It provides a lightweight structure which performs inferences at a frame rate of approximately 14 fps (on the currently available hardware).\\
 		
 		We load this network architecture and weights on the mentioned manner (\autoref{fig:5_load_model}). 
 	

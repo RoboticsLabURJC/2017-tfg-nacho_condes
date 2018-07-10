@@ -1,6 +1,6 @@
 \chapter{FollowPerson application}
 \label{chap:followperson}
-\section{Description}
+
 	The previous node, \texttt{ObjectDetector}, shows such a fine real-time detection system, for several classes of objects (up to 90 in the COCO dataset case). It conforms an inert node, but that can act as a starting point for a ton of interesting applications to come up with.\\
 	
 	In our project, we take one of these new derived applications, \texttt{FollowPerson} (\autoref{fig:6_followperson}), and in the next pages we will study its insights. Our approach is a \emph{reactive}\footnote{A reactive action has an immediate effect when the stimulus is perceived.} behavioral on a robot, which commands a Turtlebot robot to follow a target person (which we will call \emph{mom}) using a RGBD\footnote{\emph{RGBD} stands for \emph{RGB + Depth}. It provides, in addition to the standard RGB image, a depth map, as described at \ref{sec:3_xtion}} sensor. This person can be easily specified, providing the node an image of it, in the YML configuration file. The node will search and analyze its faces, and store it as the face to follow. It comprises, as we will see, some new systems as a modular extension of the pure detection component.
@@ -77,7 +77,7 @@ correct_scores = scores[mask]
 		\label{fig:6_followperson_pulp}
 	\end{figure}
 	
-	We discern which one is the target person (\emph{mom}), \emph{identifying its face}. To do this, we have to firstly \emph{detect} faces on the image, and then perform a \emph{reidentification} with each found face, to contrast wether that person is or not mom. Now, we will describe the pipeline followed to perform these actions.
+	We discern which one is the target person (\emph{mom}), \emph{validating its face}. To do this, we have to firstly \emph{detect} faces on the image, and then perform a \emph{comparative} of each found face with \emph{mom}'s, to contrast wether that person is or not mom. Now, we will describe the pipeline followed to perform these actions.
 	
 	\subsection{Detection: Haar Cascade Classifier}
 	
@@ -243,7 +243,7 @@ distance = facenet.compareFaces(face1, face2)
 		
 		\item The counter for all the \emph{tracked} and \emph{candidate} instances is decremented in 1.
 	\end{enumerate}
-	When a strong detection is mantained, it is stored in the \emph{tracked} set, and its counter is always saturated to the maximum value, so it is safe for being demoted for a while if it stops being detected for a few frames. This can be applied to person detections (avoiding undesired detections) and to face detections (this cancels the effect of the limp face detection, where only the highest one will be kept and, in addition, it will have to be detected for a few frames to be considered).\\
+	When a strong detection is constantly appearing, it is stored in the \emph{tracked} set, and its counter is always saturated to the maximum value, so it is safe for being demoted for a while if it stops being detected for a few frames. This can be applied to person detections (avoiding undesired detections) and to face detections (this cancels the effect of the limp face detection, where only the highest one will be kept and, in addition, it will have to be detected for a few frames to be considered).\\
 	
 	This role promotion and demotion system is successfully implemented with custom types in Python, where we have a general \texttt{PersonTracker}, which keeps the coherence between the sets for all the image, and a \texttt{FaceTracker} inside each person (to have three of the explained sets being executed for each detected person) yielding excellent results to keep steady detections. This allows to handle faces only inside detected persons (which also eliminates false positive face detections outside a person, which is never convenient).\\
 	
@@ -483,16 +483,16 @@ v = v_PID.computeResponse(linear_error)
 	
 	\begin{figure}[h]
 		\centering
-		\begin{subfigure}[b]{0.6\linewidth}
+		\begin{subfigure}[b]{0.55\linewidth}
 			\centering
-			\includegraphics[width=4in]{images/ptz_error_comp}
+			\includegraphics[width=3.6in]{images/ptz_error_comp}
 			\caption{Error computation on each axis.}
 			\label{fig:6_ptz_error}
 		\end{subfigure}
 		\hfill
 		\begin{subfigure}[b]{0.5\linewidth}
 			\centering
-			\includegraphics[width=4in]{images/ptz_dead_zone}
+			\includegraphics[width=3.7in]{images/ptz_dead_zone}
 			\caption{Dead zone of actuation (radius of 60 px).}
 			\label{fig:6_ptz_dead_zone}
 		\end{subfigure}

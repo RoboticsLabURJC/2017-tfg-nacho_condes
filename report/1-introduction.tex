@@ -4,11 +4,11 @@ This introductory chapter aims to present the general context which wraps this p
 
 \section{Robots}
 
-Robotics applications can be really useful at daily tasks. These tasks are of greater interest when the behavioral of a robot tends to emulate the human one\footnote{\href{https://www.engadget.com/2018/01/08/new-sony-aibo-first-impressions/}{Some efforts are taken even into adopting the performance of human's best friend}}, with the advantage of no human beings exposed to a significant risk, or, in a less gloomy scenario, without human body physical limitations. This requires a polished (and somehow complex) behavioral, which is triggered by a certain input. At this point, we can find two main branches into robots, depending on the input source:
+Robotics applications can be really useful at daily tasks. These tasks are of greater interest when the behavioral of a robot tends to emulate the human one\footnote{\href{https://www.engadget.com/2018/01/08/new-sony-aibo-first-impressions/}{Some efforts are taken even into adopting the performance of human's best friend}}, with the advantage of no human people exposed to a significant risk, or, in a less gloomy scenario, without human body physical limitations. This requires a polished (and somehow complex) behavioral, which is triggered by a certain input. At this point, we can find two main branches into robots, depending on the input source:
 \begin{itemize}
 	\item \textbf{Teleoperated robots:} this kind of robots are capable of perform certain actions, which are \textit{remotely controlled by a human operator}. This application is the one with most weight on the hazardousness (\autoref{fig:1_pioneer}) \cite{chernobyl-robot} or precision \cite{teleop-surgery} factor. Thus, some advances are made nowadays improving the teleoperation function, implementing \emph{feedbacks} from the robot, such as haptic feedback \cite{teleop-haptic}, or VR (\emph{Virtual Reality}) sensation, to allow that person to sense the environment as if it was in front of it.	
 	
-	\item \textbf{Autonomous robots:} these robots are much more complex machines, as they are distinguished for implementing a response by itself, independently of any kind of remote operator. This is seeked on certain scenarios, where the time elapsed performing an action or the cost of mantaining a critical link with a base, are factors with a considerable weight in the design \cite{ai-space}. This is the kind of robots that concern us on this work: the state-of-the-art techniques try to emulate \emph{human behavioral}(\autoref{fig:1_pepper}), so some actions can begin to be performed with a certain intelligence, as we will describe below.
+	\item \textbf{Autonomous robots:} these robots are much more complex machines, as they are distinguished for implementing a response by itself, independently of any kind of remote operator. This is seeked on certain scenarios, where there are some factors (as the time elapsed performing an action, or the cost of a control link with the robot) with a considerable weight in the design \cite{ai-space}. This is the kind of robots that concern us on this work: the state-of-the-art techniques try to emulate \emph{human behavioral}(\autoref{fig:1_pepper}), so some actions can begin to be performed with a certain intelligence, as we will describe below.
 \end{itemize}
 
 
@@ -114,10 +114,10 @@ First approaches to neural networks, according to \cite{nn-history} were develop
 	\label{fig:1_perceptron}
 \end{figure}
 
-
+\vspace{0.3in}
 Every neuron is composed by an structured schema:
 \begin{enumerate}
-	\item \emph{Inputs}: the data which come into the neuron. It might come from the main stimuli, or from another neuron (as the output of the previous layer). The input for a specific neuron is called its \emph{receptive field} (the region of the total input that stimulates that neuron, where it looks for features).
+	\item \emph{Inputs}: the data which come into the neuron. It might come from the main stimuli, or from another neuron (as the output of the previous layer). The input for a specific neuron is called its \emph{receptive field} (which region of the total input that stimulates that particular neuron, where it looks for features).
 	\item \emph{Weights}: the tuned parameters of the network. They represent the importance given to each feature on that singular neural unit. The weight $w_n$ multiplied $x_n$ times results on the contribution of the feature $n$ in the current neuron. 
 	\item \emph{Sum}: the product of all the inputs with their suitable weight come into a sum operation\footnote{We consider $w_0$ as the product to the constant input $1$, as the intercept term (a constant always present independently of the current input).}, to \textit{build a total linear response:} $ z = \sum_{i=0}^{n}x_i \cdot w_i$  \footnote{There is also a summation bias term on each neuron, $b_i$, but it is ignored here for the sake of simplicity, as the weights are more representative with respect to the input.}.
 	\item \emph{Activation function}: this is an crucial part of a neural network. Until now, all the numerical computations we have performed were just linear operations. If we keep the output of the neuron being a linear function of the input, we will lose the effect of having more than 1 layer, as really the total result of all the network is a linear function of the first input, so \emph{we could simplify all the network down to one single neuron}. \\
@@ -173,7 +173,7 @@ We can solve both problems simultaneously with an easy procedure: we will not pr
 
 
 
-But, \emph{how do we find the best value for each weight, and for each layer?} That's the process we call \textit{training a network}. Using a technique called \emph{back propagation}, we can compute 
+But, \emph{how do we find the best value for each weight, and for each layer?} That's the process we call \textit{training a network}. Using a technique called \emph{back propagation}, we can compute the most suitable values for every neuron in the network.\\
 
 \begin{figure}[h]
 	\centering

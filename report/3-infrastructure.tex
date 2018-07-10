@@ -26,7 +26,7 @@
 		\begin{itemize}
 			\item \emph{Pan:} horizontal movement. It can take values from $-100$ to $100$ degrees from the centered position. This movement can be performed at a certain speed, which can be set between $1$ and $24$.
 
-			\item \emph{Tilt:} vertical movement. Its range goes from $-30$ to $30$, and the movement speed can be also varied between $1$ and $20$.
+			\item \emph{Tilt:} vertical movement. Its range goes from $-30$ to $30$ degrees, and the movement speed can be also varied between $1$ and $20$.
 		\end{itemize}
 		
 		Something remarkable about this device is that it is bidirectional: we \textit{receive} images from its camera, and, at the same time, we \textit{send} it commands to move the motors.\\
@@ -49,8 +49,7 @@
 			
 		\end{description}
 
-	
-		We have to be careful on the movement commands (as it will be seen on \autoref{sec:follow_ptz}).\\
+
 
 		This is the device we use on our experimental approach to the \emph{detection + robotic behavioral} node (\autoref{sec:follow_ptz}), where the only response is moving the camera.\\
 
@@ -234,7 +233,7 @@ rospy.spin()                             # 'Infinite loop' listening to the topi
 		
 		Additionally, another machine (\emph{Computer 2}) is running a viewer, which allows it to draw the images seen by the camera, and the laser readings from the scanner. So, this component only receives the data from the sensors, and does not send any kind of data to the devices.
 		
-		We can see that both components can perfectly run together and on different machines, even when they are written over completely different languages (Python and C++, respectively). In addition, we can perfectly handle virtual and real devices simultaneously, even if they talk through different interfaces (ROS or ICE), due to the perfect support to both by the \texttt{comm}  library (\autoref{sec:3_comm}). 		 \textit{In this easiness and flexibility resides the main advantage of using JdeRobot}\\
+		We can see that both components can perfectly run together and on different machines, even when they are written over completely different languages (Python and C++, respectively). In addition, we can perfectly handle virtual and real devices simultaneously, even if they talk through different interfaces (ROS or ICE), due to the perfect support to both by the \texttt{comm}  library (\autoref{sec:3_comm}). 		 \textit{In this easiness and flexibility resides the main advantage of using JdeRobot}.\\
 		
 		
 		\begin{figure}[h]
@@ -323,22 +322,22 @@ PTMotors.setPTMotorsData(new_pan, new_tilt, max_pan_speed, max_tilt_speed)
 
 \section{NumPy library}
 	NumPy\footnote{\url{http://www.numpy.org/}} (\emph{Numeric Python}) is a library for Python (written in C++), born to extend the numerical abilities of this language. It provides a powerful \texttt{array} class, which allows to keep a N-dimensional collection of values/objects in a really handy way (in comparison with Python's standard \emph{lists}). It also provides a rich interface to describe the arrays (such as advanced indexing, shaping, data formatting, etc.).\\
-	This will such an useful resource on this work, for 3 main reasons:
+	It has been an useful resource on this work, for 3 main reasons:
 	\begin{itemize}
-		\item \emph{Matricial representation of images:} every processed image is handled as matrices or bigger order tensors (the concept of matrix generalized for any number of dimensions), so visualizing/slicing them becomes a trivial task.
+		\item \emph{Matrix representation of images:} processed images are handled as matrices or bigger order tensors (the concept of matrix generalized for any number of dimensions), so visualizing/slicing them becomes a trivial task.
 		\item \emph{Abstract structure to keep objects:} it allows to store different objects in a \texttt{np.array} object, providing an advanced API for indexing, and conditional checks to instantly retrieve the elements fulfilling a specific condition.
 		\item \emph{Saving variables into disk:} this is an useful feature for debugging purposes. \texttt{np.save()} allows to save any variable (even non-NumPy ones, like dictionaries), finding it on a \texttt{.npy} file, ready to be traced and debugged.
 	\end{itemize}
 
-In the same way than OpenCV, this is a numerical library widely adopted between Python users. This is due to the easiness of handling of its types and structures, that provides an immediate data exchange format with other parties software. It has made of it our main numerical engine on the developed purposes, having used it on its version 1.14.5.
+In the same way than OpenCV, this is a numerical library widely adopted among Python users. This is due to the easiness of handling of its types and structures, that provide an immediate data exchange format with third party software. It has made of it our main numerical engine on the developed purposes, having used it on its version 1.14.5.
 
 
 
 \section{TensorFlow framework}
 	\label{sec:3_tensorflow}
-	TensorFlow\footnote{\url{https://www.tensorflow.org/}}, which has been the core component of this project, is an open-source software framework for high performance numerical computation. It was originally created by the Google Brain team, and it offers an excellent background for \emph{machine learning} tasks.\\
+	TensorFlow\footnote{\url{https://www.tensorflow.org/}} is an open-source software framework for high performance numerical computation. It was originally created by the Google Brain team, and it offers an excellent background for \emph{machine learning} tasks.\\
 	
-	Its internal functionality is based on \emph{graphs}, composed by nodes which operate and exchange data values establishing \emph{a flow of tensors} (as previously described, a tensor is the general term to describe a multidimensional structure). These tensors are handled in the backend of TensorFlow, so performing operations with tensors is really fast, in comparison with high-level mathematical libraries (NumPy). A tensor can be formed of different data types (images, words, poses, numbers, etc.), which is the key for the versatility it offers for a large variety of projects\footnote{\url{https://github.com/jtoy/awesome-tensorflow}}.\\
+	Its internal functionality is based on \emph{graphs}, composed by nodes which operate and exchange data values establishing \emph{a flow of tensors}. These tensors are handled in the backend of TensorFlow, so performing operations with tensors is really fast, in comparison with other high-level mathematical libraries (NumPy). A tensor can be formed of different data types (images, words, poses, numbers, etc.), which is the key of the versatility it offers for a large variety of projects\footnote{\url{https://github.com/jtoy/awesome-tensorflow}}.\\
 	
 	\begin{figure}[h]
 		\centering
@@ -347,31 +346,27 @@ In the same way than OpenCV, this is a numerical library widely adopted between 
 		\label{fig:3_tf_graph}
 	\end{figure}
 	
-	All these possibilities make TensorFlow a very optimized ecosystem to implement \emph{deep learning} models (Deep Neural Networks). In addition, it is optimized for parallel GPU hardware. This gives a network the opportunity to experiment a performance boost, since it can reduce significantly the time it takes to make an inference (and even work on a system with a cluster of GPUs, although this is focused to more exigent systems than the one we create on this work). For our\\
+	All these possibilities make TensorFlow a very optimized ecosystem to implement \emph{deep learning} models (Deep Neural Networks). In addition, it is optimized for parallel GPU hardware. This gives a network the opportunity to experiment a performance boost, since it can reduce significantly the time it takes to make an inference (and even work on a system with a cluster of GPUs, although this is focused to more exigent systems than the one we create on this work).\\
 	
-	Since it was launched (November 2015), it has been adopted by many big companies which have used TensorFlow as the base for their Artificial Intelligence applications, such as Twitter, Intel, Google, eBay, Xiaomi, Nvidia, etc.\\
+	Since it was launched (November 2015), it has been adopted by many big companies which use TensorFlow as the base for their Artificial Intelligence applications, such as Twitter, Intel, Google, eBay, Xiaomi, Nvidia, etc.\\
 	
-	As we will see later in the specific components, it allows to \emph{train} a neural network (for its later use) or even \emph{load} a specific model (kept on a Google Protobuf\footnote{Google's open source mechanism to serialize structured data.} \texttt{.pb} file). This is a really interesting feature, given that we are able to retrieve a bunch of pretrained models and embed them into a generic neural network.\\
+	It allows to \emph{train} a neural network or even \emph{load} a specific model (kept on a Google Protobuf\footnote{Google's open source mechanism to serialize structured data.} \texttt{.pb} file). This is a really interesting feature, given that we are able to retrieve a bunch of pretrained models and embed them into a generic neural network.\\
 	
 	The version we have been using along the project is the last available one nowadays (1.9.0), compiled from sources on a Nvidia GPU (through CUDA on its 9.2.88 version), in order to squeeze the maximum inference speed possible.\\
 	
-	We have also also taken advantage of an included tool, \emph{TensorBoard}, which allows to \emph{visualize} interesting contents about a neural network, from a log trace of its execution. It is possible to visualize the \emph{graph} (including nodes, tensor shapes, operations, etc.). Also, it provides a functionality to analyze the obtained weights for each layer, on advanced analysis techniques, as PCA (\emph{Principal Component Analysis}). We have used it to visualize all the networks we design or import.
+	We have also taken advantage of the \emph{TensorBoard} tool, which allows to \emph{visualize} interesting contents about a neural network, from a log trace of its execution. It is possible to visualize the \emph{graph} (including nodes, tensor shapes, operations, etc.). Also, it provides a functionality to analyze the obtained weights for each layer, on advanced analysis techniques, as PCA (\emph{Principal Component Analysis}). We have used it to visualize all the networks we design or import.
 
 
 
 
 \section{Keras framework}
-	As it is stated in \cite{dpascualhe}, Keras is a high-level \emph{neural network framework}, written in Python and capable of running on top of either TensorFlow or Theano (another \emph{deep learning} library).\\
-	
-	Hence, it is an abstraction with the goal of programming and handling a neural network on an simpler way, relying on a powerful library (treated as \emph{backend}) as TensorFlow to perform all the numeric operations. As well as TensorFlow, it is capable of loading previously compiled and saved models, on the serialization standard HDF5\footnote{Hierarchical Data Format (v.5): general purpose format to store and manage data.} (\texttt{.h5} files).\\
+	As it is stated in \cite{dpascualhe}, Keras is a high-level \emph{neural network framework}, written in Python and capable of running on top of either TensorFlow or Theano (another \emph{deep learning} library). Hence, it is an abstraction with the goal of programming and handling a neural network on an simpler way, relying on a powerful library (treated as \emph{backend}) as TensorFlow to perform all the numeric operations. As well as TensorFlow, it is capable of loading previously compiled and saved models, on the serialization standard HDF5\footnote{Hierarchical Data Format (v.5): general purpose format to store and manage data.} (\texttt{.h5} files).\\
 	
 	In our project, support has been provided to use this framework (selecting it on the YML configuration file) on its version 2.2.0, although our main interest has been TensorFlow due to the significative difference of processing speed between both frameworks (being TensorFlow twice as fast as Keras).
 \section{PyQt framework}
-	Qt\footnote{\url{https://www.qt.io/}} is an cross-platform object-oriented framework for building GUIs (\emph{Graphical User Interfaces}), originally developed by a Nokia department. It is distributed under a commercial license, although it has a standard GPL license for open-source projects.\\
+	Qt\footnote{\url{https://www.qt.io/}} is an cross-platform object-oriented framework for building GUIs (\emph{Graphical User Interfaces}), originally developed by a Nokia department. It is distributed under a commercial license, although it has a standard GPL license for open-source projects. A third party company (RiverBank Computing) developed PyQt, a set of Python bindings to interact with Qt (originally written in C++). It is structured in units called \emph{Widgets}, which contain blocks (\emph{Labels}).\\
 	
-	A third party company (RiverBank Computing) developed PyQt, a set of Python bindings to interact with Qt (originally written in C++). It is structured in units called \emph{Widgets}, which contain blocks (\emph{Labels}).\\
-	
-	All this allows to easily deploy a GUI-based(\emph{Graphic User Interface}) program:
+	All this allows to easily deploy a GUI-based(\emph{Graphic User Interface}) program, as in \autoref{fig:3_pyqt_helloworld}.
 	\begin{figure}[h]
 		\centering
 		\begin{subfigure}[h]{0.55\linewidth}
@@ -406,53 +401,12 @@ if __name__ == '__main__':
 		\label{fig:3_pyqt_helloworld}
 	\end{figure}
 	
-	As it is the last available version at the time this is developed, we have used the version 5 of Qt. Hence, our binding library is \texttt{PyQt5}, which has been used to build a live-capable GUI on an intuitive way, in all the developed tools.\\
+	We have used the version 5 of Qt. Hence, our GUI library is \texttt{PyQt5}, which has been used to build a live-capable GUI on an intuitive way, in all the developed tools.\\
 	
 \section{threading library}
 	\label{sec:3_threading}
-	\texttt{Threading}\footnote{\url{https://docs.python.org/2/library/threading.html}} is a Python standard library which offer a high-level API for threading processes. This means to run programs on more than one single job for the CPU, which allows to be capable of perform several tasks on a simultaneous way.\\
+	\texttt{Threading}\footnote{\url{https://docs.python.org/2/library/threading.html}} is a Python standard library which offers a high-level API for threading processes. This is very convenient for our purpose, as we want to stick to a multiprocessing paradigm. This way we can have dedicated threads to grab the new camera images, update the GUI, and make the Neural Network to load new inferences on the last image detected.\\
 	
-	This is very convenient for our purpose, as we want to stick to a multiprocessing paradigm. So, this way we can have dedicated threads to grab the new camera images, update the GUI, and make the Neural Network to load new inferences on the last image detected.\\
-	
-	The \texttt{threading} provides a generic class for a thread. Our only task is to create a custom class which inherits it, customizing the \texttt{\_\_init\_\_} and \texttt{run()} methods our own way:
-	
-
-	\begin{lstlisting}
-...
-import threading
-from datetime import datetime
-...
-
-class MyThread(threading.Thread):
-
-	def __init__(self, foo, bar):
-		'''
-		This is the method which will be called at the creation of the thread.
-		'''
-		self.my_foo = foo
-		self.my_bar = bar
-		self.time_cycle = 100 # ms
-		threading.Thread.__init__(self)  # Rest of the initialization.
-		
-		
-	def run(self):
-		'''
-		This is the task the thread will perform once.
-		If we put an infinite loop inside, we have a periodic thread.
-		'''
-		while True:
-			start_time = datetime.now()
-			# Grab an image, or run an inference on the neural network...
-			self.my_foo.doMyStuff(self.my_bar)
-			end_time = datetime.now()
-			dt = end_time - start_time
-			
-			# If it did not take the refresh time, it sleeps until it arrives.
-			if dt < self.t_cycle:
-				sleep(self.t_cycle - dt)
-				
-	\end{lstlisting}
-	
-In addition, as we can see, it is possible to control the update period of the thread, so we can decide how much time it will be elapsed between two consecutive executions of the thread task (and of course this is a tunable parameter).\\
+	The \texttt{threading} provides a generic class for a thread. Our only task is to create a custom class which inherits it, customizing the \texttt{\_\_init\_\_} and \texttt{run()} methods our own way.\\
 
 The version we have used is the standard one included with the Python installation.
