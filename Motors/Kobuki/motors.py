@@ -35,7 +35,7 @@ class Motors():
                          Kd=3,
                          K_loss=0,
                          scaling_factor=0.005,
-                         limiter=0.5)
+                         limiter=0.7)
 
         # Parameters for error processing:
         self.w_center = 0
@@ -52,6 +52,7 @@ class Motors():
 
         self.mom_coords = None
         self.prev_error = None
+        self.persons = []
         self.faces = []
 
         # Interface for turtlebot sounds

@@ -99,8 +99,8 @@ if __name__ == '__main__':
 
     motors = Motors(motors_proxy)
     motors.setNetworks(network, siamese_network)
+    motors.setCamera(cam)
     if device_type.lower() == 'kobuki':
-        motors.setCamera(cam)
         motors.setDepth(depth)
     t_motors = ThreadMotors(motors)
     window.setMotors(motors, t_motors)

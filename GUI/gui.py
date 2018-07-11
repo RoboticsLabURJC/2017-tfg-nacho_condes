@@ -98,9 +98,9 @@ class GUI(QtWidgets.QWidget):
         self.network = network
 
         if self.network.framework == "TensorFlow":
-            self.setWindowTitle("JdeRobot-TensorFlow detector")
+            self.setWindowTitle("JdeRobot-TensorFlow tracker")
         else:
-            self.setWindowTitle("JdeRobot-Keras detector")
+            self.setWindowTitle("JdeRobot-Keras tracker")
 
         self.t_network = t_network
 

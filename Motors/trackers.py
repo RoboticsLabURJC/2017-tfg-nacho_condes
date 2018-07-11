@@ -129,7 +129,7 @@ class Person:
 
 
 class PersonTracker:
-    def __init__(self, patience=1, mom_dist_thr=1.00, same_person_thr=180):
+    def __init__(self, patience=5, mom_dist_thr=1.00, same_person_thr=180):
         self.patience = patience
         self.mom_dist_thr = mom_dist_thr
         self.same_person_thr = same_person_thr
@@ -187,7 +187,6 @@ class PersonTracker:
                 if pxBetweenBoxes(d_person, t_person.coords) < self.same_person_thr:
                     # Tracked person found in the same place (approximately).
                     # Updating person.
-                    print "updating"
                     self.tracked_persons[idx] = Person(d_person,
                                                        d_score,
                                                        min(t_person.counter, self.patience) + 2,
@@ -195,8 +194,6 @@ class PersonTracker:
                                                        t_person.is_mom)
                     found = True
                     break
-                else:
-                    print "ko"
 
             # Person not tracked. Is it a candidate?
             for idx in range(len(self.candidate_persons)):

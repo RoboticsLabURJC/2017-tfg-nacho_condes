@@ -13,7 +13,7 @@ class SiameseNetwork:
     '''
     def __init__(self, model_name, mom_path):
         # Load the siamese network model
-        model_path = 'Net/TensorFlow/' + model_name + '.pb'
+        model_path = 'Net/TensorFlow/' + model_name
         with tf.device('/cpu:0'):
             siamese_graph = tf.Graph()
             with siamese_graph.as_default():
@@ -43,7 +43,7 @@ class SiameseNetwork:
 
 
 
-        print("Siamese network ready!")
+        print("MobileNet ready!")
 
     def prewhiten(self, face, square_size=160):
         ''' Function to preprocess a certain face, to be fed to the

@@ -3,7 +3,6 @@ FollowPerson:
 
   Motors:
     Server: ROS # Deactivate, Ice, ROS
-    Proxy: "Motors:default -h localhost -p 9001"
     Topic: "/mobile_base/commands/velocity"
     Name: kobukiMotors
     maxV: 3
@@ -24,9 +23,9 @@ FollowPerson:
   Network:
     Framework: TensorFlow  # Currently supported: "Keras" or "TensorFlow"
     #Model: VGG_512_512_coco.h5
-    Model: ssd_mobilenet_v2_coco_2018_03_29.pb
+    Model: ssdlite_mobilenet_v2_coco_2018_05_29.pb
     Dataset: COCO # available: VOC, COCO, KITTI, OID, PET
-    SiameseModel: siamese_model
+    SiameseModel: siamese_model.pb
 
   Mom:
     ImagePath: mom_imgs/mom7.jpg
