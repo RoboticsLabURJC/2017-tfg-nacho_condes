@@ -1,9 +1,0 @@
-The proposed following behavior combines a perception and
-a control module. Perception module addresses person detection on images using a pretrained TensorFlow SSD person detection Convolutional
-Neural Network. It provides robustness over traditional methods, although care has to be put on not losing real-time operation. A person tracker filter has been included to alliviate the effect of false positives/negatives. It also extracts faces, which are analyzed by a siamese
-network in order to reidentify the tracked individual. This perception
-module tells which person in the image has to be followed, even on poorly
-lightened scenarios. it is combined with depth readings to obtain the relative position of the person. The control module implements a case-based
-PID controller for a reactive smooth response, moving the robot towards
-the target person. The entire system has been experimentally validated 3
-on a real Turtlebot robot, with an Asus Xtion RGBD camera.
