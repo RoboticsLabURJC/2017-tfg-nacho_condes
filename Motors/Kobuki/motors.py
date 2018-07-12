@@ -31,24 +31,24 @@ class Motors():
         self.v_PID = PIDDriver(
                          func=self.motors.sendVX,
                          Kc=2,
-                         Ki=0.1,
-                         Kd=3,
+                         Ki=0.08,
+                         Kd=2.7,
                          K_loss=0,
                          scaling_factor=0.005,
                          limiter=0.7)
 
         # Parameters for error processing:
         self.w_center = 0
-        self.w_margin = 60
+        self.w_margin = 50
 
-        self.v_center = 70
+        self.v_center = 40
         self.v_margin = 10
         # Overswitching avoidance flag
         self.margin_expanded = False
         # To restore the margin when it is dynamically modified
         self.original_v_margin = self.v_margin
 
-        self.face_thres = 1.0
+        self.face_thres = 0.9
 
         self.mom_coords = None
         self.prev_error = None
@@ -130,8 +130,8 @@ class Motors():
             # Avoid jumps
             if d_error < 10.0:
                 if error < -self.v_margin:
-                    # Too far
-                    v = self.v_PID.processError(error, verbose=False)
+                    # Too near
+                    v = self.v_PID.processError(error, verbose=True)
                     cprint.warn('  Distance: %d px (too near) >> VX = %.3f m/s' % (distance, v))
                     # Avoid overswitching
                     if not self.margin_expanded:
@@ -142,8 +142,8 @@ class Motors():
                     cprint.info("New margin: %d" % (self.v_margin))
 
                 elif error > self.v_margin:
-                    # Too near
-                    v = self.v_PID.processError(error, verbose=False)
+                    # Too far
+                    v = self.v_PID.processError(error, verbose=True)
                     cprint.warn('  Distance: %d px (too far) >> VX = %.3f m/s' % (distance, v))
                     # Avoid overswitching
                     if not self.margin_expanded:

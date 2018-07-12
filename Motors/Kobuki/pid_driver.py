@@ -27,6 +27,7 @@ class PIDDriver:
     def _sendCommand(self, response):
         ''' This method sends a command to the motors, and updates the last command. '''
         # Soften movements:
+        '''
         if abs(response - self.last_response) > 0.2:
             speeds = np.linspace(self.last_response, response, num=5)
             for speed in speeds:
@@ -34,22 +35,24 @@ class PIDDriver:
                 sleep(0.05)
         else:
             self.func(response)
-
         self.last_response = response
+        '''
+        #print "    response: ", response
+        #print "    last res: ", self.last_response
+        resp = (response + self.last_response) / 2.0
+        #print "sending -> ", resp
+        self.func(resp)
+
 
 
     def brake(self):
-        ''' Braking progressively on 4 steps until 0 (blocking function). '''
-        if self.last_response != 0:
-            speeds = np.linspace(self.last_response, 0, num=4)
-            for speed in speeds:
-                # Send speed to the motors
-                self._sendCommand(speed)
+        self._sendCommand(0)
 
 
     def lostResponse(self):
         ''' Send a softened response from the last sent speed. '''
         response = self.K_loss * self.last_response
+        #print "lost called"
         if abs(response) > self.lost_limiter:
             response = np.sign(response) * self.lost_limiter
 

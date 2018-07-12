@@ -129,7 +129,7 @@ class Person:
 
 
 class PersonTracker:
-    def __init__(self, patience=5, mom_dist_thr=1.00, same_person_thr=180):
+    def __init__(self, patience=5, mom_dist_thr=1.00, same_person_thr=130):
         self.patience = patience
         self.mom_dist_thr = mom_dist_thr
         self.same_person_thr = same_person_thr
