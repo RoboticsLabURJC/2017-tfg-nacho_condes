@@ -1,29 +1,98 @@
-\documentclass[11pt, a4paper]{svproc}
+%%%%%%%%%%%%%%%%%%%% author.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% sample root file for your "contribution" to a proceedings volume
+%
+% Use this file as a template for your own input.
+%
+%%%%%%%%%%%%%%%% Springer %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\documentclass{svproc}
+%
+% RECOMMENDED %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+
+% to typeset URLs, URIs, and DOIs
+\usepackage{url}
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
-\usepackage{multicol}
-\usepackage{footmisc}
-\usepackage{url}
 \def\UrlFont{\rmfamily}
 
+\begin{document}
+\mainmatter              % start of a contribution
+%
 \title{Person following robot behavior using Deep Learning}
+%
+%
 \author{Ignacio Condés\inst{1} \and José María Cañas\inst{2}}
+%
 
+%
 \institute{Universidad Rey Juan Carlos,
 	\email{ignacio.condes.m@gmail.com},
 	\and
 Universidad Rey Juan Carlos, \email{jmplaza@gsyc.es}}
 
+\maketitle              % typeset the title of the contribution
+
+\begin{abstract}
+The proposed following behavior combines a \emph{perception} and a \emph{control} module. Perception module addresses the person detection on images using a pretrained TensorFlow SSD \emph{Convolutional Neural Network}. It provides \emph{robustness} over traditional methods, although care has to be put on not losing real-time operation. A \emph{person tracker filter} has been included to alleviate the effect of false positives/negatives. It also extracts faces, which are also analyzed by a \emph{FaceNet} CNN to reidentify the tracked individual. This perception module tells which person in the image has to be followed, even on poorly lightened scenarios. It is combined with depth readings to obtain the relative position of the person. The control module implements a case-based \emph{PID} controller for a reactive smooth response, moving the robot towards the target person. The entire system has been experimentally validated\footnote{\url{https://jderobot.org/Naxvm-tfg}} on a real Turtlebot2 robot, with an Asus Xtion RGBD camera.
+% We would like to encourage you to list your keywords within
+% the abstract section using the \keywords{...} command.
+\keywords{Computer Vision, neural networks, deep learning, robotic behavior}
+\end{abstract}
+%
+
+%  ---- Intro ----
+\input{1-intro}
+
+% ---- Infrastructure ----
+\input{2-infrastructure}
+
+% ---- Perception module ----
+\input{3-perception}
 
 
 
-\begin{document}
-	\maketitle
-	
-	\begin{abstract}
-		The proposed following behavior combines a \emph{perception} and a \emph{control} module. Perception module addresses the person detection on images using a pretrained TensorFlow SSD \emph{Convolutional Neural Network}. It provides \emph{robustness} over traditional methods, although care has to be put on not losing real-time operation. A \emph{person tracker filter} has been included to alleviate the effect of false positives/negatives. It also extracts faces, which are also analyzed by a \emph{siamese network} to reidentify the tracked individual. This perception module tells which person in the image has to be followed, even on poorly lightened scenarios. It is combined with depth readings to obtain the relative position of the person. The control module implements a case-based \emph{PID} controller for a reactive smooth response, moving the robot towards the target person. The entire system has been experimentally validated\footnote{\url{https://jderobot.org/Naxvm-tfg}} on a real Turtlebot robot, with an Asus Xtion RGBD camera.
-	\end{abstract}
 
-	
-	
+
+
+
+
+
+% ---- Bibliography ----
+%
+\begin{thebibliography}{6}
+%
+
+\bibitem {smit:wat}
+Smith, T.F., Waterman, M.S.: Identification of common molecular subsequences.
+J. Mol. Biol. 147, 195?197 (1981). \url{doi:10.1016/0022-2836(81)90087-5}
+
+\bibitem {may:ehr:stein}
+May, P., Ehrlich, H.-C., Steinke, T.: ZIB structure prediction pipeline:
+composing a complex biological workflow through web services.
+In: Nagel, W.E., Walter, W.V., Lehner, W. (eds.) Euro-Par 2006.
+LNCS, vol. 4128, pp. 1148?1158. Springer, Heidelberg (2006).
+\url{doi:10.1007/11823285_121}
+
+\bibitem {fost:kes}
+Foster, I., Kesselman, C.: The Grid: Blueprint for a New Computing Infrastructure.
+Morgan Kaufmann, San Francisco (1999)
+
+\bibitem {czaj:fitz}
+Czajkowski, K., Fitzgerald, S., Foster, I., Kesselman, C.: Grid information services
+for distributed resource sharing. In: 10th IEEE International Symposium
+on High Performance Distributed Computing, pp. 181?184. IEEE Press, New York (2001).
+\url{doi: 10.1109/HPDC.2001.945188}
+
+\bibitem {fo:kes:nic:tue}
+Foster, I., Kesselman, C., Nick, J., Tuecke, S.: The physiology of the grid: an open grid services architecture for distributed systems integration. Technical report, Global Grid
+Forum (2002)
+
+\bibitem {onlyurl}
+National Center for Biotechnology Information. \url{http://www.ncbi.nlm.nih.gov}
+
+
+\end{thebibliography}
 \end{document}

@@ -1,0 +1,11 @@
+Version history for the SVProc LaTeX2e class
+
+date      filename   version  action/reason/acknowledgements
+-----------------------------------------------------------------
+26.01.16  history.txt         introducing this file
+
+26.01.16  svproc.cls    1.0   first experimental version of the document
+                              class SVProc for proceedings volumes
+
+22.07.16  svproc.cls    1.5   initial rollout of the integrated document class
+                              SVProc for Springer Nature proceedings volumes
