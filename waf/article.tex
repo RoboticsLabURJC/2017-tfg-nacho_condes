@@ -21,7 +21,7 @@
 \begin{document}
 \mainmatter              % start of a contribution
 %
-\title{Person following robot behavior using Deep Learning}
+\title{Person Following Robot Behavior Using Deep Learning}
 %
 %
 \author{Ignacio Condés\inst{1} \and José María Cañas\inst{2}}
@@ -46,12 +46,23 @@ The proposed following behavior combines a \emph{perception} and a \emph{control
 %  ---- Intro ----
 \input{1-intro}
 
+% ---- State of the art ----
+\input{2-stateoftheart}
+
 % ---- Infrastructure ----
-\input{2-infrastructure}
+\input{3-infrastructure}
 
 % ---- Perception module ----
-\input{3-perception}
+\input{4-perception}
 
+% ---- Actuation module ----
+\input{5-actuation}
+
+% ---- Experiments ----
+\input{6-experiments}
+
+% ---- Conclusions ----
+\input{7-conclusions}
 
 
 
@@ -65,34 +76,20 @@ The proposed following behavior combines a \emph{perception} and a \emph{control
 \begin{thebibliography}{6}
 %
 
-\bibitem {smit:wat}
-Smith, T.F., Waterman, M.S.: Identification of common molecular subsequences.
-J. Mol. Biol. 147, 195?197 (1981). \url{doi:10.1016/0022-2836(81)90087-5}
+\bibitem {rocapal}
+Calvo, R.: Comportamiento sigue persona con visión direccional, 2004.
 
-\bibitem {may:ehr:stein}
-May, P., Ehrlich, H.-C., Steinke, T.: ZIB structure prediction pipeline:
-composing a complex biological workflow through web services.
-In: Nagel, W.E., Walter, W.V., Lehner, W. (eds.) Euro-Par 2006.
-LNCS, vol. 4128, pp. 1148?1158. Springer, Heidelberg (2006).
-\url{doi:10.1007/11823285_121}
+\bibitem {ssd}
+Lui, W., Anguelov, D., Erhan, D., et al. SSD: Single-Shot Multibox Detector. \emph{CoRR}, abs/1512.02325, 2015.
 
-\bibitem {fost:kes}
-Foster, I., Kesselman, C.: The Grid: Blueprint for a New Computing Infrastructure.
-Morgan Kaufmann, San Francisco (1999)
+\bibitem {viola-jones}
+Viola, P., Jones, M. Rapid object detection using a boosted cascade of simple features. In \emph{Proceedings of the 2001 IEEE Computer Society Conference on Computer Vision and Pattern Recognition. CVPR 2001}, volume 1, pages I-511-I-518 vol.1, 2001.
 
-\bibitem {czaj:fitz}
-Czajkowski, K., Fitzgerald, S., Foster, I., Kesselman, C.: Grid information services
-for distributed resource sharing. In: 10th IEEE International Symposium
-on High Performance Distributed Computing, pp. 181?184. IEEE Press, New York (2001).
-\url{doi: 10.1109/HPDC.2001.945188}
+\bibitem{facenet}
+Schroff, F., Kalenichenko, D., Philbin, J. \emph{FaceNet}: A unified embedding for face recognition and clustering. \emph{CoRR}, abs/1503.038032, 2015.
 
-\bibitem {fo:kes:nic:tue}
-Foster, I., Kesselman, C., Nick, J., Tuecke, S.: The physiology of the grid: an open grid services architecture for distributed systems integration. Technical report, Global Grid
-Forum (2002)
-
-\bibitem {onlyurl}
-National Center for Biotechnology Information. \url{http://www.ncbi.nlm.nih.gov}
-
+\bibitem{pid-controller}
+Åström, KJ., Murray, RM. Feedback Systems: An Introduction for Scientists and Engineers, 2004.
 
 \end{thebibliography}
 \end{document}
