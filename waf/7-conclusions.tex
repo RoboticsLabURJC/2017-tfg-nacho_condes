@@ -1,11 +1,18 @@
 \section{Conclusions}
 
-In this paper we have presented a personal following behavioral, taking advantage of one of the possible synergies between both presented fields: \emph{robotics} and \emph{deep learning}, which are yielding a really promising results in these days.\\
+In this paper an algorithm for person following behavior inside a robot has been presented. 
+% It combines robotics and deeplerning. 
+The proposed system has been implemented with two concurrent modules in a Python program, one for \emph{perception} and another one for \emph{actuation}. 
 
+For perception it uses a pretrained people detection network, a regular face detector based on Haar features, some filters to alleviate false positives and false negatives, and a FaceNet neural network for person re-identification. The visual information is combined with depth data from the RGBD sensor to estimate the relative position of the target person from the robot. The person detection network was carefully selected to meet the real time operation requirement typical in robotics. All this leads into a fast and efficient following system, capable of keeping the track on a particular individual even without a continuous checking of her identity or detection of her face. 
 
-As it has been explained, this system implements two concurrent blocks, performing operations related to \emph{perception} and \emph{actuation}. This leads into a fast and efficient following system, capable of keeping the track on an individual person even without a continuous checking of its identity (its face, in this approach).\\
+For actuation it uses two PID controllers which are based on angular error and distance error between the robot and the target detected person.
 
-On an experimental point of view, the infrastructure allows to test different detection and reidentification models, in order to implement more robust ones to perform a slower but preciser following, or to connect the system to a different motor system. The source code of the entire system is available online\footnote{\url{https://github.com/roboticsurjc-students/2017-tfg-nacho_condes}}\\
+All this functionalities have been combined into a software node that runs on real time. This allows a simple robot to perform a successful tracking of a person, just knowing her face beforehand. The source code of the entire system is available online \footnote{\url{https://github.com/roboticsurjc-students/2017-tfg-nacho_condes}}.
 
+Several experiments with a real robot have been performed and are also publicly available. They validate the successful operation of the proposed system. The use of deeplearning neural networks provide high robustness to the image based person detection, which works even on tough lightning conditions. 
 
-This allows a simple robot to perform a successful tracking of a person, just knowing its face beforehand. 
+%The design allows to test different detection and reidentification models, in order to implement more robust ones to perform a slower but preciser following, or to connect the system to a different motor system. 
+
+% future lines
+This work can be extended in several lines. For instance using another neural network for face detection instead of Haar features. In addition, the use of faster networks for people detection, like YOLO DarkNet ones, is being explored. For this a rewriting of the node software in C++ would be required.
