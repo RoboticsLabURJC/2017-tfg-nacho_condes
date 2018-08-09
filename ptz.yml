@@ -21,7 +21,7 @@ FollowPerson:
     SiameseModel: siamese_model.pb
 
   Mom:
-    ImagePath: mom_imgs/mom7.jpg
+    ImagePath: mom_img/sample_img.jpg
 
 
   NodeName: FollowPerson
