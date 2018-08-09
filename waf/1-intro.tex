@@ -1,20 +1,21 @@
 \section{Introduction}
-%
-In this project, we aim to establish a scope which covers two fields: \emph{robotics} and \emph{deep learning}.\\
+%In this project, we aim to establish a scope which covers two fields: \emph{robotics} and \emph{deep learning}.\\
 
-In the last decades, robots have become a powerful allied to humans, as they are leveraged to perform all kind of tasks (hazardous explorations, personal assistance, cleaning, driving, \dots). However, we aim to design them to perform these tasks on the most autonomous way possible, which means not requiring to be controlled on every action (with exceptions, such as surgeon robots). This requires to provide robots a certain intelligence and capabilities to correctly trigger the most suitable action for each possible input stimulus. For this purpose, we can find multiple approaches for different problems (navigation, conversation, \dots).\\
+In the last years robots have become a powerful tool for humans in many areas, helping to perform all kind of tasks: hazardous explorations, personal assistance, cleaning, driving, etc.. Electronics assembly, car factories, autonomous driving (like Tesla), vaccum cleaners (like Roomba) and even logistics (like Amazon warehouses) are good examples of it. In all these fields robots are designed to perform these tasks on the most autonomous possible way, which means not requiring to be directly controlled on every action. This involves to provide robots a certain intelligence and capabilities to correctly trigger the most suitable action for each possible input stimulus. 
 
-Concretely, this article is dovetailed with \emph{Computer Vision}, which involves connecting cameras to a robot, and taking advantage of this on an autonomous way. Concretely, we will tackle the \emph{person following} challenge, which is based on a behavior governed by a person \emph{detection} system. Many approaches are already existing, such as color filters \cite{rocapal}, or disparities filtering. However, promising \emph{Deep Learning} techniques excel on their image processing variant, as they offer high quality results, accompanied by \emph{robustness} facing lighting issues (Fig. \ref{fig:intro_harsh_light}). This is the set of techniques we have used on this project, so we will describe the basis firstly.\\
+As robots enter into offices, supermarkets or homes (like vacuum cleaners, domestic assistants, etc.), better mechanisms for human-robot interaction are also desirable. One useful capability there is the robot being able to follow a particular person. 
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=2in]{images/light_ko_2}
-	\caption{Harsh lighting situation for \emph{Computer Vision} algorithms.}
-	\label{fig:intro_harsh_light}
-\end{figure}
+In addition, one of the main robot sensors are cameras. They are cheap and a very powerful source of information about the robot environment. One of the most popular advances in computer vision are the deeplearning tecniques with neural networks to process camera images in a robust way. They can solve classification, detection and segmentation tasks in a very robuts way. Typically the neural networks have to be trained with huge supervised datasets and they work fine with new unseen images. 
 
 
-In the image detection quandary, the main objective is to determine \emph{presence and position} of a certain object in a given image. For this, we make use on this article of \emph{deep learning} techniques, concretely \emph{Convolutional Neural Networks} (CNNs).\\
+In this paper, a new system for \emph{person following behavior} inside a robot is presented. It avoids the use of laser sensors and relies on a cheap RGBD sensor and color images processing. The person \emph{detection} subsystem uses deeplearning to detect people and to identify the particular person the robot has to follow, in particular \emph{Convolutional Neural Networks} (CNNs).
+
+%the main objective is to determine \emph{presence and position} of a certain object in a given image. For this, we make use on this article of \emph{deep learning} techniques, concretely \emph{Convolutional Neural Networks} (CNNs).
 
 
-This investigation has focused on exploring the synergies existing the two explained fields, making use of \emph{deep learning} to automatically command a robot to follow a determined person. This is achieved making use of two different modules: a \emph{perception} one, focused on the computer vision/deep learning tasks, and an \emph{actuation} module, which implements a case-based behavior, depending on what the perceptive part senses and computes. The designed system has been experimentally validated, as it will be seen on section \ref{sec:experiments}
+%However, promising \emph{Deep Learning} techniques excel on their image processing variant, as they offer high quality results, accompanied by \emph{robustness} facing lighting issues.
+
+
+%This research has focused on exploring the synergies existing the two explained fields, making use of \emph{deep learning} to automatically command a robot to follow a determined person. This is achieved making use of two different modules: a \emph{perception} one, focused on the computer vision/deep learning tasks, and an \emph{actuation} module, which implements a case-based behavior, depending on what the perceptive part senses and computes. 
+
+Second section review some related works about person following and image processing with neural networks. Third section describes the design of the proposed system, whose main modules are detailed in the fourth and fifth sections explaining its perception side and its control side. It has been implemented and experimentally validated, as it will be seen on section \ref{sec:experiments}. Finally some brief conclusions finish the paper.
