@@ -1,10 +1,7 @@
 
 # Final Degree Project (Nacho Condés)
-<center>
 __Deep Learning Applications for Robotics using TensorFlow and JdeRobot__
-<br>
 
-</center>
 
 [Full report here](https://gsyc.urjc.es/jmplaza/students/tfg-deep_learning-object_detector-nacho_condes-2018.pdf)
 
@@ -20,7 +17,7 @@ __Deep Learning Applications for Robotics using TensorFlow and JdeRobot__
     * Turtlebot2: `sudo apt install ros-kinetic-openni2_launch ros-kinetic-kobuki-node`
 
 
-_For PTZ camera_:<br>
+_For PTZ camera_:
 Make sure that you execute `sudo chmod 666 /dev/ttyUSB0` when you connect the PT motors (EVI connector) to your computer (`evicam_driver` needs this to be this way, otherwise it will raise an _EBADF_ error when trying to access the device).
 
 Also, check which of your computer video devices corresponds to the PT camera interface. You can perform this launching `ls /dev`. You will see the devices related to your computer. `/dev/video0` is tipically your laptop webcam (or default camera). The PT camera will correspond to the next device, which can stand for `/dev/video1`, `/dev/video2`, etc. This is due to the order of the USB connections. You will have to change the value of the `resources/usb_cam-test.launch` file to match to this device no (line 2):
@@ -34,11 +31,12 @@ Application capable of implementing a robotic behavioral to follow a determined 
 The implementation (network models and mom image) can be customized using the YML file (`turtlebot.yml` or `ptz.yml`)
 
 
-<center>
-**Functional video:**<br><br>
+**Functional video:**
+
+
 [![YouTube video](http://img.youtube.com/vi/oKMR_QCT7EE/0.jpg)](https://www.youtube.com/watch?v=oKMR_QCT7EE)
 <!--[![YouTube video](http://img.youtube.com/vi/ZH4MJVXKo1w/0.jpg)](https://www.youtube.com/watch?v=ZH4MJVXKo1w) -->
-</center>
+
 
 ### How to use
 
@@ -91,22 +89,24 @@ _Sony EVI D100P_:
 
 ***
 ### Object Detector
-<center>
-__Example video:__<br>
+
+__Example video:__
+
 [
 ![YouTube video](http://img.youtube.com/vi/wmtAs7n-r2A/0.jpg)](https://www.youtube.com/watch?v=wmtAs7n-r2A)
-</center>
+
 
 
 This tool was ported to its own repository [(available here)](https://github.com/JdeRobot/dl-objectdetector)
 
 
 ### Digit Classifier
-<center>
-__Example video:__<br>
+
+__Example video:__
+
 [
 ![YouTube video](http://img.youtube.com/vi/x-OhWal38Ak/0.jpg)](https://www.youtube.com/watch?v=x-OhWal38Ak)
-</center>
+
 
 
 This tool was ported to its own repository [(available here)](https://github.com/JdeRobot/dl-digitclassifier)
