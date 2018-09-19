@@ -1,6 +1,6 @@
 \section{Actuation module}
 
-With the \emph{perception} module the system obtains the maximum possible certainty about the persons present in the current RGB image, as well as their condition of being or not being the one to be followed. The \emph{actuation} module is responsible of generating a suitable command to the robot motors, in order to move towards the followed target person, in case it is seen in the current frame. To do so, it follows its own pipeline, explained next.
+With the \emph{perception} module the system obtains the maximum possible certainty about the persons present in the current RGB image, as well as their condition of being or not the one to be followed. The \emph{actuation} module is responsible of generating a suitable command to the robot motors, in order to move towards the target person, in case it is being tracked in the current frame. To do so, it follows its own pipeline, explained next.
 
 %\subsection{Following behavior}
 % As it has been stated, 
@@ -13,7 +13,7 @@ The input for this module is the information yielded by the \emph{perception} mo
 	\label{fig:actuation_flow}
 \end{figure}
 
-If the target person is found among the tracked persons, the system follows it. It can be observed that the system does not need a continuous face feedback to follow the target person. The time-spatial continuity provided by the previously described trackers allows the person tracking even when only the person back side is visible. In addition, if a new face is found and it satisfies the criteria of similarity with the reference face, then the \emph{followed} role is switched to that new person, which begins to be followed by the robot.
+If the target person is found among the tracked persons, the system follows it. It can be observed that the system does not need a continuous face feedback to follow the target person. The time-spatial continuity provided by the previously described trackers allows a stable tracking even when the person is only visible on its back side. In addition, if a new face is found and it satisfies the criteria of similarity with the reference face, then the \emph{followed} role is switched to that new person, which starts being followed by the robot.
 
 This actuation module has been implemented within a computer iterative thread, and its pipeline is executed \emph{once} per thread iteration. This results on a new speed command pair (angular and linear speeds) to the motor base on each iteration.
 
@@ -22,21 +22,20 @@ This actuation module has been implemented within a computer iterative thread, a
 Once the system has recognized the target person inside the image, in case it is being seen, it proceeds to an \emph{error computation}, in order to determine the strength of the required rotation and traslation to move towards that person. As the robot moves over the ground plane, with two degrees of freedom, the system computes two errors: angular error and distance error.
 
 \begin{figure}
-  \centering
-  \includegraphics[width=6cm]{images/h_error}
-  \includegraphics[width=6cm]{images/distance_error}
+%  \centering
+  \includegraphics[width=13cm]{images/errors}
   \caption{Computation of the angular error (left) and distance error (right) between the system and the followed person.}
   \label{fig:h_error}
 \end{figure}
 
 The most desirable robot orientation with respect to the person is to be aligned with her. This way, the person appears right in the horizontal center of the image. Hence, we can compute the \emph{angular error} as the subtract of the center coordinates and the center of the person's bounding box, in the horizontal dimension (Figure \ref{fig:h_error} (left)). This error gives an approximate idea of the necessary turn to align the robot and the target person.
 	
-The used sensor is a RGBD camera, which provides \emph{depth} images. As it is aligned with the RGB image, the coordinates of the person inside the depth image are the same than the RGB ones. Hence, it allows to \emph{locate} the person inside the depth map and measure the \emph{distance error}. For the sake of robustness, this has been implemented using a 10$\times$10 grid sampling of the depth values inside the person box (putting care on avoiding the margins, in order to measure only inside the person) allows to collect a serie of measured distances to the person. It computes the \emph{median} of that set of measures, taking the result as the real distance from the robot to the person, as seen on Fig. \ref{fig:h_error} (right). 
+The used sensor is a RGBD camera, which provides \emph{depth} images. These depth images are aligned with the RGB ones, which means that the coordinates of the person inside the depth image are the same than the RGB ones. Hence, it allows to \emph{locate} the person inside the depth map and measure the \emph{distance error}. For the sake of robustness, this has been implemented using a 10$\times$10 grid sampling of the depth values inside the person box (putting care on avoiding the margins, in order to measure only inside the person) allows to collect a serie of measured distances to the person. It computes the \emph{median} of that set of measures, taking the result as the real distance from the robot to the person, as seen on Fig. \ref{fig:h_error} (right). 
 %So far, the system is capable to determine a numerical error value to measure the magnitude of the required response.
 
 \subsection{Movement control}
 
-Both angular and distance errors are computed to determine the \emph{relative position} of the robot and the target person. They are used as an input to compute the most suitable control response. As the purpose is not to move the robot literally to the position of the person, but to just maintain a following behavior, a \emph{desirable zone} is established in each degree of freedom. When the target person is found inside these desirable zones (illustrated on Fig.\ref{fig:dead_zones}) the robot will not move towards her, as the person is considered \emph{under control}. They are also known as dead zones as no correction from control is needed. 
+Both angular and distance errors are computed to determine the \emph{relative position} of the robot and the target person. They are used as an input to compute the most suitable control response. As the purpose is not to move the robot literally to the position of the person, but to just maintain a following behavior, a \emph{desirable zone} is established in each degree of freedom. When the target person is found inside these desirable zones (illustrated on Fig.\ref{fig:dead_zones}), the robot will not move towards her, as the person is considered \emph{under control}. They are also known as dead zones as no correction from control is needed. 
 
 \begin{figure}[h]
 	\centering
