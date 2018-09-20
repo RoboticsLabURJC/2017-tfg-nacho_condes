@@ -13,7 +13,7 @@ The input for this module is the information yielded by the \emph{perception} mo
 	\label{fig:actuation_flow}
 \end{figure}
 
-If the target person is found among the tracked persons, the system follows it. It can be observed that the system does not need a continuous face feedback to follow the target person. The time-spatial continuity provided by the previously described trackers allows a stable tracking even when the person is only visible on its back side. In addition, if a new face is found and it satisfies the criteria of similarity with the reference face, then the \emph{followed} role is switched to that new person, which starts being followed by the robot.
+If the target person is found among the tracked persons, the system follows it. It can be observed that the system does not need a continuous face feedback to follow the target person. The time-spatial continuity provided by the previously described trackers allows a stable tracking even when the person is only visible from her back side. In addition, if a new face is found and it satisfies the criteria of similarity with the reference face, then the \emph{followed} role is switched to that new person, which starts being followed by the robot.
 
 This actuation module has been implemented within a computer iterative thread, and its pipeline is executed \emph{once} per thread iteration. This results on a new speed command pair (angular and linear speeds) to the motor base on each iteration.
 
@@ -30,7 +30,7 @@ Once the system has recognized the target person inside the image, in case it is
 
 The most desirable robot orientation with respect to the person is to be aligned with her. This way, the person appears right in the horizontal center of the image. Hence, we can compute the \emph{angular error} as the subtract of the center coordinates and the center of the person's bounding box, in the horizontal dimension (Figure \ref{fig:h_error} (left)). This error gives an approximate idea of the necessary turn to align the robot and the target person.
 	
-The used sensor is a RGBD camera, which provides \emph{depth} images. These depth images are aligned with the RGB ones, which means that the coordinates of the person inside the depth image are the same than the RGB ones. Hence, it allows to \emph{locate} the person inside the depth map and measure the \emph{distance error}. For the sake of robustness, this has been implemented using a 10$\times$10 grid sampling of the depth values inside the person box (putting care on avoiding the margins, in order to measure only inside the person) allows to collect a serie of measured distances to the person. It computes the \emph{median} of that set of measures, taking the result as the real distance from the robot to the person, as seen on Fig. \ref{fig:h_error} (right). 
+The used sensor is a RGBD camera, which provides \emph{depth} images. These depth images are aligned with the RGB ones, which means that the coordinates of the person inside the depth image are the same than the RGB ones. Hence, it allows to \emph{locate} the person inside the depth map and measure the \emph{distance error}. For the sake of robustness, this has been implemented using a 10$\times$10 grid sampling of the depth values inside the person box (putting care on avoiding the margins, in order to measure only inside the person). This allows to collect a set of measured distances to the person. It computes the \emph{median} of that set of measurements, taking the result as the real distance from the robot to the person, as seen on Fig. \ref{fig:h_error} (right). 
 %So far, the system is capable to determine a numerical error value to measure the magnitude of the required response.
 
 \subsection{Movement control}
@@ -61,6 +61,6 @@ The implemented \emph{PID} controllers (an angular and a linear one) have been e
 	\label{tab:pids}
 \end{table}
 
-This way, the system can output a speed command with a tight adjustment to the values required by the situation of the current iteration. The response obtained from this value is a \emph{reactive} one. This means that each value results in a new movement command, avoiding to perform movements longer than one iteration. For softness sake, what is sent to the motors is not that value, but the \emph{mean} between it and the last sent one. This way, it results on a slightly longer convergence that helps to remove sudden movements.
+This way, the system can output a speed command with a tight adjustment to the values required by the situation of the current iteration. The response obtained from this value is a \emph{reactive} one. This means that each value results in a new movement command, avoiding to perform movements longer than one iteration. For smoothness sake, what is sent to the motors is not that value, but the \emph{mean} between it and the last sent one. This way, it results on a slightly longer convergence that helps to remove sudden movements.
 
 
