@@ -19,6 +19,8 @@ from Net.threadnetwork import ThreadNetwork
 from Motors.threadmotors import ThreadMotors
 import rospy
 import cv2
+import numpy as np
+from datetime import datetime
 
 
 
@@ -37,18 +39,26 @@ if __name__ == '__main__':
     cam = ROSCam(topics)
     network = TrackingNetwork(network_model)
     network.setCamera(cam)
-    display_imgs = False
+    display_imgs = True
 
     while not rospy.is_shutdown():
+
+        # Make an inference on the current image
+        start_time = datetime.now()
+        network.predict()
+        elapsed = datetime.now() - start_time
+        print "elapsed {} ms. Framerate: {} fps".format(elapsed.microseconds/1000.0, 1e6/elapsed.microseconds)
+        print "inference output", network.predictions, network.boxes, network.scores
+        # Draw every detected person
+        for idx, person in enumerate(network.boxes):
+            [xmin, ymin, xmax, ymax] = person
+            img_cp = np.copy(cam.rgb_img)
+            cv2.rectangle(img_cp, (xmin, ymax), (xmax, ymin), (0,255,0), 5)
         if display_imgs:
-            cv2.imshow("RGB", cam.rgb_img)
+            cv2.imshow("RGB", img_cp)
             cv2.imshow("depth", cam.depth_img)
             if cv2.waitKey(1) == 27:
                 break
-        # Make an inference on the current image
-        network.predict()
-        print "inference output", network.predictions, network.boxes, network.scores
-
     if display_imgs:
         cv2.destroyAllWindows()
 
