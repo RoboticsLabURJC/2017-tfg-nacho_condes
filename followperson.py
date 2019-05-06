@@ -13,72 +13,45 @@ import signal
 # from PyQt5 import QtWidgets
 
 from Camera.ROSCam import ROSCam
-# from Camera.threadcamera import ThreadCamera
+from Net.TensorFlow.network import TrackingNetwork
 from GUI.threadgui import ThreadGUI
 from Net.threadnetwork import ThreadNetwork
 from Motors.threadmotors import ThreadMotors
 import rospy
+import cv2
 
 
 
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 if __name__ == '__main__':
-
+    # Parameters
     rospy.init_node("followperson")
     topics = {'rgb': '/camera/rgb/image_raw',
               'depth': '/camera/depth_registered/image_raw'}
 
-    # try:
-    #     cfg = config.load(sys.argv[1])
-    # except IndexError:
-    #     raise SystemExit('Missing YML file. Usage: python2 followperson.py [your_config_file].yml')
+    network_model = 'ssdlite_mobilenet_v2_coco_2018_05_09.pb'
+    
 
-    # jdrc = comm.init(cfg, 'FollowPerson')
-    # cam_proxy = jdrc.getCameraClient('FollowPerson.Camera')
-
-
-    # Network (TensorFlow/Keras) parsing:
-    # net_prop = cfg.getProperty('FollowPerson.Network')
-    # framework = net_prop['Framework']
-    # if framework.lower() == 'tensorflow':
-    #     from Net.TensorFlow.network import TrackingNetwork
-    #     # Parse and import the siamese network for face identification
-    #     siamese_model = net_prop['SiameseModel']
-    #     from Net.TensorFlow.siamese_network import SiameseNetwork
-    # elif framework.lower() == 'keras':
-    #     from Net.Keras.network import TrackingNetwork
-    # else:
-    #     raise SystemExit(('%s not supported! Supported frameworks: Keras, TensorFlow') % (framework))
-
-    # # Device (PTZ/Kobuki) parsing:
-    # device_type = cfg.getProperty('FollowPerson.Device')
-    # if device_type.lower() == 'kobuki':
-    #     # GUI version with depth image
-    #     from GUI.gui import DepthGUI as GUIClass
-    #     # Turtlebot motors
-    #     from Motors.Kobuki.motors import Motors
-    #     motors_proxy = jdrc.getMotorsClient('FollowPerson.Motors')
-    #     # PT motors for EVI camera
-    # elif device_type.lower() == 'ptz':
-    #     from GUI.gui import GUI as GUIClass
-    #     from Motors.PTZ.motors import Motors
-    #     motors_proxy = jdrc.getPTMotorsClient('FollowPerson.PTMotors')
-    # else:
-    #     raise SystemExit(('%s not supported! Supported devices: Kobuki, PTZ') % (device_type))
-
-    import cv2
-
+    # The camera does not need a dedicated thread, the callbacks have their owns.
     cam = ROSCam(topics)
-    while not rospy.is_shutdown():
-        cv2.imshow("RGB", cam.rgb_img)
-        cv2.imshow("depth", cam.depth_img)
-        if cv2.waitKey(1) == 27:
-            break
-    cv2.destroyAllWindows()
+    network = TrackingNetwork(network_model)
+    network.setCamera(cam)
+    display_imgs = False
 
-    # network = TrackingNetwork(net_prop)
-    # network.setCamera(cam)
+    while not rospy.is_shutdown():
+        if display_imgs:
+            cv2.imshow("RGB", cam.rgb_img)
+            cv2.imshow("depth", cam.depth_img)
+            if cv2.waitKey(1) == 27:
+                break
+        # Make an inference on the current image
+        network.predict()
+        print "inference output", network.predictions, network.boxes, network.scores
+
+    if display_imgs:
+        cv2.destroyAllWindows()
+
     # t_network = ThreadNetwork(network)
     # t_network.start()
 

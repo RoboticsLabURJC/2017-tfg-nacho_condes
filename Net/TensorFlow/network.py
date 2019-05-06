@@ -1,5 +1,6 @@
 import tensorflow as tf
 import numpy as np
+from Camera import ROSCam
 
 
 from Net.utils import label_map_util
@@ -14,7 +15,7 @@ class TrackingNetwork():
     def __init__(self, net_model):
         self.framework = "TensorFlow"
 
-        labels_file = LABELS_DICT[net_model['Dataset'].lower()]
+        labels_file = LABELS_DICT['coco']
         label_map = label_map_util.load_labelmap(labels_file) # loads the labels map.
         categories = label_map_util.convert_label_map_to_categories(label_map, max_num_classes= 999999)
         category_index = label_map_util.create_category_index(categories)
@@ -24,7 +25,7 @@ class TrackingNetwork():
             self.classes[cat] = str(category_index[cat]['name'])
 
         # Frozen inference graph, written on the file
-        CKPT = 'Net/TensorFlow/' + net_model['Model']
+        CKPT = 'Net/TensorFlow/' + net_model
         detection_graph = tf.Graph() # new graph instance.
         with detection_graph.as_default():
             od_graph_def = tf.GraphDef()
@@ -65,14 +66,14 @@ class TrackingNetwork():
 
     def setCamera(self, cam):
         self.cam = cam
-        self.original_height = cam.im_height
-        self.original_width = cam.im_width
+        self.original_height = ROSCam.IMAGE_HEIGHT
+        self.original_width = ROSCam.IMAGE_WIDTH
 
     def setDepth(self, depth):
         self.depth = depth
 
-    def predict(self):
-        input_image = self.cam.getImage()
+    def predict(self,):
+        input_image = self.cam.rgb_img
         image_np_expanded = np.expand_dims(input_image, axis=0)
         (boxes, scores, predictions, _) = self.sess.run(
             [self.detection_boxes, self.detection_scores, self.detection_classes, self.num_detections],
