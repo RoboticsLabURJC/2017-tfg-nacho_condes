@@ -1,6 +1,11 @@
 import tensorflow as tf
+import tensorflow.contrib.tensorrt as trt # to solve compat. on bin graph
+from tensorflow.python.platform import gfile
 import numpy as np
 from Camera import ROSCam
+import cv2
+from PIL import Image
+from datetime import datetime
 
 
 from Net.utils import label_map_util
@@ -24,30 +29,30 @@ class TrackingNetwork():
         for cat in category_index:
             self.classes[cat] = str(category_index[cat]['name'])
 
-        # Frozen inference graph, written on the file
+
+        print "Creating session..."
+        conf = tf.ConfigProto(log_device_placement=False)
+        conf.gpu_options.allow_growth = True
+
+        self.sess = tf.Session(config=conf)
+        print " Created"
+        print "Loading the custom graph..."
+        # Load the TRT frozen graph from disk
         CKPT = 'Net/TensorFlow/' + net_model
-        detection_graph = tf.Graph() # new graph instance.
-        with detection_graph.as_default():
-            od_graph_def = tf.GraphDef()
-            with tf.gfile.GFile(CKPT, 'rb') as fid:
-                serialized_graph = fid.read()
-                od_graph_def.ParseFromString(serialized_graph)
-                tf.import_graph_def(od_graph_def, name='')
+        self.sess.graph.as_default()
+        graph_def = tf.GraphDef()
+        with gfile.FastGFile(CKPT, 'rb') as fid:
+            graph_def.ParseFromString(fid.read())
+        print "Loaded..."
+        tf.import_graph_def(graph_def, name='')
+        print "Imported"
 
-
-        #gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.7)
-        self.sess = tf.Session(graph=detection_graph,
-                               config=tf.ConfigProto(log_device_placement=False,
-                                                     #gpu_options=gpu_options))
-                                                     ))
-
-        self.image_tensor = detection_graph.get_tensor_by_name('image_tensor:0')
-        # NCHW conversion. not possible
-        #self.image_tensor = tf.transpose(self.image_tensor, [0, 3, 1, 2])
-        self.detection_boxes = detection_graph.get_tensor_by_name('detection_boxes:0')
-        self.detection_scores = detection_graph.get_tensor_by_name('detection_scores:0')
-        self.detection_classes = detection_graph.get_tensor_by_name('detection_classes:0')
-        self.num_detections = detection_graph.get_tensor_by_name('num_detections:0')
+        # Set placeholders...
+        self.image_tensor = self.sess.graph.get_tensor_by_name('image_tensor:0')
+        self.detection_boxes = self.sess.graph.get_tensor_by_name('detection_boxes:0')
+        self.detection_scores = self.sess.graph.get_tensor_by_name('detection_scores:0')
+        self.detection_classes = self.sess.graph.get_tensor_by_name('detection_classes:0')
+        self.num_detections = self.sess.graph.get_tensor_by_name('num_detections:0')
 
         self.boxes = []
         self.scores = []
@@ -72,12 +77,14 @@ class TrackingNetwork():
     def setDepth(self, depth):
         self.depth = depth
 
-    def predict(self,):
-        input_image = self.cam.rgb_img
-        image_np_expanded = np.expand_dims(input_image, axis=0)
+    def predict(self):
+        # Reshape the latest image
+        input_image = Image.fromarray(self.cam.rgb_img)
+        img_rsz = np.array(input_image.resize((300,300)))
+
         (boxes, scores, predictions, _) = self.sess.run(
             [self.detection_boxes, self.detection_scores, self.detection_classes, self.num_detections],
-            feed_dict={self.image_tensor: image_np_expanded})
+            feed_dict={self.image_tensor: img_rsz[None, ...]})
         boxes = np.squeeze(boxes)
         scores = np.squeeze(scores)
         predictions = np.squeeze(predictions)
@@ -105,3 +112,4 @@ class TrackingNetwork():
         self.predictions = []
         for idx in predictions[mask]:
             self.predictions.append(self.classes[idx])
+

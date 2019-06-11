@@ -64,3 +64,4 @@ class ROSCam:
         self.depth_img = self.depth_bridge.imgmsg_to_cv2(depth_img, depth_img.encoding)
         rospy.logdebug("Depth updated")
         self.lock.release()
+        
