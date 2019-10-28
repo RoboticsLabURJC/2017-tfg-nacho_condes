@@ -3,11 +3,10 @@ import cv2
 import rospy
 from kobuki_msgs.msg import Sound
 from time import sleep
-from datetime import datetime
+from datetime import datetime, timedelta
 from Motors.Kobuki.pid_driver import PIDDriver
 from cprint import cprint
 
-from Motors import talk
 
 from Motors import trackers
 
@@ -15,12 +14,13 @@ class Motors():
     ''' Class to process the error computed from the RGB and depth images, and send commands,
     which will be intelligently interpreted. '''
 
-    def __init__(self, motors):
-        self.motors = motors
+    def __init__(self, motors_topic):
+        # self.motors = motors
+        # TODO: re-write velocity controllers 
 
         # PID controllers:
         self.w_PID = PIDDriver(
-                         func=self.motors.sendW,
+                         #func=self.motors.sendW,
                          Kc=7,
                          Ki=0.5,
                          Kd=10,
@@ -29,7 +29,7 @@ class Motors():
                          limiter=1)
 
         self.v_PID = PIDDriver(
-                         func=self.motors.sendVX,
+                         #func=self.motors.sendVX,
                          Kc=2,
                          Ki=0.08,
                          Kd=2.7,
@@ -67,7 +67,7 @@ class Motors():
         self.network = detection_network
         self.siamese_network = siamese_network
         self.person_tracker.setSiameseNetwork(siamese_network)
-        self.center_coords = (self.network.original_width/2, self.network.original_height/2)
+        # self.center_coords = (self.network.original_width/2, self.network.original_height/2)
 
     def setCamera(self, cam):
         self.camera = cam
@@ -101,17 +101,13 @@ class Motors():
         # Returning also the grid, to be able to draw it on the depth image (TODO)
         return median, grid
 
-    def move(self):
+    def move(self, full_image, full_depth, persons, scores, faces):
         '''
         Method called on each iteration. Detects persons and look for mom.
         Commands the robot towards mom if it is found.
         '''
-        # We get the full RGB and D images.
-        full_image = self.camera.getImage()
-        d = self.depth.getImage()
-        full_depth, _, _ = cv2.split(d)
 
-        def goToMom(mom_box):
+        def goToMom(mom_box, orig_center):
             '''
             Function to go towards mom.
             '''
@@ -119,6 +115,8 @@ class Motors():
             ################################
             ############### v ##############
             ################################
+            print "FULL DEPTH:", type(full_depth), full_depth.shape
+            print "MOM_BOX:", type(mom_box), mom_box.shape, mom_box
             mom_depth = full_depth[mom_box[1]:mom_box[3], mom_box[0]:mom_box[2]]
             distance, grid = self.estimateDepth(mom_depth)
             # V error processing (go forward/backward)
@@ -171,7 +169,7 @@ class Motors():
             ################################
 
             mom_center = (mom_box[2] + mom_box[0]) / 2
-            h_error = self.center_coords[0] - mom_center
+            h_error = orig_center[0] - mom_center
 
             if abs(h_error) > self.w_margin:
                 # Turning...
@@ -189,21 +187,22 @@ class Motors():
                 self.w_PID.brake()
 
         # Network outputs. Exclusively high score people detections.
-        self.detection_boxes = self.network.boxes
-        self.detection_scores = self.network.scores
+        # self.detection_boxes = self.network.boxes
+        # self.detection_scores = self.network.scores
 
         # num_detections = len(self.detection_boxes)
         # We retrieve every detected face on the current frame.
-        self.persons = self.person_tracker.evalPersons(self.detection_boxes, self.detection_scores, full_image)
+        self.persons = self.person_tracker.evalPersons(persons, scores, full_image)
+        # self.persons = persons
         # Now, we look for faces in those persons.
-        print ""
-        self.faces = self.person_tracker.getFaces(full_image)
-        cprint.info('\t........%d/%d faces detected........' % (len(self.faces), len(self.persons)))
+        self.faces = self.person_tracker.filterFaces(self.persons, faces)
+        # self.faces = faces
+        # cprint.info('\t........%d/%d faces detected........' % (len(self.faces), len(self.persons)))
 
         mom_found_now = False
         # Iteration over all faces and persons...
-        for idx in range(len(self.persons)):
-            person = self.persons[idx]
+        elapsed_times = []
+        for idx, person in enumerate(self.persons):
             if person.is_mom:
                 self.mom_coords = person.coords
                 mom_found_now = True
@@ -218,7 +217,10 @@ class Motors():
                     f_total_box[2:4] = f_total_box[:2] + [f_width, f_height]
                     cropped_face = full_image[f_total_box[1]:f_total_box[3], f_total_box[0]:f_total_box[2], :]
                     # We compute the likelihood with mom...
+                    start_time = datetime.now()
                     dist_to_mom = self.siamese_network.distanceToMom(cropped_face)
+                    elapsed = datetime.now() - start_time
+                    elapsed_times.append(elapsed.seconds * 1e6 + elapsed.microseconds)
                     if dist_to_mom < self.face_thres:
                         # Unset other moms
                         for idx2 in range(len(self.persons)):
@@ -232,8 +234,12 @@ class Motors():
         # If mom is being tracked, we move the robot towards it.
         if mom_found_now:
             cprint.ok("\t\t  Mom found")
-            goToMom(self.mom_coords)
+            # goToMom(self.mom_coords, full_image.shape)
         else:
             cprint.warn("\t\t  Looking for mom...")
             self.v_PID.lostResponse()
             self.w_PID.lostResponse()
+        if len(elapsed_times) > 0:
+            return timedelta(microseconds=np.mean(elapsed_times))
+        else:
+            return np.nan

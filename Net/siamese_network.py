@@ -4,16 +4,16 @@ import cv2
 from tensorflow.python.platform import gfile
 from imageio import imread
 
-frontal_face_cascade = cv2.CascadeClassifier('resources/haarcascade_frontalface_default.xml')
+# frontal_face_cascade = cv2.CascadeClassifier('resources/haarcascade_frontalface_default.xml')
 
-class SiameseNetwork:
+class FaceTrackingNetwork:
     '''
     Class to abstract a siamese network, useful to compare faces between
     them, and compute their L2 (euclidean) distance.
     '''
-    def __init__(self, model_name, mom_path):
+    def __init__(self, model_name, mom_path, face_detector):
         # Load the siamese network model
-        model_path = 'Net/TensorFlow/' + model_name
+        model_path = 'Net/' + model_name
         with tf.device('/cpu:0'):
             siamese_graph = tf.Graph()
             with siamese_graph.as_default():
@@ -33,6 +33,7 @@ class SiameseNetwork:
             self.embeddings = siamese_graph.get_tensor_by_name('embeddings:0')
 
         mom_img = imread(mom_path)
+        self.face_detector = face_detector
         self.mom_face, _ = self.getFace(mom_img)
 
         # Dummy initialization...
@@ -41,21 +42,20 @@ class SiameseNetwork:
         dummy_tensor = np.zeros((160, 160, 3))
         _ = self.distanceToMom(dummy_tensor)
 
-
-
         print("MobileNet ready!")
 
     def prewhiten(self, face, square_size=160):
         ''' Function to preprocess a certain face, to be fed to the
         siamese network. '''
         # Squared crop
-        square_face = cv2.resize(face, (square_size, square_size), interpolation=cv2.INTER_CUBIC)
-        blurred_face = cv2.blur(square_face, (5,5))
-        # Now we normalize (whiten) the image
-        [mean, std] = [np.mean(blurred_face), np.std(square_face)]
-        whitened_face = np.multiply(np.subtract(blurred_face, mean), 1.0/std)
+        if 0 not in face.shape:
+            square_face = cv2.resize(face, (square_size, square_size), interpolation=cv2.INTER_CUBIC)
+            blurred_face = cv2.blur(square_face, (5,5))
+            # Now we normalize (whiten) the image
+            [mean, std] = [np.mean(blurred_face), np.std(square_face)]
+            whitened_face = np.multiply(np.subtract(blurred_face, mean), 1.0/std)
 
-        return whitened_face
+            return whitened_face
 
     def getFace(self, person_img, margin=2):
         '''
@@ -82,11 +82,13 @@ class SiameseNetwork:
         gray_img = cv2.cvtColor(person_img, cv2.COLOR_BGR2GRAY)
 
         # We look for frontal faces
-        frontal_face_boxes = frontal_face_cascade.detectMultiScale(gray_img,
-                                                   scaleFactor=1.1,
-                                                   minNeighbors=2)
+        #frontal_face_boxes = frontal_face_cascade.detectMultiScale(gray_img,
+        #                                           scaleFactor=1.1,
+        #                                           minNeighbors=2)
+        #                                           
 
-        face_boxes = frontal_face_boxes
+        # face_boxes = frontal_face_boxes
+        face_boxes = self.face_detector.predict(person_img)
         n_faces = np.asarray(face_boxes).shape[0]
 
         if n_faces == 0:
@@ -104,7 +106,7 @@ class SiameseNetwork:
 
         if n_faces == 1:
             # Now we transform the detection
-            x, y, w, h = np.squeeze(face_boxes)
+            x, y, w, h, _ = np.squeeze(face_boxes)
             det = [x, y, x+w, y+h]
 
             box = np.zeros(4, dtype=np.int32)
@@ -142,7 +144,8 @@ class SiameseNetwork:
             target = self.prewhiten(face_query)
         else:
             target = face_query
-
+        if target is None:
+            return np.infty
+        
         dist = self.compareFaces(target, self.mom_face)
-
         return dist

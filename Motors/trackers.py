@@ -182,8 +182,7 @@ class PersonTracker:
 
             found = False
             # We contrast the new person with existing tracked persons.
-            for idx in range(len(self.tracked_persons)):
-                t_person = self.tracked_persons[idx]
+            for idx, t_person in enumerate(self.tracked_persons):
                 if pxBetweenBoxes(d_person, t_person.coords) < self.same_person_thr:
                     # Tracked person found in the same place (approximately).
                     # Updating person.
@@ -196,8 +195,7 @@ class PersonTracker:
                     break
 
             # Person not tracked. Is it a candidate?
-            for idx in range(len(self.candidate_persons)):
-                c_person = self.candidate_persons[idx]
+            for idx, c_person in enumerate(self.candidate_persons):
                 if pxBetweenBoxes(d_person, c_person.coords) < self.same_person_thr:
                     # Candidate person found in the same place (approximately).
                     # Updating person.
@@ -216,26 +214,36 @@ class PersonTracker:
         self.refreshPersons()
         return self.tracked_persons
 
-    def getFaces(self, full_image):
-        # Broadcast of the image for all the trackers to have it.
+    def filterFaces(self, persons, faces):
+        ''' Return only those faces corresponding to a person. '''
         total_faces = []
-        for idx in range(len(self.tracked_persons)):
-            # We will look for faces in each person.
-            person = self.tracked_persons[idx]
-            box = person.coords
-            width, height = [box[2] - box[0], box[3] - box[1]]
-            cropped_person = full_image[box[1]:box[3], box[0]:box[2]]
-            face, f_box = self.siamese_network.getFace(cropped_person)
-            # Faces were detected, and the highest one was returned
-            t_faces = person.ftrk.evalFaces(f_box)
-            if len(t_faces) != 0:
-                face = t_faces[0]
-                # We rewrite the coordinates with respect to
-                # the entire image
-                [f_width, f_height] = [face[2] - face[0], face[3] - face[1]]
-                f_total_box = np.zeros(4, dtype=np.int16)
-                f_total_box[:2] = box[:2] + face[:2]
-                f_total_box[2:4] = f_total_box[:2] + [f_width, f_height]
-                total_faces.append(f_total_box)
+        for face in faces:
+            for person in persons:
+                p_box = person.coords
+                # We check the face center belongs to a person
+                horz = p_box[0] <= face[0] <= p_box[2]
+                vert = p_box[1] <= face[1] <= p_box[3]
+                if horz and vert:
+                    # The face belongs to this person.
+                    hc, vc, w, h = face[:4]
+                    f_box = np.array([hc - w/2, vc - h/2, hc + w/2, vc + h/2])
+                    t_faces = person.ftrk.evalFaces(f_box)
+                    break
+
+
+            # width, height = [box[2] - box[0], box[3] - box[1]]
+            # cropped_person = full_image[box[1]:box[3], box[0]:box[2]]
+            # face, f_box = self.siamese_network.getFace(cropped_person)
+            # # Faces were detected, and the highest one was returned
+            # t_faces = person.ftrk.evalFaces(f_box)
+            # if len(t_faces) != 0:
+            #     face = t_faces[0]
+            #     # We rewrite the coordinates with respect to
+            #     # the entire image
+            #     [f_width, f_height] = [face[2] - face[0], face[3] - face[1]]
+            #     f_total_box = np.zeros(4, dtype=np.int16)
+            #     f_total_box[:2] = box[:2] + face[:2]
+            #     f_total_box[2:4] = f_total_box[:2] + [f_width, f_height]
+            #     total_faces.append(f_total_box)
 
         return total_faces

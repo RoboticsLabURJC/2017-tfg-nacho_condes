@@ -6,9 +6,10 @@ from cprint import cprint
 class PIDDriver:
     ''' PID controller connected to a Turtlebot motors, which can command velocities
     avoiding sudden stops, and also handle loss situations (with a softer response). '''
-    def __init__(self, func, Kc, Ki, Kd, K_loss, scaling_factor, limiter):
+    def __init__(self, Kc, Ki, Kd, K_loss, scaling_factor, limiter):
         # Specific parameters
-        self.func = func
+        # TODO: REWRITE THE DRIVER
+        #self.func = func
         self.Kc = Kc
         self.Ki = Ki
         self.Kd = Kd
@@ -41,7 +42,7 @@ class PIDDriver:
         #print "    last res: ", self.last_response
         resp = (response + self.last_response) / 2.0
         #print "sending -> ", resp
-        self.func(resp)
+        # self.func(resp)
 
 
 

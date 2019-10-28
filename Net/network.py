@@ -16,29 +16,29 @@ LABELS_DICT = {'voc': 'Net/labels/pascal_label_map.pbtxt',
                'oid': 'Net/labels/oid_bboc_trainable_label_map.pbtxt',
                'pet': 'Net/labels/pet_label_map.pbtxt'}
 
-class TrackingNetwork():
+class DetectionNetwork():
     def __init__(self, net_model):
-        self.framework = "TensorFlow"
-
         labels_file = LABELS_DICT['coco']
         label_map = label_map_util.load_labelmap(labels_file) # loads the labels map.
         categories = label_map_util.convert_label_map_to_categories(label_map, max_num_classes= 999999)
         category_index = label_map_util.create_category_index(categories)
-        self.classes = {}
-        # We build is as a dict because of gaps on the labels definitions
-        for cat in category_index:
-            self.classes[cat] = str(category_index[cat]['name'])
-
+        self.classes = {k:str(v['name']) for k, v in category_index.iteritems()}
+        # Find person index
+        for idx, class_ in self.classes.iteritems():
+            if class_ == 'person':
+                self.person_class = idx
+                break
 
         print "Creating session..."
         conf = tf.ConfigProto(log_device_placement=False)
-        conf.gpu_options.allow_growth = True
+        conf.gpu_options.allow_growth = False
+        # conf.gpu_options.per_process_gpu_memory_fraction = 0.67 # leave mem for tf-rt
 
         self.sess = tf.Session(config=conf)
-        print " Created"
+        print "Created"
         print "Loading the custom graph..."
         # Load the TRT frozen graph from disk
-        CKPT = 'Net/TensorFlow/' + net_model
+        CKPT = 'Net/' + net_model
         self.sess.graph.as_default()
         graph_def = tf.GraphDef()
         with gfile.FastGFile(CKPT, 'rb') as fid:
@@ -69,17 +69,10 @@ class TrackingNetwork():
 
         print("Network ready!")
 
-    def setCamera(self, cam):
-        self.cam = cam
-        self.original_height = ROSCam.IMAGE_HEIGHT
-        self.original_width = ROSCam.IMAGE_WIDTH
-
-    def setDepth(self, depth):
-        self.depth = depth
-
-    def predict(self):
+    def predict(self, img):
         # Reshape the latest image
-        input_image = Image.fromarray(self.cam.rgb_img)
+        orig_h, orig_w = img.shape[:2]
+        input_image = Image.fromarray(img)
         img_rsz = np.array(input_image.resize((300,300)))
 
         (boxes, scores, predictions, _) = self.sess.run(
@@ -87,29 +80,18 @@ class TrackingNetwork():
             feed_dict={self.image_tensor: img_rsz[None, ...]})
         boxes = np.squeeze(boxes)
         scores = np.squeeze(scores)
-        predictions = np.squeeze(predictions)
+        predictions = np.squeeze(predictions).astype(int)
 
-        # We only keep the most confident predictions.
         mask1 = scores > self.confidence_threshold # bool array
-
-        # We map the predictions into a mask (human or not)
-        mask2 = []
-        for idx in predictions:
-            mask2.append(self.classes[int(idx)] == 'person')
+        mask2 = [idx == self.person_class for idx in predictions]
 
         # Total mask: CONFIDENT PERSONS
         mask = np.logical_and(mask1, mask2)
         # Boxes containing only confident humans
         boxes = boxes[mask]
-        # aux variable for avoiding race condition while int casting
         # Box format and reshaping...
-        tmp_boxes = np.zeros([len(boxes), 4])
-        tmp_boxes[:,[0,2]] = boxes[:,[1,3]] * self.original_width
-        tmp_boxes[:,[3,1]] = boxes[:,[2,0]] * self.original_height
-        self.boxes = tmp_boxes.astype(int)
+        boxes_ = [[b[1] * orig_w, b[0] * orig_h,
+                   b[3] * orig_w, b[2] * orig_h] for b in boxes]
+        scores_ = scores[mask]
 
-        self.scores = scores[mask]
-        self.predictions = []
-        for idx in predictions[mask]:
-            self.predictions.append(self.classes[idx])
-
+        return np.array(boxes_), np.array(scores_)
