@@ -1,6 +1,5 @@
 import tensorflow as tf
 import tensorflow.contrib.tensorrt as trt # to solve compat. on bin graph
-from tensorflow.python.platform import gfile
 import numpy as np
 from Camera import ROSCam
 import cv2
@@ -22,30 +21,30 @@ class DetectionNetwork():
         label_map = label_map_util.load_labelmap(labels_file) # loads the labels map.
         categories = label_map_util.convert_label_map_to_categories(label_map, max_num_classes= 999999)
         category_index = label_map_util.create_category_index(categories)
-        self.classes = {k:str(v['name']) for k, v in category_index.iteritems()}
+        self.classes = {k:str(v['name']) for k, v in category_index.items()}
         # Find person index
-        for idx, class_ in self.classes.iteritems():
+        for idx, class_ in self.classes.items():
             if class_ == 'person':
                 self.person_class = idx
                 break
 
-        print "Creating session..."
+        print("Creating session...")
         conf = tf.ConfigProto(log_device_placement=False)
         conf.gpu_options.allow_growth = False
         # conf.gpu_options.per_process_gpu_memory_fraction = 0.67 # leave mem for tf-rt
 
         self.sess = tf.Session(config=conf)
-        print "Created"
-        print "Loading the custom graph..."
+        print("Created")
+        print("Loading the custom graph...")
         # Load the TRT frozen graph from disk
         CKPT = 'Net/' + net_model
         self.sess.graph.as_default()
-        graph_def = tf.GraphDef()
-        with gfile.FastGFile(CKPT, 'rb') as fid:
+        graph_def = tf.compat.v1.GraphDef()
+        with tf.gfile.GFile(CKPT, 'rb') as fid:
             graph_def.ParseFromString(fid.read())
-        print "Loaded..."
+        print("Loaded...")
         tf.import_graph_def(graph_def, name='')
-        print "Imported"
+        print("Imported")
 
         # Set placeholders...
         self.image_tensor = self.sess.graph.get_tensor_by_name('image_tensor:0')

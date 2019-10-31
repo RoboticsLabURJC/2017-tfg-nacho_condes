@@ -115,8 +115,8 @@ class Motors():
             ################################
             ############### v ##############
             ################################
-            print "FULL DEPTH:", type(full_depth), full_depth.shape
-            print "MOM_BOX:", type(mom_box), mom_box.shape, mom_box
+            print("FULL DEPTH:", type(full_depth), full_depth.shape)
+            print("MOM_BOX:", type(mom_box), mom_box.shape, mom_box)
             mom_depth = full_depth[mom_box[1]:mom_box[3], mom_box[0]:mom_box[2]]
             distance, grid = self.estimateDepth(mom_depth)
             # V error processing (go forward/backward)

@@ -33,7 +33,8 @@ class ROSCam:
 
         # rospy.init_node('ROSCam', anonymous=True)
         # Check the existance of the topics
-        topic_names = zip(*rospy.get_published_topics())[0]
+
+        topic_names, _ = map(list, zip(*rospy.get_published_topics()))
         if topics['rgb'] not in topic_names or topics['depth'] not in topic_names:
             raise NotAdvertisedException
 

@@ -20,8 +20,6 @@ from Net.siamese_network import FaceTrackingNetwork
 from Motors.Kobuki.motors import Motors
 
 
-# signal.signal(signal.SIGINT, signal.SIG_DFL)
-
 if __name__ == '__main__':
     rospy.init_node("followperson")
     # Parameters
@@ -45,7 +43,7 @@ if __name__ == '__main__':
     motors = Motors(topics['velocity'])
     motors.setNetworks(network, siamese_network)
     # network.setCamera(cam)
-    display_imgs = False
+    display_imgs = True
     MAX_ITER = 100
 
     iteration = 0
@@ -70,8 +68,8 @@ if __name__ == '__main__':
 
         faces = face_detector.predict(image)
         elapsed_2 = datetime.now() - p1_time
-        print "faces\t", faces
-        print "persons\t", persons
+        print("faces\t", faces)
+        print("persons\t", persons)
         elapsed_3 = motors.move(image, depth, persons, scores, faces)
 
 
@@ -93,8 +91,8 @@ if __name__ == '__main__':
 
         elapsed_times.append([elapsed_1, elapsed_2, elapsed_3])
         iteration += 1
-        print iteration
-        print '-----#~~~~~~~~----------'
+        print(iteration)
+        print('-----#~~~~~~~~----------')
         if iteration == MAX_ITER:
             rospy.signal_shutdown("Finished!!")
 
@@ -111,7 +109,7 @@ if __name__ == '__main__':
         #     cv2.imshow("depth", cam.depth_img)
         #     if cv2.waitKey(1) == 27:
         #         break
-    print "\n\n\nElapsed times:"
+    print("\n\n\nElapsed times:")
     t1s = []
     t2s = []
     t3s = []
@@ -120,8 +118,8 @@ if __name__ == '__main__':
         t2s.append(t2.microseconds / 1000.0)
         if type(t3) == timedelta:
             t3s.append(t3.microseconds / 1000.0)
-    print "Means\n-----\n%.3f\t%.3f\t%.3f" %(np.mean(t1s), np.mean(t2s), np.mean(t3s))
-    print "Stds\n----\n%.3f\t%.3f\t%.3f" %(np.std(t1s), np.std(t2s), np.std(t3s))
+    print("Means\n-----\n%.3f\t%.3f\t%.3f" %(np.mean(t1s), np.mean(t2s), np.mean(t3s)))
+    print("Stds\n----\n%.3f\t%.3f\t%.3f" %(np.std(t1s), np.std(t2s), np.std(t3s)))
     if display_imgs:
         cv2.destroyAllWindows()
 
