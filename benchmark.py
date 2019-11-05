@@ -35,11 +35,11 @@ if __name__ == '__main__':
     NETWORK_MODEL = config['NetworkModel']
     LOGDIR = config['LogDir']
 
-    bm_wrt = BenchmarkWriter(LOGDIR)            # Benchmark writer
+    bm_wrt = BenchmarkWriter(LOGDIR, NETWORK_MODEL)  # Benchmark writer
     if not bm_wrt.check_last_commented():
         exit()
-    cam = ROSCam(IMG_TOPICS)                    # Camera subscribers
-    network = DetectionNetwork(NETWORK_MODEL)   # Network instance
+    cam = ROSCam(IMG_TOPICS)                         # Camera subscribers
+    network = DetectionNetwork(NETWORK_MODEL)        # Network instance
 
     rospy.init_node(config['NodeName'])
 

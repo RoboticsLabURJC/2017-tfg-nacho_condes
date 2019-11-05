@@ -1,9 +1,8 @@
-*datasets*
-*pyc*
+benchmarks/*yml
+*__pycache__
 *swp*
 *pb
 *h5
-mom_imgs
 *aux
 *log
 *synctex.gz

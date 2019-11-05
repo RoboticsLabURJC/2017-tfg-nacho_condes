@@ -1,0 +1,609 @@
+1 - Meta:
+  Datetime: 05-11-2019 10:51:02
+  Description: Initial checkpoint
+  NetworkModel: ssdlite_mobilenet_v2_coco_2018_05_09.pb
+2 - Summary:
+  AverageFPS: 5.667403816435399
+  AverageInferenceTime: 176.44763499999996
+  StdInferenceTime: 7.318436135662796
+3 - Iterations:
+  1:
+    ElapsedMs: 194.96
+    NumDetections: 1
+  2:
+    ElapsedMs: 182.713
+    NumDetections: 1
+  3:
+    ElapsedMs: 196.553
+    NumDetections: 1
+  4:
+    ElapsedMs: 178.992
+    NumDetections: 1
+  5:
+    ElapsedMs: 188.885
+    NumDetections: 2
+  6:
+    ElapsedMs: 168.823
+    NumDetections: 1
+  7:
+    ElapsedMs: 170.292
+    NumDetections: 1
+  8:
+    ElapsedMs: 180.414
+    NumDetections: 1
+  9:
+    ElapsedMs: 185.908
+    NumDetections: 1
+  10:
+    ElapsedMs: 170.17
+    NumDetections: 0
+  11:
+    ElapsedMs: 172.913
+    NumDetections: 0
+  12:
+    ElapsedMs: 163.552
+    NumDetections: 0
+  13:
+    ElapsedMs: 166.949
+    NumDetections: 0
+  14:
+    ElapsedMs: 169.666
+    NumDetections: 0
+  15:
+    ElapsedMs: 170.215
+    NumDetections: 0
+  16:
+    ElapsedMs: 170.541
+    NumDetections: 0
+  17:
+    ElapsedMs: 175.478
+    NumDetections: 0
+  18:
+    ElapsedMs: 177.519
+    NumDetections: 0
+  19:
+    ElapsedMs: 169.127
+    NumDetections: 0
+  20:
+    ElapsedMs: 176.87
+    NumDetections: 0
+  21:
+    ElapsedMs: 180.118
+    NumDetections: 0
+  22:
+    ElapsedMs: 184.541
+    NumDetections: 0
+  23:
+    ElapsedMs: 169.914
+    NumDetections: 0
+  24:
+    ElapsedMs: 173.532
+    NumDetections: 0
+  25:
+    ElapsedMs: 175.3
+    NumDetections: 1
+  26:
+    ElapsedMs: 171.21
+    NumDetections: 0
+  27:
+    ElapsedMs: 179.824
+    NumDetections: 0
+  28:
+    ElapsedMs: 190.458
+    NumDetections: 0
+  29:
+    ElapsedMs: 174.625
+    NumDetections: 0
+  30:
+    ElapsedMs: 172.889
+    NumDetections: 0
+  31:
+    ElapsedMs: 186.473
+    NumDetections: 0
+  32:
+    ElapsedMs: 187.912
+    NumDetections: 0
+  33:
+    ElapsedMs: 174.88
+    NumDetections: 1
+  34:
+    ElapsedMs: 178.252
+    NumDetections: 1
+  35:
+    ElapsedMs: 191.885
+    NumDetections: 1
+  36:
+    ElapsedMs: 188.294
+    NumDetections: 1
+  37:
+    ElapsedMs: 182.342
+    NumDetections: 1
+  38:
+    ElapsedMs: 188.475
+    NumDetections: 1
+  39:
+    ElapsedMs: 169.038
+    NumDetections: 1
+  40:
+    ElapsedMs: 184.901
+    NumDetections: 1
+  41:
+    ElapsedMs: 192.876
+    NumDetections: 1
+  42:
+    ElapsedMs: 182.128
+    NumDetections: 1
+  43:
+    ElapsedMs: 172.35
+    NumDetections: 1
+  44:
+    ElapsedMs: 184.342
+    NumDetections: 1
+  45:
+    ElapsedMs: 178.267
+    NumDetections: 1
+  46:
+    ElapsedMs: 173.616
+    NumDetections: 1
+  47:
+    ElapsedMs: 177.857
+    NumDetections: 1
+  48:
+    ElapsedMs: 183.093
+    NumDetections: 1
+  49:
+    ElapsedMs: 173.462
+    NumDetections: 1
+  50:
+    ElapsedMs: 164.816
+    NumDetections: 1
+  51:
+    ElapsedMs: 182.876
+    NumDetections: 1
+  52:
+    ElapsedMs: 161.134
+    NumDetections: 0
+  53:
+    ElapsedMs: 170.444
+    NumDetections: 0
+  54:
+    ElapsedMs: 168.708
+    NumDetections: 0
+  55:
+    ElapsedMs: 183.255
+    NumDetections: 1
+  56:
+    ElapsedMs: 172.793
+    NumDetections: 1
+  57:
+    ElapsedMs: 166.466
+    NumDetections: 1
+  58:
+    ElapsedMs: 176.573
+    NumDetections: 0
+  59:
+    ElapsedMs: 169.558
+    NumDetections: 0
+  60:
+    ElapsedMs: 157.992
+    NumDetections: 0
+  61:
+    ElapsedMs: 170.264
+    NumDetections: 0
+  62:
+    ElapsedMs: 175.198
+    NumDetections: 1
+  63:
+    ElapsedMs: 172.443
+    NumDetections: 1
+  64:
+    ElapsedMs: 165.44
+    NumDetections: 1
+  65:
+    ElapsedMs: 171.316
+    NumDetections: 1
+  66:
+    ElapsedMs: 166.365
+    NumDetections: 2
+  67:
+    ElapsedMs: 171.226
+    NumDetections: 1
+  68:
+    ElapsedMs: 180.081
+    NumDetections: 1
+  69:
+    ElapsedMs: 165.931
+    NumDetections: 1
+  70:
+    ElapsedMs: 184.697
+    NumDetections: 1
+  71:
+    ElapsedMs: 173.871
+    NumDetections: 1
+  72:
+    ElapsedMs: 174.717
+    NumDetections: 1
+  73:
+    ElapsedMs: 191.029
+    NumDetections: 1
+  74:
+    ElapsedMs: 177.843
+    NumDetections: 1
+  75:
+    ElapsedMs: 180.677
+    NumDetections: 1
+  76:
+    ElapsedMs: 174.647
+    NumDetections: 1
+  77:
+    ElapsedMs: 179.523
+    NumDetections: 1
+  78:
+    ElapsedMs: 175.76
+    NumDetections: 1
+  79:
+    ElapsedMs: 172.487
+    NumDetections: 1
+  80:
+    ElapsedMs: 179.958
+    NumDetections: 1
+  81:
+    ElapsedMs: 166.287
+    NumDetections: 1
+  82:
+    ElapsedMs: 173.541
+    NumDetections: 1
+  83:
+    ElapsedMs: 179.301
+    NumDetections: 1
+  84:
+    ElapsedMs: 187.235
+    NumDetections: 1
+  85:
+    ElapsedMs: 185.012
+    NumDetections: 1
+  86:
+    ElapsedMs: 176.49
+    NumDetections: 1
+  87:
+    ElapsedMs: 171.888
+    NumDetections: 1
+  88:
+    ElapsedMs: 180.212
+    NumDetections: 1
+  89:
+    ElapsedMs: 174.808
+    NumDetections: 1
+  90:
+    ElapsedMs: 188.755
+    NumDetections: 1
+  91:
+    ElapsedMs: 179.018
+    NumDetections: 1
+  92:
+    ElapsedMs: 167.327
+    NumDetections: 1
+  93:
+    ElapsedMs: 182.274
+    NumDetections: 1
+  94:
+    ElapsedMs: 174.312
+    NumDetections: 1
+  95:
+    ElapsedMs: 178.997
+    NumDetections: 1
+  96:
+    ElapsedMs: 180.267
+    NumDetections: 1
+  97:
+    ElapsedMs: 175.011
+    NumDetections: 1
+  98:
+    ElapsedMs: 188.514
+    NumDetections: 1
+  99:
+    ElapsedMs: 171.629
+    NumDetections: 1
+  100:
+    ElapsedMs: 181.515
+    NumDetections: 1
+  101:
+    ElapsedMs: 172.632
+    NumDetections: 1
+  102:
+    ElapsedMs: 178.214
+    NumDetections: 1
+  103:
+    ElapsedMs: 187.089
+    NumDetections: 1
+  104:
+    ElapsedMs: 178.667
+    NumDetections: 1
+  105:
+    ElapsedMs: 175.802
+    NumDetections: 1
+  106:
+    ElapsedMs: 159.294
+    NumDetections: 1
+  107:
+    ElapsedMs: 167.583
+    NumDetections: 1
+  108:
+    ElapsedMs: 173.866
+    NumDetections: 1
+  109:
+    ElapsedMs: 178.798
+    NumDetections: 1
+  110:
+    ElapsedMs: 175.358
+    NumDetections: 1
+  111:
+    ElapsedMs: 180.037
+    NumDetections: 1
+  112:
+    ElapsedMs: 180.05
+    NumDetections: 1
+  113:
+    ElapsedMs: 178.652
+    NumDetections: 1
+  114:
+    ElapsedMs: 178.486
+    NumDetections: 1
+  115:
+    ElapsedMs: 175.816
+    NumDetections: 1
+  116:
+    ElapsedMs: 169.458
+    NumDetections: 1
+  117:
+    ElapsedMs: 173.383
+    NumDetections: 1
+  118:
+    ElapsedMs: 163.446
+    NumDetections: 1
+  119:
+    ElapsedMs: 174.14
+    NumDetections: 0
+  120:
+    ElapsedMs: 182.168
+    NumDetections: 1
+  121:
+    ElapsedMs: 187.899
+    NumDetections: 1
+  122:
+    ElapsedMs: 171.669
+    NumDetections: 1
+  123:
+    ElapsedMs: 178.698
+    NumDetections: 1
+  124:
+    ElapsedMs: 181.806
+    NumDetections: 1
+  125:
+    ElapsedMs: 174.306
+    NumDetections: 1
+  126:
+    ElapsedMs: 177.607
+    NumDetections: 1
+  127:
+    ElapsedMs: 171.589
+    NumDetections: 1
+  128:
+    ElapsedMs: 194.961
+    NumDetections: 1
+  129:
+    ElapsedMs: 186.13
+    NumDetections: 1
+  130:
+    ElapsedMs: 190.753
+    NumDetections: 1
+  131:
+    ElapsedMs: 178.423
+    NumDetections: 1
+  132:
+    ElapsedMs: 178.891
+    NumDetections: 0
+  133:
+    ElapsedMs: 178.891
+    NumDetections: 1
+  134:
+    ElapsedMs: 170.362
+    NumDetections: 1
+  135:
+    ElapsedMs: 182.001
+    NumDetections: 1
+  136:
+    ElapsedMs: 166.695
+    NumDetections: 1
+  137:
+    ElapsedMs: 183.252
+    NumDetections: 1
+  138:
+    ElapsedMs: 176.438
+    NumDetections: 1
+  139:
+    ElapsedMs: 173.466
+    NumDetections: 1
+  140:
+    ElapsedMs: 177.605
+    NumDetections: 1
+  141:
+    ElapsedMs: 168.616
+    NumDetections: 1
+  142:
+    ElapsedMs: 189.191
+    NumDetections: 1
+  143:
+    ElapsedMs: 171.322
+    NumDetections: 1
+  144:
+    ElapsedMs: 176.154
+    NumDetections: 1
+  145:
+    ElapsedMs: 178.912
+    NumDetections: 0
+  146:
+    ElapsedMs: 188.555
+    NumDetections: 0
+  147:
+    ElapsedMs: 178.078
+    NumDetections: 0
+  148:
+    ElapsedMs: 164.136
+    NumDetections: 0
+  149:
+    ElapsedMs: 174.589
+    NumDetections: 0
+  150:
+    ElapsedMs: 167.007
+    NumDetections: 0
+  151:
+    ElapsedMs: 171.29
+    NumDetections: 0
+  152:
+    ElapsedMs: 167.707
+    NumDetections: 0
+  153:
+    ElapsedMs: 168.073
+    NumDetections: 0
+  154:
+    ElapsedMs: 171.207
+    NumDetections: 0
+  155:
+    ElapsedMs: 176.076
+    NumDetections: 0
+  156:
+    ElapsedMs: 173.571
+    NumDetections: 0
+  157:
+    ElapsedMs: 174.799
+    NumDetections: 0
+  158:
+    ElapsedMs: 161.723
+    NumDetections: 0
+  159:
+    ElapsedMs: 178.318
+    NumDetections: 0
+  160:
+    ElapsedMs: 180.671
+    NumDetections: 0
+  161:
+    ElapsedMs: 176.776
+    NumDetections: 1
+  162:
+    ElapsedMs: 169.786
+    NumDetections: 1
+  163:
+    ElapsedMs: 173.173
+    NumDetections: 1
+  164:
+    ElapsedMs: 177.775
+    NumDetections: 1
+  165:
+    ElapsedMs: 181.121
+    NumDetections: 1
+  166:
+    ElapsedMs: 174.221
+    NumDetections: 1
+  167:
+    ElapsedMs: 182.366
+    NumDetections: 1
+  168:
+    ElapsedMs: 173.023
+    NumDetections: 1
+  169:
+    ElapsedMs: 177.978
+    NumDetections: 1
+  170:
+    ElapsedMs: 169.067
+    NumDetections: 1
+  171:
+    ElapsedMs: 178.482
+    NumDetections: 1
+  172:
+    ElapsedMs: 174.411
+    NumDetections: 1
+  173:
+    ElapsedMs: 177.687
+    NumDetections: 1
+  174:
+    ElapsedMs: 194.647
+    NumDetections: 1
+  175:
+    ElapsedMs: 174.533
+    NumDetections: 1
+  176:
+    ElapsedMs: 174.138
+    NumDetections: 1
+  177:
+    ElapsedMs: 177.089
+    NumDetections: 1
+  178:
+    ElapsedMs: 178.028
+    NumDetections: 1
+  179:
+    ElapsedMs: 177.807
+    NumDetections: 1
+  180:
+    ElapsedMs: 177.515
+    NumDetections: 1
+  181:
+    ElapsedMs: 178.61
+    NumDetections: 1
+  182:
+    ElapsedMs: 176.208
+    NumDetections: 1
+  183:
+    ElapsedMs: 179.931
+    NumDetections: 1
+  184:
+    ElapsedMs: 174.91
+    NumDetections: 1
+  185:
+    ElapsedMs: 178.637
+    NumDetections: 1
+  186:
+    ElapsedMs: 157.263
+    NumDetections: 1
+  187:
+    ElapsedMs: 166.137
+    NumDetections: 1
+  188:
+    ElapsedMs: 174.749
+    NumDetections: 1
+  189:
+    ElapsedMs: 165.654
+    NumDetections: 1
+  190:
+    ElapsedMs: 182.16
+    NumDetections: 1
+  191:
+    ElapsedMs: 175.374
+    NumDetections: 1
+  192:
+    ElapsedMs: 180.193
+    NumDetections: 1
+  193:
+    ElapsedMs: 164.161
+    NumDetections: 1
+  194:
+    ElapsedMs: 180.865
+    NumDetections: 1
+  195:
+    ElapsedMs: 172.551
+    NumDetections: 1
+  196:
+    ElapsedMs: 170.261
+    NumDetections: 0
+  197:
+    ElapsedMs: 172.994
+    NumDetections: 0
+  198:
+    ElapsedMs: 188.147
+    NumDetections: 0
+  199:
+    ElapsedMs: 173.063
+    NumDetections: 0
+  200:
+    ElapsedMs: 179.785
+    NumDetections: 1

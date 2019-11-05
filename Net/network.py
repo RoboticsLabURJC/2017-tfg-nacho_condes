@@ -37,7 +37,7 @@ class DetectionNetwork():
         print("Created")
         print("Loading the custom graph...")
         # Load the TRT frozen graph from disk
-        CKPT = 'Net/' + net_model
+        CKPT = 'Net/Models/' + net_model
         self.sess.graph.as_default()
         graph_def = tf.compat.v1.GraphDef()
         with tf.gfile.GFile(CKPT, 'rb') as fid:

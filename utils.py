@@ -16,9 +16,10 @@ FILENAME_FORMAT = '%Y%m%d %H%M%S.yml'
 
 class BenchmarkWriter:
     ''' Class to save a benchmark result on a file. '''
-    def __init__(self, logdir):
+    def __init__(self, logdir, network_model):
         self.logdir = logdir
         self.description = None
+        self.network_model = network_model
         # self.check_last_commented()
 
     def check_last_commented(self):
@@ -58,7 +59,8 @@ class BenchmarkWriter:
         }
         metrics[META_KEY] = {
             'Datetime': datetime.now().strftime('%d-%m-%Y %H:%M:%S'),
-            'Description': self.description
+            'Description': self.description,
+            'NetworkModel': self.network_model,
         }
         metrics[SUMMARY_KEY] = summary
         metrics[ITERS_KEY] = {}
