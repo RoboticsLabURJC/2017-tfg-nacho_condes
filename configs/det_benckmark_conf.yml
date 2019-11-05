@@ -1,0 +1,7 @@
+DetectionTester:
+  NodeName: "detection_tester"
+  NetworkModel: "ssdlite_mobilenet_v2_coco_2018_05_09.pb"
+  ImageTopics:
+    rgb: "/camera/rgb/image_raw"
+    depth: "/camera/depth_registered/image_raw"
+  LogDir: "benchmarks/detection"

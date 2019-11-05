@@ -4,7 +4,7 @@ import rospy
 from kobuki_msgs.msg import Sound
 from time import sleep
 from datetime import datetime, timedelta
-from Motors.Kobuki.pid_driver import PIDDriver
+from Motors.pid_driver import PIDDriver
 from cprint import cprint
 
 

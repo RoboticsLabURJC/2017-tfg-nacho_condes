@@ -1,3 +1,13 @@
+__Project under revision__: you can find the TFG delivery [here](https://github.com/RoboticsLabURJC/2017-tfg-nacho_condes/releases/tag/TFG)
+
+# Current framework (on Jetson TX1)
+* Python 3.6
+* ROS Melodic
+* OpenCV4
+* CUDA 10.0
+* TensorRT 5.1.6
+
+---
 
 # Final Degree Project (Nacho Condés)
 __Deep Learning Applications for Robotics using TensorFlow and JdeRobot__

@@ -1,11 +1,6 @@
-Keras
 numpy
-six
 matplotlib
 tensorflow_gpu
 opencv_python
 Pillow
-PyQt5
-config
-protobuf
 h5py
