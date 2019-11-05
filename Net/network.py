@@ -30,7 +30,7 @@ class DetectionNetwork():
 
         print("Creating session...")
         conf = tf.ConfigProto(log_device_placement=False)
-        conf.gpu_options.allow_growth = False
+        conf.gpu_options.allow_growth = True
         # conf.gpu_options.per_process_gpu_memory_fraction = 0.67 # leave mem for tf-rt
 
         self.sess = tf.Session(config=conf)
@@ -73,10 +73,11 @@ class DetectionNetwork():
         orig_h, orig_w = img.shape[:2]
         input_image = Image.fromarray(img)
         img_rsz = np.array(input_image.resize((300,300)))
-
+        start = datetime.now()
         (boxes, scores, predictions, _) = self.sess.run(
             [self.detection_boxes, self.detection_scores, self.detection_classes, self.num_detections],
             feed_dict={self.image_tensor: img_rsz[None, ...]})
+        elapsed = datetime.now() - start
         boxes = np.squeeze(boxes)
         scores = np.squeeze(scores)
         predictions = np.squeeze(predictions).astype(int)
@@ -93,4 +94,4 @@ class DetectionNetwork():
                    b[3] * orig_w, b[2] * orig_h] for b in boxes]
         scores_ = scores[mask]
 
-        return np.array(boxes_), np.array(scores_)
+        return np.array(boxes_), np.array(scores_), elapsed

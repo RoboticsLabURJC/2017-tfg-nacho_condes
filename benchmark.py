@@ -8,7 +8,7 @@
 import rospy
 import cv2
 import numpy as np
-from datetime import datetime, timedelta
+from datetime import datetime
 from faced import FaceDetector
 import sys
 import yaml
@@ -16,8 +16,6 @@ import yaml
 from Camera.ROSCam import ROSCam
 from Net.network import DetectionNetwork
 from utils import BenchmarkWriter
-# from Net.siamese_network import FaceTrackingNetwork
-# from Motors.motors import Motors
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
@@ -57,9 +55,9 @@ if __name__ == '__main__':
     while not rospy.is_shutdown():
         # Make an inference on the current image
         image = cam.rgb_img
-        start_time = datetime.now()
-        persons, scores = network.predict(image)
-        elapsed = datetime.now() - start_time
+        # start_time = datetime.now()
+        persons, scores, elapsed = network.predict(image)
+        # elapsed = datetime.now() - start_time
         detections.append([persons, scores])
         elapsed_times.append(elapsed)
         iteration += 1

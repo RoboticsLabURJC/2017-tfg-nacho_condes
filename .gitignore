@@ -1,4 +1,5 @@
-benchmarks/*yml
+benchmarks/detection/*
+resources/ref_face/*
 *__pycache__
 *swp*
 *pb

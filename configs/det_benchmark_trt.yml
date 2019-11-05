@@ -1,0 +1,7 @@
+DetectionTester:
+  NodeName: "detection_tester"
+  NetworkModel: "ssd_inception_v2_coco_trt.pb"
+  ImageTopics:
+    rgb: "/camera/rgb/image_raw"
+    depth: "/camera/depth_registered/image_raw"
+  LogDir: "benchmarks/detection"
