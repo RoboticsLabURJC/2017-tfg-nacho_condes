@@ -46,7 +46,7 @@ class BenchmarkWriter:
             return False
 
 
-    def write_log(self, elapsed_times, detections):
+    def write_log(self, elapsed_times, detections, optim_params=None):
         metrics = {}
         elapsed_ms = list(map(lambda x: x.seconds * 1000.0 + x.microseconds / 1000.0, elapsed_times))
         elapsed_mean = float(np.mean(elapsed_ms))
@@ -57,11 +57,19 @@ class BenchmarkWriter:
             'StdInferenceTime': elapsed_std,
             'AverageFPS': avg_fps,
         }
-        metrics[META_KEY] = {
-            'Datetime': datetime.now().strftime('%d-%m-%Y %H:%M:%S'),
-            'Description': self.description,
-            'NetworkModel': self.network_model,
-        }
+        if optim_params is not None:
+            metrics[META_KEY] = {
+                'OriginalModel': optim_params['model_name'],
+                'PrecisionMode': optim_params['prec'],
+                'MinimumSegmentSize': optim_params['mss'],
+                'MaximumCachedEngines': optim_params['mce'],
+            }
+        else:
+            metrics[META_KEY] = {
+                'Datetime': datetime.now().strftime('%d-%m-%Y %H:%M:%S'),
+                'Description': self.description,
+                'NetworkModel': self.network_model,
+            }
         metrics[SUMMARY_KEY] = summary
         metrics[ITERS_KEY] = {}
 

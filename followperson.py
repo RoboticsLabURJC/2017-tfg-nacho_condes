@@ -17,7 +17,7 @@ from faced import FaceDetector
 from Camera.ROSCam import ROSCam
 from Net.network import DetectionNetwork
 from Net.siamese_network import FaceTrackingNetwork
-from Motors.Kobuki.motors import Motors
+from Motors.motors import Motors
 
 
 if __name__ == '__main__':
@@ -28,9 +28,9 @@ if __name__ == '__main__':
               'depth':    '/camera/depth_registered/image_raw',
               'velocity': '/mobile_base/commands/velocity',}
 
-    network_model = 'ssdlite_mobilenet_v2_coco_2018_05_09.pb'
+    network_model = 'ssd_inception_v2_coco_trt.pb'
     siamese_model = 'facenet_model.pb'
-    mom_img = 'mom_img/mom.jpg'
+    mom_img = 'resources/ref_face/refface.jpg'
 
 
     # The camera does not need a dedicated thread, the callbacks have their owns.
@@ -62,7 +62,7 @@ if __name__ == '__main__':
         image = cam.rgb_img
         depth = cam.depth_img
         start_time = datetime.now()
-        persons, scores = network.predict(image)
+        persons, scores, _ = network.predict(image)
         p1_time = datetime.now()
         elapsed_1 = p1_time - start_time
 
@@ -86,7 +86,11 @@ if __name__ == '__main__':
         #         print horz, vert
 
 
-
+        if display_imgs:
+            img_cp = np.copy(cam.rgb_img)
+            print("should display")
+            cv2.imshow('Image', img_cp)
+            cv2.waitKey(30)
 
 
         elapsed_times.append([elapsed_1, elapsed_2, elapsed_3])

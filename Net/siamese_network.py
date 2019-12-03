@@ -13,7 +13,7 @@ class FaceTrackingNetwork:
     '''
     def __init__(self, model_name, mom_path, face_detector):
         # Load the siamese network model
-        model_path = 'Net/' + model_name
+        model_path = 'Net/Models/' + model_name
         with tf.device('/cpu:0'):
             siamese_graph = tf.Graph()
             with siamese_graph.as_default():

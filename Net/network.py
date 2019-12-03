@@ -30,7 +30,7 @@ class DetectionNetwork():
 
         print("Creating session...")
         conf = tf.ConfigProto(log_device_placement=False)
-        conf.gpu_options.allow_growth = True
+        conf.gpu_options.allow_growth = False
         # conf.gpu_options.per_process_gpu_memory_fraction = 0.67 # leave mem for tf-rt
 
         self.sess = tf.Session(config=conf)
