@@ -1,76 +1,115 @@
 #
-# Created on May, 2018
+# Created on Dec, 2019
 #
 # @author: naxvm
 #
-# Based on dl-objectdetector
-# https://github.com/jderobot/dl-objectdetector
 
+import argparse
 import sys
-import signal
-import rospy
-import cv2
-import numpy as np
 from datetime import datetime, timedelta
-from faced import FaceDetector
 
+import numpy as np
+
+import cv2
+import rospy
+import yaml
 from Camera.ROSCam import ROSCam
-from Net.network import DetectionNetwork
-from Net.siamese_network import FaceTrackingNetwork
+from faced import FaceDetector
+from imageio import imread
 from Motors.motors import Motors
-
+from Net.detection_network import DetectionNetwork
+from Net.facenet import FaceNet
+import utils
 
 if __name__ == '__main__':
-    rospy.init_node("followperson")
-    # Parameters
-    # TODO: read from YML config file
-    topics = {'rgb':      '/camera/rgb/image_raw',
-              'depth':    '/camera/depth_registered/image_raw',
-              'velocity': '/mobile_base/commands/velocity',}
+    # Parameter parsing
+    parser = argparse.ArgumentParser(description='Run the main following script')
+    parser.add_argument('config_file', type=str, help='Path for the YML configuration file')
+    args = parser.parse_args()
+    with open(args.config_file, 'r') as f:
+        cfg = yaml.safe_load(f)
 
-    network_model = 'ssd_inception_v2_coco_trt.pb'
-    siamese_model = 'facenet_model.pb'
-    mom_img = 'resources/ref_face/refface.jpg'
+    rospy.init_node(cfg['NodeName'])
+    
+    # Requested behavioral
+    benchmark = cfg['Mode'].lower() == 'benchmark'
 
+    # Instantiations
+    if benchmark:
+        cam = ROSCam(cfg['Topics'], cfg['RosbagFile'])
+    else:
+        cam = ROSCam(cfg['Topics'])
+    # Person detection network (SSD or (TODO) YOLO)
+    obj_det = DetectionNetwork(cfg['Networks']['DetectionModel'])
+    # Face detection network. The frozen graphs can't be overridden as they are included in the
+    # faced package. Use symlinks in order to exchange them for anothers.
+    face_det = FaceDetector()
+    # FaceNet embedding encoder.
+    face_enc = FaceNet(cfg['Networks']['FaceEncoderModel'])
 
-    # The camera does not need a dedicated thread, the callbacks have their owns.
-    cam = ROSCam(topics)
-    # Neural network TF instances
-    network = DetectionNetwork(network_model)
-    face_detector = FaceDetector()
-    siamese_network = FaceTrackingNetwork(siamese_model, mom_img, face_detector)
+    # Now we extract the reference face
+    face_img = imread(cfg['RefFace'])
+    fbox = face_det.predict(face_img)
+    ref_face = utils.crop_face(face_img, fbox)
+    # and plug it into the encoder
+    face_enc.set_reference_face(ref_face)
+
     # Motors instance
-    motors = Motors(topics['velocity'])
-    motors.setNetworks(network, siamese_network)
-    # network.setCamera(cam)
+    # motors = Motors(cfg['Topics']['Velocity'])
     display_imgs = True
-    MAX_ITER = 100
+    MAX_ITER = 1000
 
     iteration = 0
     elapsed_times = []
 
     def shtdn_hook():
-        network.sess.close()
-        face_detector.sess.close()
-        siamese_network.sess.close()
+        obj_det.sess.close()
+        face_det.sess.close()
+        face_enc.sess.close()
         print("Cleaning and exiting...")
     # Register shutdown hook
     rospy.on_shutdown(shtdn_hook)
 
-    while not rospy.is_shutdown():
-        # Make an inference on the current image
-        image = cam.rgb_img
-        depth = cam.depth_img
-        start_time = datetime.now()
-        persons, scores, _ = network.predict(image)
-        p1_time = datetime.now()
-        elapsed_1 = p1_time - start_time
+    if benchmark:
+        total_times = []
 
-        faces = face_detector.predict(image)
-        elapsed_2 = datetime.now() - p1_time
-        print("faces\t", faces)
-        print("persons\t", persons)
-        elapsed_3 = motors.move(image, depth, persons, scores, faces)
+    while not rospy.is_shutdown():
+        if benchmark:
+            times = []
+        # Fetch the images
+        image, depth = cam.getImages()
+
+        if benchmark:
+            start_time = datetime.now()
+            iter_time = datetime.now()
+        # Make an inference on the current image
+        persons, scores, _ = obj_det.predict(image)
+        if benchmark:
+            times.append(datetime.now() - start_time)
+
+        # Detect and crop
+        if benchmark:
+            start_time = datetime.now()
+        face_detections = face_det.predict(image)
+        if benchmark:
+            times.append(datetime.now() - start_time)
+
+        # Filter just confident faces
+        # # TODO: keep only faces inside persons 
+        faces_flt = filter(lambda f: f[-1] > 0.9, face_detections)
+        faces_cropped = [utils.crop_face(image, fdet) for fdet in faces_flt]
+
+        # # elapsed_3 = motors.move(image, depth, persons, scores, faces)
+
+
+        if benchmark:
+            start_time = datetime.now()
+        sims = map(face_enc.distanceToRef, faces_cropped)
+        for idx, sim in enumerate(sims):
+            print(idx, '\t', sim)
+        if benchmark:
+            times.append(datetime.now() - start_time)
+            times.append(datetime.now() - iter_time)
 
 
     # motors.setNetworks(network, siamese_network)
@@ -85,104 +124,36 @@ if __name__ == '__main__':
         #         vert = person[1] <= face[1] <= person[3]
         #         print horz, vert
 
+        if benchmark:
+            total_times.append(times)
 
         if display_imgs:
-            img_cp = np.copy(cam.rgb_img)
-            print("should display")
-            cv2.imshow('Image', img_cp)
+            img_cp = np.copy(image)
+            transformed = cv2.cvtColor(img_cp, cv2.COLOR_RGB2BGR)
+            if len(faces_cropped) > 0:
+                f = cv2.cvtColor(faces_cropped[0], cv2.COLOR_RGB2BGR)
+                cv2.imshow('Face', f)
+            cv2.imshow('Image', transformed)
             cv2.waitKey(30)
 
-
-        elapsed_times.append([elapsed_1, elapsed_2, elapsed_3])
         iteration += 1
         print(iteration)
-        print('-----#~~~~~~~~----------')
+        print('*' * 20)
+
         if iteration == MAX_ITER:
             rospy.signal_shutdown("Finished!!")
 
-        # print "elapsed {} ms. Framerate: {} fps".format(elapsed.microseconds/1000.0, 1e6/elapsed.microseconds)
-        # print "inference output", network.predictions, network.boxes, network.scores
-        # print "faces:", faces
-        # print ""
-        # Draw every detected person
-        # for idx, person in enumerate(network.boxes):
-        #     [xmin, ymin, xmax, ymax] = person
-        #     cv2.rectangle(img_cp, (xmin, ymax), (xmax, ymin), (0,255,0), 5)
-        # if display_imgs:
-        #     cv2.imshow("RGB", img_cp)
-        #     cv2.imshow("depth", cam.depth_img)
-        #     if cv2.waitKey(1) == 27:
-        #         break
-    print("\n\n\nElapsed times:")
-    t1s = []
-    t2s = []
-    t3s = []
-    for t1, t2, t3 in elapsed_times:
-        t1s.append(t1.microseconds / 1000.0)
-        t2s.append(t2.microseconds / 1000.0)
-        if type(t3) == timedelta:
-            t3s.append(t3.microseconds / 1000.0)
-    print("Means\n-----\n%.3f\t%.3f\t%.3f" %(np.mean(t1s), np.mean(t2s), np.mean(t3s)))
-    print("Stds\n----\n%.3f\t%.3f\t%.3f" %(np.std(t1s), np.std(t2s), np.std(t3s)))
+    if benchmark:
+        # Vectorized conversion to ms
+        times_ms = utils.TO_MS(total_times)
+        t_mean = times_ms.mean(axis=0)
+        t_std = times_ms.std(axis=0)
+
+        np.set_printoptions(precision=3)
+        print('Mean:', times_ms.mean(axis=0), ' (ms)')
+        print('Dev.:', times_ms.std(axis=0),  ' (ms)')
+        print('Max.:', times_ms.max(axis=0),  ' (ms)')
+        print('Min.:', times_ms.min(axis=0),  ' (ms)')
+
     if display_imgs:
         cv2.destroyAllWindows()
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # mom_path = cfg.getProperty('FollowPerson.Mom.ImagePath')
-
-    # siamese_network = SiameseNetwork(siamese_model, mom_path)
-
-
-    # app = QtWidgets.QApplication(sys.argv)
-    # window = GUIClass()
-
-    # if device_type.lower() == 'kobuki':
-    #     depth_proxy = jdrc.getCameraClient('FollowPerson.Depth')
-    #     depth = Camera(depth_proxy)
-    #     network.setDepth(depth)
-    #     t_depth = ThreadCamera(depth)
-    #     t_depth.start()
-    #     window.setCamera(cam, t_cam)
-    #     window.setDepth(depth, t_depth)
-    # else:
-    #     window.setCamera(cam, t_cam)
-
-
-    # motors = Motors(motors_proxy)
-    # motors.setNetworks(network, siamese_network)
-    # motors.setCamera(cam)
-    # if device_type.lower() == 'kobuki':
-    #     motors.setDepth(depth)
-    # t_motors = ThreadMotors(motors)
-    # window.setMotors(motors, t_motors)
-    # t_motors.start()
-
-
-    # window.setNetwork(network, t_network)
-    # window.show()
-
-    # # Threading GUI
-    # t_gui = ThreadGUI(window)
-    # t_gui.start()
-
-
-    # print("")
-    # print("Requested timers:")
-    # print("    Camera: %d ms" % (t_cam.t_cycle))
-    # print("    GUI: %d ms" % (t_gui.t_cycle))
-    # print("    Network: %d ms" % (t_network.t_cycle))
-    # print("    Motors: %d ms" % (t_motors.t_cycle))
-    # print("")
-
-    # sys.exit(app.exec_())

@@ -8,11 +8,34 @@ import yaml
 from os import listdir, path
 import numpy as np
 
-META_KEY = '1 - Meta'
-SUMMARY_KEY = '2 - Summary'
-ITERS_KEY = '3 - Iterations'
-
 FILENAME_FORMAT = '%Y%m%d %H%M%S.yml'
+
+TO_MS = np.vectorize(lambda x: x.seconds * 1000.0 + x.microseconds / 1000.0) # Auxiliary vectorized function
+
+
+def log_benchmark(logdir, parameters, person_detections=None, person_times=None,
+                                      face_detections=None, face_times=None):
+        if parameters.check_persons:
+            person_avg_ms = np.vectorize(TO_MS)
+
+
+def crop_face(image, det):
+    ''' Crop the detected face, using the faced detection outputs. '''
+    cx, cy, w, h, prob = np.squeeze(det).astype(int)
+
+    # Filter as the borders might fall outside the image
+    im_h, im_w = image.shape[:2]
+
+    y_up =    max(0,    cy - h//2)
+    y_down =  min(im_h, cy + h//2)
+    x_left =  max(0,    cx - w//2)
+    x_right = min(im_w, cx + w//2)
+    
+    face_crop = image[y_up:y_down, x_left:x_right]
+
+    return face_crop
+
+
 
 class BenchmarkWriter:
     ''' Class to save a benchmark result on a file. '''
@@ -20,35 +43,11 @@ class BenchmarkWriter:
         self.logdir = logdir
         self.description = None
         self.network_model = network_model
-        # self.check_last_commented()
 
-    def check_last_commented(self):
-        if not path.exists(self.logdir):
-            print(f'Error: {self.path} does not exist.')
-            return
-        files = listdir(self.logdir)
-        # Parse the filenames
-        datetimes = list(map(lambda x: (datetime.strptime(x, FILENAME_FORMAT), x), files))
-        datetimes.sort()
-        # Read the most recent logging file
-        latest_datetime, latest_file = datetimes[-1]
-        with open(self.logdir + '/' + latest_file, 'r') as f:
-            latest_log = yaml.safe_load(f)
-
-        latest_descr = latest_log[META_KEY]['Description']
-        
-        if latest_descr != '':
-            print(f'Latest description:\n{latest_descr}')
-            self.description = input('Please enter the description for the new benchmark >> ')
-            return True
-        else:
-            print(f'Error: the latest description on "{latest_file}" is empty')
-            return False
-
-
-    def write_log(self, elapsed_times, detections, optim_params=None):
+    def write_log(self, elapsed_times, detections, optim_params=None, write_iters=True):
         metrics = {}
-        elapsed_ms = list(map(lambda x: x.seconds * 1000.0 + x.microseconds / 1000.0, elapsed_times))
+        to_ms = lambda x: x.seconds * 1000.0 + x.microseconds / 1000.0 # Auxiliary function
+        elapsed_ms = np.vectorize(to_ms)(elapsed_times)
         elapsed_mean = float(np.mean(elapsed_ms))
         elapsed_std = float(np.std(elapsed_ms))
         avg_fps = float(1000.0 / elapsed_mean)
@@ -72,16 +71,16 @@ class BenchmarkWriter:
             }
         metrics[SUMMARY_KEY] = summary
         metrics[ITERS_KEY] = {}
+        if write_iters:
+            for (idx, elp), dets in zip(enumerate(elapsed_ms), detections):
+                det = {
+                    'ElapsedMs':     elp,
+                    'NumDetections': len(dets[0])
+                }
+                metrics['3 - Iterations'][idx + 1] = det
 
-        for (idx, elp), dets in zip(enumerate(elapsed_ms), detections):
-            det = {
-                'ElapsedMs':     elp,
-                'NumDetections': len(dets[0])
-            }
-            metrics['3 - Iterations'][idx + 1] = det
+            filename = datetime.now().strftime(self.logdir + '/' + FILENAME_FORMAT)
+            with open(filename, 'w') as f:
+                yaml.dump(metrics, f)
 
-        filename = datetime.now().strftime(self.logdir + '/' + FILENAME_FORMAT)
-        with open(filename, 'w') as f:
-            yaml.dump(metrics, f)
-
-        print(f'Logfile saved on {filename}')
+            print(f'Logfile saved on {filename}')
