@@ -27,10 +27,8 @@ class ROSCam:
         A control thread is not necessary (the subscribers are controlled
         by rospy threads).
         '''
-        
         self.use_bag = rosbag_path is not None
-
-        if self.use_bag is not None:
+        if self.use_bag:
             # Create iterators for the rosbag
             self.bag = rosbag.Bag(rosbag_path)
             self.rgb_iter = self.bag.read_messages(topics['RGB'])
@@ -69,7 +67,7 @@ class ROSCam:
         self.__depth_data = depth_data
         rospy.logdebug("Depth updated")
         self.lock.release()
-        
+
     def getImages(self):
         ''' Return the latest images from a rosbag or from the topic. '''
         if self.use_bag:

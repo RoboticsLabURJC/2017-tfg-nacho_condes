@@ -28,16 +28,27 @@ class DetectionNetwork():
                 self.person_class = idx
                 break
 
-        conf = tf.ConfigProto(log_device_placement=False)
+        conf = tf.compat.v1.ConfigProto(log_device_placement=False)
         conf.gpu_options.allow_growth = True
-        # conf.gpu_options.per_process_gpu_memory_fraction = 0.67 # leave mem for tf-rt
-        self.sess = tf.Session(config=conf)
-        # Load the frozen graph from disk
-        self.sess.graph.as_default()
-        graph_def = tf.compat.v1.GraphDef()
-        with tf.gfile.GFile(net_model, 'rb') as fid:
-            graph_def.ParseFromString(fid.read())
-        tf.import_graph_def(graph_def, name='')
+        # conf.gpu_options.per_process_gpu_memory_fraction = 0.67 # leave mem for trt
+
+        detection_graph = tf.Graph()
+        with detection_graph.as_default():
+            od_graph_def = tf.compat.v1.GraphDef()
+            with tf.gfile.GFile(net_model, 'rb') as fid:
+                serialized_graph = fid.read()
+                od_graph_def.ParseFromString(serialized_graph)
+                tf.import_graph_def(od_graph_def, name=GRAPH_NS)
+
+        self.sess = tf.Session(graph=detection_graph, config=conf)
+        # graph = tf.Graph()
+        # with graph.as_default():
+        #     self.sess = tf.compat.v1.Session(config=conf)
+        #     # Load the frozen graph from disk
+        #     with tf.io.gfile.GFile(net_model, 'rb') as fid:
+        #         graph_def = tf.compat.v1.GraphDef()
+        #         graph_def.ParseFromString(fid.read())
+        #         tf.import_graph_def(graph_def, name=GRAPH_NS)
 
         # Set placeholders...
         self.image_tensor      = self.sess.graph.get_tensor_by_name('image_tensor:0')

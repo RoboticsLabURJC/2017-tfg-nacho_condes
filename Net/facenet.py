@@ -12,14 +12,26 @@ class FaceNet:
 
     def __init__(self, model_path):
         # Load the embedding network model
-        conf = tf.ConfigProto(log_device_placement=False)
+        conf = tf.compat.v1.ConfigProto(log_device_placement=False)
         conf.gpu_options.allow_growth = True
-        self.sess = tf.Session(config=conf)
-        self.sess.graph.as_default()
-        graph_def = tf.compat.v1.GraphDef()
-        with tf.gfile.GFile(model_path, 'rb') as fid:
-            graph_def.ParseFromString(fid.read())
-        tf.import_graph_def(graph_def, name='')
+
+        detection_graph = tf.compat.v1.Graph()
+        with detection_graph.as_default():
+            fn_graph_def = tf.GraphDef()
+            with tf.gfile.GFile(model_path, 'rb') as fid:
+                serialized_graph = fid.read()
+                fn_graph_def.ParseFromString(serialized_graph)
+                tf.import_graph_def(fn_graph_def, name=GRAPH_NS)
+
+        self.sess = tf.Session(graph=detection_graph, config=conf)
+
+        # graph = tf.Graph()
+        # with graph.as_default():
+        #     self.sess = tf.Session(config=conf)
+        #     with tf.gfile.GFile(model_path, 'rb') as fid:
+        #         graph_def = tf.compat.v1.GraphDef()
+        #         graph_def.ParseFromString(fid.read())
+        #     tf.import_graph_def(graph_def, name=GRAPH_NS)
 
         # Instance of the placeholders and embedding tensors
 
@@ -38,7 +50,7 @@ class FaceNet:
 
         # Dummy initialization...
         dummy_tensor = np.random.randn(SQUARE_SIZE, SQUARE_SIZE, 3)
-        self.distanceToRef(dummy_tensor, preprocess=False)
+        _ = self.distanceToRef(dummy_tensor, preprocess=False)
 
     def preprocess(self, face):
         ''' Function to preprocess a face. '''
