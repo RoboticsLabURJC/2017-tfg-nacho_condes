@@ -14,12 +14,13 @@ import cv2
 import rospy
 import yaml
 from Camera.ROSCam import ROSCam
-from faced import FaceDetector
+from detector import FaceDetector # based on a symlink to faced library path
 from imageio import imread
 from Motors.motors import Motors
 from Net.detection_network import DetectionNetwork
 from Net.facenet import FaceNet
 import utils
+
 
 if __name__ == '__main__':
     # Parameter parsing
@@ -30,7 +31,7 @@ if __name__ == '__main__':
         cfg = yaml.safe_load(f)
 
     rospy.init_node(cfg['NodeName'])
-    
+
     # Requested behavioral
     benchmark = cfg['Mode'].lower() == 'benchmark'
 
@@ -39,13 +40,23 @@ if __name__ == '__main__':
         cam = ROSCam(cfg['Topics'], cfg['RosbagFile'])
     else:
         cam = ROSCam(cfg['Topics'])
+
+    from cprint import cprint
+
     # Person detection network (SSD or (TODO) YOLO)
+    cprint.info('Loading object detector...')
     obj_det = DetectionNetwork(cfg['Networks']['DetectionModel'])
+    cprint.ok('Object detector loaded')
+
     # Face detection network. The frozen graphs can't be overridden as they are included in the
     # faced package. Use symlinks in order to exchange them for anothers.
     face_det = FaceDetector()
+
     # FaceNet embedding encoder.
+    cprint.info('Loading face encoder...')
     face_enc = FaceNet(cfg['Networks']['FaceEncoderModel'])
+    cprint.ok('Face encoder loaded')
+
 
     # Now we extract the reference face
     face_img = imread(cfg['RefFace'])
@@ -95,7 +106,7 @@ if __name__ == '__main__':
             times.append(datetime.now() - start_time)
 
         # Filter just confident faces
-        # # TODO: keep only faces inside persons 
+        # # TODO: keep only faces inside persons
         faces_flt = filter(lambda f: f[-1] > 0.9, face_detections)
         faces_cropped = [utils.crop_face(image, fdet) for fdet in faces_flt]
 

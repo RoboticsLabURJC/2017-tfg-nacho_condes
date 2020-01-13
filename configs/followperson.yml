@@ -3,7 +3,7 @@ Mode: "inference"
 Display: true
 Networks:
   DetectionModel: "optim/dl_models/ssd_mobilenet_v1_0.75_depth_coco/optimizations/FP16_50_1.pb"
-  FaceEncoderModel: "optim/dl_models/facenet_inception_resnet_vggface2/frozen_graph.pb"
+  FaceEncoderModel: "optim/dl_models/facenet_inception_resnet_vggface2/optimizations/FP32_3_1.pb"
 
 RefFace: "resources/ref_face/refface.jpg"
 
