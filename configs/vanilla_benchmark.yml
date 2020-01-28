@@ -4,8 +4,8 @@ RosbagFile: "bags/bag1.bag"
 LogDir: "logs/benchmarks"
 DisplayImages: false
 Networks:
-  DetectionModel: "Optimization/dl_models/ssd_mobilenet_v1_0.75_depth_coco/optimizations/FP16_50_1.pb"
-  FaceEncoderModel: "Optimization/dl_models/facenet_inception_resnet_vggface2/optimizations/FP32_3_1.pb"
+  DetectionModel: "Optimization/dl_models/ssd_mobilenet_v1_0.75_depth_coco/frozen_inference_graph.pb"
+  FaceEncoderModel: "Optimization/dl_models/facenet_inception_resnet_vggface2/frozen_graph.pb"
 
 RefFace: "resources/ref_face/refface.jpg"
 

@@ -10,7 +10,7 @@ from cprint import cprint
 
 from Motors import trackers
 
-class Motors():
+class Motors:
     ''' Class to process the error computed from the RGB and depth images, and send commands,
     which will be intelligently interpreted. '''
 
