@@ -1,0 +1,13 @@
+InputNames:
+  - img
+  - training
+
+OutputNames:
+  - X
+  - Y
+  - W
+  - H
+
+ImgSize:
+  Height: 50
+  Width: 50

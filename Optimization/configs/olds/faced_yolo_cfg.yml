@@ -1,0 +1,14 @@
+InputNames:
+  - img
+  - training
+
+OutputNames:
+  - prob
+  - x_center
+  - y_center
+  - w
+  - h
+
+ImgSize:
+  Height: 288
+  Width: 288
