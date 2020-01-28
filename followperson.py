@@ -14,12 +14,13 @@ import cv2
 import rospy
 import yaml
 from Camera.ROSCam import ROSCam
-from detector import FaceDetector # based on a symlink to faced library path
+from faced.detector import FaceDetector
 from imageio import imread
 from Motors.motors import Motors
 from Net.detection_network import DetectionNetwork
 from Net.facenet import FaceNet
 import utils
+from logs.benchmarker import Benchmarker
 
 
 if __name__ == '__main__':
@@ -31,79 +32,91 @@ if __name__ == '__main__':
         cfg = yaml.safe_load(f)
 
     rospy.init_node(cfg['NodeName'])
-
     # Requested behavioral
     benchmark = cfg['Mode'].lower() == 'benchmark'
 
     # Instantiations
     if benchmark:
         cam = ROSCam(cfg['Topics'], cfg['RosbagFile'])
+        n_images = cam.getBagLength(cfg['Topics'])
     else:
         cam = ROSCam(cfg['Topics'])
 
-    from cprint import cprint
+    if benchmark:
+        # Tick the zero time in order to measure instantiation times.
+        zero_time = datetime.now()
+        step_time = zero_time
 
     # Person detection network (SSD or (TODO) YOLO)
-    cprint.info('Loading object detector...')
-    obj_det = DetectionNetwork(cfg['Networks']['DetectionModel'])
-    cprint.ok('Object detector loaded')
-
+    pers_det = DetectionNetwork(cfg['Networks']['DetectionModel'])
+    if benchmark:
+        t_pers_det = datetime.now() - step_time
+        step_time = datetime.now()
     # Face detection network. The frozen graphs can't be overridden as they are included in the
     # faced package. Use symlinks in order to exchange them for anothers.
     face_det = FaceDetector()
+    if benchmark:
+        t_face_det = datetime.now() - step_time
+        step_time = datetime.now()
 
     # FaceNet embedding encoder.
-    cprint.info('Loading face encoder...')
     face_enc = FaceNet(cfg['Networks']['FaceEncoderModel'])
-    cprint.ok('Face encoder loaded')
-
-
+    
     # Now we extract the reference face
     face_img = imread(cfg['RefFace'])
     fbox = face_det.predict(face_img)
     ref_face = utils.crop_face(face_img, fbox)
     # and plug it into the encoder
     face_enc.set_reference_face(ref_face)
+    if benchmark:
+        t_face_enc = datetime.now() - step_time
+        step_time = datetime.now()
 
     # Motors instance
     # motors = Motors(cfg['Topics']['Velocity'])
-    display_imgs = True
-    MAX_ITER = 1000
-
+    display_imgs = cfg['DisplayImages']
+    
     iteration = 0
     elapsed_times = []
 
     def shtdn_hook():
-        obj_det.sess.close()
+        pers_det.sess.close()
         face_det.sess.close()
         face_enc.sess.close()
-        print("Cleaning and exiting...")
+        rospy.loginfo("Cleaning and exiting...")
+
     # Register shutdown hook
     rospy.on_shutdown(shtdn_hook)
-
+    
     if benchmark:
+        ttfi = datetime.now() - zero_time
         total_times = []
 
     while not rospy.is_shutdown():
         if benchmark:
             times = []
         # Fetch the images
-        image, depth = cam.getImages()
-
+        try:
+            image, depth = cam.getImages()
+        except StopIteration:
+            rospy.signal_shutdown("rosbag completed!!")
+            break
         if benchmark:
-            start_time = datetime.now()
-            iter_time = datetime.now()
+            # Measure the elapsed time for the entire iteration and for the
+            step_time = datetime.now()
+            iter_start = step_time
         # Make an inference on the current image
-        persons, scores, _ = obj_det.predict(image)
+        persons, scores, elapsed = pers_det.predict(image)
         if benchmark:
-            times.append(datetime.now() - start_time)
+            times.append([elapsed, len(persons)])
 
         # Detect and crop
         if benchmark:
-            start_time = datetime.now()
+            step_time = datetime.now()
         face_detections = face_det.predict(image)
         if benchmark:
-            times.append(datetime.now() - start_time)
+            elapsed = datetime.now() - step_time
+            times.append([elapsed, len(face_detections)])
 
         # Filter just confident faces
         # # TODO: keep only faces inside persons
@@ -114,13 +127,13 @@ if __name__ == '__main__':
 
 
         if benchmark:
-            start_time = datetime.now()
-        sims = map(face_enc.distanceToRef, faces_cropped)
-        for idx, sim in enumerate(sims):
-            print(idx, '\t', sim)
+            step_time = datetime.now()
+        similarities = list(map(face_enc.distanceToRef, faces_cropped))
+        # for idx, sim in enumerate(similarities):
+        #     print(idx, '\t', sim)
         if benchmark:
-            times.append(datetime.now() - start_time)
-            times.append(datetime.now() - iter_time)
+            elapsed = datetime.now() - step_time
+            times.append([elapsed, len(similarities)])
 
 
     # motors.setNetworks(network, siamese_network)
@@ -135,36 +148,45 @@ if __name__ == '__main__':
         #         vert = person[1] <= face[1] <= person[3]
         #         print horz, vert
 
-        if benchmark:
-            total_times.append(times)
 
         if display_imgs:
+            display_start = datetime.now()
             img_cp = np.copy(image)
             transformed = cv2.cvtColor(img_cp, cv2.COLOR_RGB2BGR)
-            if len(faces_cropped) > 0:
+            if faces_cropped:
                 f = cv2.cvtColor(faces_cropped[0], cv2.COLOR_RGB2BGR)
                 cv2.imshow('Face', f)
             cv2.imshow('Image', transformed)
             cv2.waitKey(30)
+            display_elapsed = [datetime.now() - display_start]
+        else:
+            display_elapsed = []
 
-        iteration += 1
-        print(iteration)
-        print('*' * 20)
 
-        if iteration == MAX_ITER:
+        if benchmark:
+            iter_elapsed = [datetime.now() - iter_start]
+            total_times.append(iter_elapsed + times + display_elapsed)
+
+
+        if benchmark:
+            iteration += 1
+            n_image = f'Image {iteration}/{n_images}'
+            print(n_image)
+            print('*' * len(n_image))
+
+        if iteration == n_images:
             rospy.signal_shutdown("Finished!!")
 
-    if benchmark:
-        # Vectorized conversion to ms
-        times_ms = utils.TO_MS(total_times)
-        t_mean = times_ms.mean(axis=0)
-        t_std = times_ms.std(axis=0)
 
-        np.set_printoptions(precision=3)
-        print('Mean:', times_ms.mean(axis=0), ' (ms)')
-        print('Dev.:', times_ms.std(axis=0),  ' (ms)')
-        print('Max.:', times_ms.max(axis=0),  ' (ms)')
-        print('Min.:', times_ms.min(axis=0),  ' (ms)')
+    # Finish the loop
+    if benchmark:
+        benchmarker = Benchmarker(cfg['LogDir'])
+        benchmarker.write_benchmark(total_times,
+                                    cfg['RosbagFile'],
+                                    cfg['Networks']['DetectionModel'],
+                                    cfg['Networks']['FaceEncoderModel'],
+                                    t_pers_det, t_face_det, t_face_enc, ttfi,
+                                    display_imgs, write_iters=True)
 
     if display_imgs:
         cv2.destroyAllWindows()

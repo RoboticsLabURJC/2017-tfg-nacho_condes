@@ -2,6 +2,7 @@ import numpy as np
 import tensorflow as tf
 import cv2
 from imageio import imread
+from cprint import cprint
 
 SQUARE_SIZE = 160
 
@@ -17,21 +18,13 @@ class FaceNet:
 
         detection_graph = tf.compat.v1.Graph()
         with detection_graph.as_default():
-            fn_graph_def = tf.GraphDef()
-            with tf.gfile.GFile(model_path, 'rb') as fid:
+            fn_graph_def = tf.compat.v1.GraphDef()
+            with tf.io.gfile.GFile(model_path, 'rb') as fid:
                 serialized_graph = fid.read()
                 fn_graph_def.ParseFromString(serialized_graph)
-                tf.import_graph_def(fn_graph_def, name=GRAPH_NS)
+                tf.import_graph_def(fn_graph_def, name='')
 
         self.sess = tf.Session(graph=detection_graph, config=conf)
-
-        # graph = tf.Graph()
-        # with graph.as_default():
-        #     self.sess = tf.Session(config=conf)
-        #     with tf.gfile.GFile(model_path, 'rb') as fid:
-        #         graph_def = tf.compat.v1.GraphDef()
-        #         graph_def.ParseFromString(fid.read())
-        #     tf.import_graph_def(graph_def, name=GRAPH_NS)
 
         # Instance of the placeholders and embedding tensors
 
@@ -39,7 +32,7 @@ class FaceNet:
         self.phase_train = self.sess.graph.get_tensor_by_name('phase_train:0')
         self.embeddings  = self.sess.graph.get_tensor_by_name('embeddings:0')
 
-        print("FaceNet ready!")
+        cprint.info("FaceNet ready!")
 
 
     def set_reference_face(self, ref_crop):

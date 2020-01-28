@@ -1,11 +1,12 @@
 import tensorflow as tf
-import tensorflow.contrib.tensorrt as trt # to solve compat. on bin graph
+#import tensorflow.contrib.tensorrt as trt # to solve compat. on bin graph
 import numpy as np
 from Camera import ROSCam
 from Net.utils import label_map_util
 import cv2
 from PIL import Image
 from datetime import datetime
+from cprint import cprint
 
 LABELS_DICT = {'voc':  ('resources/labels/pascal_label_map.pbtxt',              20),
                'coco':  ('resources/labels/mscoco_label_map.pbtxt',             80),
@@ -27,29 +28,18 @@ class DetectionNetwork():
             if class_ == 'person':
                 self.person_class = idx
                 break
-
         conf = tf.compat.v1.ConfigProto(log_device_placement=False)
         conf.gpu_options.allow_growth = True
         # conf.gpu_options.per_process_gpu_memory_fraction = 0.67 # leave mem for trt
-
         detection_graph = tf.Graph()
         with detection_graph.as_default():
             od_graph_def = tf.compat.v1.GraphDef()
-            with tf.gfile.GFile(net_model, 'rb') as fid:
+            with tf.io.gfile.GFile(net_model, 'rb') as fid:
                 serialized_graph = fid.read()
                 od_graph_def.ParseFromString(serialized_graph)
-                tf.import_graph_def(od_graph_def, name=GRAPH_NS)
+                tf.import_graph_def(od_graph_def, name='')
 
-        self.sess = tf.Session(graph=detection_graph, config=conf)
-        # graph = tf.Graph()
-        # with graph.as_default():
-        #     self.sess = tf.compat.v1.Session(config=conf)
-        #     # Load the frozen graph from disk
-        #     with tf.io.gfile.GFile(net_model, 'rb') as fid:
-        #         graph_def = tf.compat.v1.GraphDef()
-        #         graph_def.ParseFromString(fid.read())
-        #         tf.import_graph_def(graph_def, name=GRAPH_NS)
-
+        self.sess = tf.compat.v1.Session(graph=detection_graph, config=conf)
         # Set placeholders...
         self.image_tensor      = self.sess.graph.get_tensor_by_name('image_tensor:0')
         self.detection_boxes   = self.sess.graph.get_tensor_by_name('detection_boxes:0')
@@ -70,7 +60,7 @@ class DetectionNetwork():
 
         self.confidence_threshold = 0.5
 
-        print("Detection network ready!")
+        cprint.ok("Detection network ready!")
 
     def predict(self, img):
         # Reshape the latest image
