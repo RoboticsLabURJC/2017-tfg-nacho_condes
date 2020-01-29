@@ -5,7 +5,7 @@ __Project under revision__: you can find the TFG delivery [here](https://github.
 * ROS Melodic
 * OpenCV 4
 * CUDA 10.0
-* TensorRT 5.1.6
+* TensorRT 6.0.1
 
 ---
 
