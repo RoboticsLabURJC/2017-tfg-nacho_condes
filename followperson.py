@@ -20,12 +20,12 @@ from Motors.motors import Motors
 from Net.detection_network import DetectionNetwork
 from Net.facenet import FaceNet
 import utils
-from logs.benchmarker import Benchmarker
-
+from logs.benchmarkers import FollowPersonBenchmarker
+from cprint import cprint
 
 if __name__ == '__main__':
     # Parameter parsing
-    parser = argparse.ArgumentParser(description='Run the main following script')
+    parser = argparse.ArgumentParser(description='Run the main followperson script with the provided configuration')
     parser.add_argument('config_file', type=str, help='Path for the YML configuration file')
     args = parser.parse_args()
     with open(args.config_file, 'r') as f:
@@ -34,6 +34,7 @@ if __name__ == '__main__':
     rospy.init_node(cfg['NodeName'])
     # Requested behavioral
     benchmark = cfg['Mode'].lower() == 'benchmark'
+    nets = cfg['Networks']
 
     # Instantiations
     if benchmark:
@@ -48,7 +49,8 @@ if __name__ == '__main__':
         step_time = zero_time
 
     # Person detection network (SSD or (TODO) YOLO)
-    pers_det = DetectionNetwork(cfg['Networks']['DetectionModel'])
+    input_shape = (nets['DetectionHeight'], nets['DetectionWidth'], 3)
+    pers_det = DetectionNetwork(nets['Arch'], input_shape, nets['DetectionModel'])
     if benchmark:
         t_pers_det = datetime.now() - step_time
         step_time = datetime.now()
@@ -60,13 +62,14 @@ if __name__ == '__main__':
         step_time = datetime.now()
 
     # FaceNet embedding encoder.
-    face_enc = FaceNet(cfg['Networks']['FaceEncoderModel'])
-    
+    face_enc = FaceNet(nets['FaceEncoderModel'])
+
     # Now we extract the reference face
     face_img = imread(cfg['RefFace'])
     fbox = face_det.predict(face_img)
     ref_face = utils.crop_face(face_img, fbox)
     # and plug it into the encoder
+
     face_enc.set_reference_face(ref_face)
     if benchmark:
         t_face_enc = datetime.now() - step_time
@@ -75,7 +78,7 @@ if __name__ == '__main__':
     # Motors instance
     # motors = Motors(cfg['Topics']['Velocity'])
     display_imgs = cfg['DisplayImages']
-    
+
     iteration = 0
     elapsed_times = []
 
@@ -87,7 +90,7 @@ if __name__ == '__main__':
 
     # Register shutdown hook
     rospy.on_shutdown(shtdn_hook)
-    
+
     if benchmark:
         ttfi = datetime.now() - zero_time
         total_times = []
@@ -180,7 +183,7 @@ if __name__ == '__main__':
 
     # Finish the loop
     if benchmark:
-        benchmarker = Benchmarker(cfg['LogDir'])
+        benchmarker = FollowPersonBenchmarker(cfg['LogDir'])
         benchmarker.write_benchmark(total_times,
                                     cfg['RosbagFile'],
                                     cfg['Networks']['DetectionModel'],

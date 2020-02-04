@@ -10,7 +10,7 @@ import numpy as np
 
 FILENAME_FORMAT = '%Y%m%d %H%M%S.yml'
 
-TO_MS = np.vectorize(lambda x: x.seconds * 1000.0 + x.microseconds / 1000.0) # Auxiliary vectorized function
+# TO_MS = np.vectorize(lambda x: x.seconds * 1000.0 + x.microseconds / 1000.0) # Auxiliary vectorized function
 
 
 def crop_face(image, det):

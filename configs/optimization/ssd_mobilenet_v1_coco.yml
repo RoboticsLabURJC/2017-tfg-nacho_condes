@@ -1,4 +1,4 @@
-ModelName: ssd_mobilenet_v1_0.75_depth_coco
+ModelName: ssd_mobilenet_v1_coco
 SavedAs: checkpoint
 InputWidth: 300
 InputHeight: 300
@@ -14,11 +14,13 @@ OutputNames:
 
 Architecture: ssd
 WriteNodes: True
+RosBag: ../bags/bag1.bag
 
 OptimParams:
   Formats:
     - FP32
     - FP16
+    - INT8
   MSS:
     - 3
     - 20

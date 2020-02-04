@@ -1,0 +1,1 @@
+/home/nvidia/ssd/virtualenvs/tfg/lib/python3.6/site-packages/faced-0.1-py3.6.egg/faced/detector.py

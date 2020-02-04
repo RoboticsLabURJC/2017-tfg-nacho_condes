@@ -1,7 +1,6 @@
 numpy
 matplotlib
 tensorflow_gpu
-opencv_python
 Pillow
 h5py
 pycrypto
@@ -9,5 +8,4 @@ gnupg
 faced
 imageio
 matplotlib
-seaborn
 cprint

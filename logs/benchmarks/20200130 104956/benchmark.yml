@@ -1,0 +1,5403 @@
+1.- Summary:
+  1.- Configuration:
+    1.- Networks:
+      1.- PersonDetectionModel: Optimization/dl_models/ssd_mobilenet_v1_0.75_depth_coco/optimizations/FP16_50_1.pb
+      2.- FaceEncodingModel: Optimization/dl_models/facenet_inception_resnet_vggface2/optimizations/FP32_3_1.pb
+    2.- RosbagFile: bags/bag1.bag
+    3.- DisplayImages: false
+  2.- LoadTimes:
+    1.- PersonDetectionNetworkLoad: 21784.568
+    2.- FaceDetectionNetworkLoad: 1200.973
+    3.- FaceEncodingNetworkLoad: 31259.284
+    4.- TTFI: 54246.922
+  3.- Stats:
+    1.- PersonDetection:
+      1.- Mean: 88.99834344377052
+      2.- Std: 89.21476513524364
+    2.- FaceDetection:
+      1.- Mean: 30.086518432104505
+      2.- Std: 29.941340405151312
+    3.- FaceEncoding:
+      1.- Mean: 33.780430297397764
+      2.- Std: 33.20700207501705
+2.- Iterations:
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 153.596
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 92.221
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 198.997
+  4.- TotalIterationTime: 454.604
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 165.395
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.89500000000001
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 76.683
+  4.- TotalIterationTime: 314.819
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 153.502
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.638
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.216
+  4.- TotalIterationTime: 298.262
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 162.705
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.119
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.905
+  4.- TotalIterationTime: 307.128
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 169.674
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.146
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.162
+  4.- TotalIterationTime: 314.545
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 170.953
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.956
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.644
+  4.- TotalIterationTime: 312.817
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 189.069
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.856
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.675
+  4.- TotalIterationTime: 327.727
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 185.923
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.277
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.55
+  4.- TotalIterationTime: 323.776
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 190.08
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 77.185
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.91
+  4.- TotalIterationTime: 343.999
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 184.976
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.749
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.634
+  4.- TotalIterationTime: 330.013
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 182.855
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.821
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.201
+  4.- TotalIterationTime: 325.676
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 182.806
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.074
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.705
+  4.- TotalIterationTime: 323.29
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 181.742
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.523
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.293
+  4.- TotalIterationTime: 322.255
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 177.834
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.887
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.744
+  4.- TotalIterationTime: 319.527
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 173.859
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.958
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.66
+  4.- TotalIterationTime: 318.725
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 168.282
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.964
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.182
+  4.- TotalIterationTime: 314.3
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 175.385
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.571
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.786
+  4.- TotalIterationTime: 314.131
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 161.066
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.318
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.009
+  4.- TotalIterationTime: 302.993
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 191.156
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.774
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.711
+  4.- TotalIterationTime: 333.326
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 174.586
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 63.154
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.251
+  4.- TotalIterationTime: 310.5
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 180.498
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.92
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.795
+  4.- TotalIterationTime: 324.241
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 186.649
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.799
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.05
+  4.- TotalIterationTime: 330.365
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 173.797
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.431
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.115
+  4.- TotalIterationTime: 315.511
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 187.781
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.482
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.8
+  4.- TotalIterationTime: 330.613
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 175.661
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.844
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.17099999999999
+  4.- TotalIterationTime: 312.243
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 191.16
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.006
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.402
+  4.- TotalIterationTime: 330.935
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 163.703
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.565
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.894
+  4.- TotalIterationTime: 305.039
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 186.686
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.06
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.66
+  4.- TotalIterationTime: 329.659
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 181.799
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.174
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.137
+  4.- TotalIterationTime: 324.092
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 179.241
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.443
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.923
+  4.- TotalIterationTime: 321.309
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 171.454
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.759
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.283
+  4.- TotalIterationTime: 314.571
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 192.262
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.197
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.228
+  4.- TotalIterationTime: 336.524
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 199.18
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.219
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.313
+  4.- TotalIterationTime: 340.434
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 202.907
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.131
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.017
+  4.- TotalIterationTime: 345.397
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 214.31
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.232
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.244
+  4.- TotalIterationTime: 355.463
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 202.504
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.168
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.625
+  4.- TotalIterationTime: 343.965
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 203.049
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.867
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.937
+  4.- TotalIterationTime: 344.649
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 187.762
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.695
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.04
+  4.- TotalIterationTime: 327.661
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 212.643
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.851
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 70.605
+  4.- TotalIterationTime: 357.781
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 218.09
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.795
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.302
+  4.- TotalIterationTime: 361.923
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 206.744
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.961
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.868
+  4.- TotalIterationTime: 345.8
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 201.313
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.207
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.355
+  4.- TotalIterationTime: 342.667
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 204.448
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.959
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.781
+  4.- TotalIterationTime: 346.302
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 193.678
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 72.17
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.457
+  4.- TotalIterationTime: 342.514
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 211.543
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.924
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.958
+  4.- TotalIterationTime: 354.564
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 220.785
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.94
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.82
+  4.- TotalIterationTime: 365.574
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 191.761
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.238
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.569
+  4.- TotalIterationTime: 332.439
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 196.057
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.42
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.411
+  4.- TotalIterationTime: 337.717
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 189.527
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.67
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.123
+  4.- TotalIterationTime: 331.342
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 185.886
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.791
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.892
+  4.- TotalIterationTime: 326.461
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 195.633
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.32
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.813
+  4.- TotalIterationTime: 334.642
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 192.456
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.678
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.364
+  4.- TotalIterationTime: 336.17
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 195.307
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 70.041
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.581
+  4.- TotalIterationTime: 340.688
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 187.561
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.683
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.99799999999999
+  4.- TotalIterationTime: 327.128
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 185.141
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.767
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.091
+  4.- TotalIterationTime: 327.7
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 180.651
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.385
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.297
+  4.- TotalIterationTime: 321.162
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 193.184
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.129
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.67
+  4.- TotalIterationTime: 333.516
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 200.297
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.113
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.005
+  4.- TotalIterationTime: 341.067
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 196.247
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.988
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.52
+  4.- TotalIterationTime: 340.245
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 193.015
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.446
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.779
+  4.- TotalIterationTime: 330.865
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 199.428
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.866
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.785
+  4.- TotalIterationTime: 340.843
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 190.918
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 63.679
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.284
+  4.- TotalIterationTime: 327.794
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 198.382
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.783
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.17
+  4.- TotalIterationTime: 338.297
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 182.667
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.146
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.411
+  4.- TotalIterationTime: 323.056
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 185.053
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 71.118
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.249
+  4.- TotalIterationTime: 331.107
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 185.674
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 75.047
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.398
+  4.- TotalIterationTime: 335.888
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 175.055
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.768
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.183
+  4.- TotalIterationTime: 317.931
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 184.513
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.005
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.211
+  4.- TotalIterationTime: 325.598
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 193.269
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.952
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.273
+  4.- TotalIterationTime: 331.226
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 195.914
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 63.756
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.702
+  4.- TotalIterationTime: 332.001
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 186.414
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 62.333
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.97200000000001
+  4.- TotalIterationTime: 320.534
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 179.621
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.634
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.437
+  4.- TotalIterationTime: 322.605
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 189.057
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.238
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.113
+  4.- TotalIterationTime: 330.099
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 188.232
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 62.992
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.097
+  4.- TotalIterationTime: 323.164
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 188.138
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.499
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.65
+  4.- TotalIterationTime: 329.854
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 175.832
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.393
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.01
+  4.- TotalIterationTime: 318.011
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 176.871
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 63.923
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.752
+  4.- TotalIterationTime: 315.506
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 178.982
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.632
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.492
+  4.- TotalIterationTime: 318.983
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 179.794
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.874
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.661
+  4.- TotalIterationTime: 323.871
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 183.43
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.52
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.355
+  4.- TotalIterationTime: 321.127
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 186.019
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.578
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.377
+  4.- TotalIterationTime: 327.749
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 187.357
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.026
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.706
+  4.- TotalIterationTime: 327.047
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 188.101
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.147
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.796
+  4.- TotalIterationTime: 330.853
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 187.948
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.511
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.631
+  4.- TotalIterationTime: 331.112
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 181.679
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.904
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.723
+  4.- TotalIterationTime: 321.351
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 197.944
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.533
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.248
+  4.- TotalIterationTime: 339.638
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 188.645
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.441
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.264
+  4.- TotalIterationTime: 331.708
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 184.428
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.104
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.04
+  4.- TotalIterationTime: 326.748
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 180.031
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 63.994
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.285
+  4.- TotalIterationTime: 315.993
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 185.352
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.524
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.362
+  4.- TotalIterationTime: 324.345
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 203.45
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.044
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.851
+  4.- TotalIterationTime: 344.04
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 202.731
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.614
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.795
+  4.- TotalIterationTime: 340.96
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 194.989
+  2.- FacesDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 76.508
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.616
+  4.- TotalIterationTime: 343.877
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 195.454
+  2.- FacesDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 75.035
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.243
+  4.- TotalIterationTime: 342.559
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 180.68
+  2.- FacesDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 78.137
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.318
+  4.- TotalIterationTime: 332.066
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 186.435
+  2.- FacesDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 76.47
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.037
+  4.- TotalIterationTime: 336.959
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 188.65
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.53399999999999
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.514
+  4.- TotalIterationTime: 328.437
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 192.053
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.252
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.04
+  4.- TotalIterationTime: 337.407
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 185.073
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.574
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.356
+  4.- TotalIterationTime: 324.113
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 178.009
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.068
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.681
+  4.- TotalIterationTime: 321.605
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 190.773
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.008
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.532
+  4.- TotalIterationTime: 333.23
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 174.32
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.747
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.089
+  4.- TotalIterationTime: 316.38
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 179.346
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.232
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.086
+  4.- TotalIterationTime: 320.06
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 221.293
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.063
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.142
+  4.- TotalIterationTime: 362.176
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 205.752
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.587
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.714
+  4.- TotalIterationTime: 346.9
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 202.326
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.831
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.257
+  4.- TotalIterationTime: 341.899
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 203.423
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.779
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.847
+  4.- TotalIterationTime: 345.427
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 205.486
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 63.564
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.898
+  4.- TotalIterationTime: 341.556
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 172.569
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.539
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.195
+  4.- TotalIterationTime: 315.508
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 197.31
+  2.- FacesDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 79.75
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.582
+  4.- TotalIterationTime: 351.248
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 188.201
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.42099999999999
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.469
+  4.- TotalIterationTime: 327.346
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 198.201
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.44200000000001
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.818
+  4.- TotalIterationTime: 338.717
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 188.479
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.526
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.432
+  4.- TotalIterationTime: 331.905
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 204.666
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.688
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.699
+  4.- TotalIterationTime: 345.87
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 197.546
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.238
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.884
+  4.- TotalIterationTime: 339.438
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 194.42
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.694
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.547
+  4.- TotalIterationTime: 337.169
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 195.635
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.66
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.714
+  4.- TotalIterationTime: 338.814
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 194.021
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.682
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.746
+  4.- TotalIterationTime: 335.087
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 196.891
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.013
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.219
+  4.- TotalIterationTime: 340.467
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 202.003
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.901
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.228
+  4.- TotalIterationTime: 342.934
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 216.912
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.962
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.599
+  4.- TotalIterationTime: 357.021
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 202.158
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 74.465
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.924
+  4.- TotalIterationTime: 349.656
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 202.135
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.92
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.353
+  4.- TotalIterationTime: 342.121
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 193.587
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.44
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.866
+  4.- TotalIterationTime: 332.461
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 182.542
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.551
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.153
+  4.- TotalIterationTime: 324.56
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 184.298
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.881
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.354
+  4.- TotalIterationTime: 325.679
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 189.691
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.556
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.614
+  4.- TotalIterationTime: 333.692
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 195.363
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 63.441
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.388
+  4.- TotalIterationTime: 331.249
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 194.031
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.946
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.76
+  4.- TotalIterationTime: 335.443
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 173.92
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 63.698
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.374
+  4.- TotalIterationTime: 313.213
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 182.964
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.915
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.396
+  4.- TotalIterationTime: 323.713
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 187.084
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.145
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.033
+  4.- TotalIterationTime: 329.545
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 193.503
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.436
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.667
+  4.- TotalIterationTime: 331.429
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 186.858
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.692
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.373
+  4.- TotalIterationTime: 328.268
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 192.322
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.767
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.13
+  4.- TotalIterationTime: 333.452
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 187.881
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 71.414
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.218
+  4.- TotalIterationTime: 335.427
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 179.236
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.728
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.811
+  4.- TotalIterationTime: 322.138
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 179.129
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.983
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.574
+  4.- TotalIterationTime: 319.571
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 190.106
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.906
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.918
+  4.- TotalIterationTime: 327.415
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 208.751
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.476
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.452
+  4.- TotalIterationTime: 352.5
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 200.944
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.72
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.375
+  4.- TotalIterationTime: 343.746
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 192.198
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.789
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.172
+  4.- TotalIterationTime: 334.351
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 204.672
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.122
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.15
+  4.- TotalIterationTime: 343.937
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 185.69
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.271
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.517
+  4.- TotalIterationTime: 325.708
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 201.238
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.563
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.387
+  4.- TotalIterationTime: 342.368
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 187.644
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 63.781
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.05
+  4.- TotalIterationTime: 325.731
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 193.876
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.662
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.593
+  4.- TotalIterationTime: 337.034
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 208.5
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.096
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.057
+  4.- TotalIterationTime: 348.956
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 181.255
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 63.646
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.976
+  4.- TotalIterationTime: 319.129
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 191.85
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.136
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.384
+  4.- TotalIterationTime: 328.422
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 205.826
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.212
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.43
+  4.- TotalIterationTime: 348.478
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 190.497
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.909
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.154
+  4.- TotalIterationTime: 332.075
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 176.438
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.928
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.293
+  4.- TotalIterationTime: 315.783
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 188.734
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.263
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.413
+  4.- TotalIterationTime: 326.649
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 194.16
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.569
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.274
+  4.- TotalIterationTime: 337.791
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 195.637
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.806
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.362
+  4.- TotalIterationTime: 339.523
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 203.24
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.845
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 71.891
+  4.- TotalIterationTime: 349.833
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 183.25
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.289
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.193
+  4.- TotalIterationTime: 321.937
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 200.582
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.075
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 72.564
+  4.- TotalIterationTime: 347.483
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 196.623
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.911
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 70.851
+  4.- TotalIterationTime: 342.538
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 192.096
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 70.091
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.8
+  4.- TotalIterationTime: 336.163
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 197.913
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 63.138
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.678
+  4.- TotalIterationTime: 334.302
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 195.506
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.52199999999999
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.377
+  4.- TotalIterationTime: 334.044
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 198.392
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.227
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.541
+  4.- TotalIterationTime: 337.736
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 176.855
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.306
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.394
+  4.- TotalIterationTime: 315.131
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 190.342
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.17
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.772
+  4.- TotalIterationTime: 330.71
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 198.119
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.878
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.68
+  4.- TotalIterationTime: 339.424
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 187.829
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.529
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.919
+  4.- TotalIterationTime: 328.604
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 174.941
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.185
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.436
+  4.- TotalIterationTime: 317.203
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 192.32
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.323
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.555
+  4.- TotalIterationTime: 333.724
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 197.112
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.447
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.371
+  4.- TotalIterationTime: 338.719
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 186.286
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.503
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.458
+  4.- TotalIterationTime: 325.424
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 187.377
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.737
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.907
+  4.- TotalIterationTime: 328.278
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 205.089
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.306
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.88
+  4.- TotalIterationTime: 344.624
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 190.016
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.455
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.845
+  4.- TotalIterationTime: 329.926
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 185.482
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.856
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.732
+  4.- TotalIterationTime: 325.38
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 188.566
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.872
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.257
+  4.- TotalIterationTime: 329.977
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 193.668
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.332
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.353
+  4.- TotalIterationTime: 332.441
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 196.753
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.595
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.228
+  4.- TotalIterationTime: 338.77
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 177.853
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.233
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.593
+  4.- TotalIterationTime: 315.983
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 206.664
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 70.51
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.564
+  4.- TotalIterationTime: 351.541
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 192.412
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.903
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.301
+  4.- TotalIterationTime: 334.834
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 204.253
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 70.386
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.443
+  4.- TotalIterationTime: 348.413
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 213.139
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.86
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.916
+  4.- TotalIterationTime: 353.634
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 187.162
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.304
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.416
+  4.- TotalIterationTime: 326.128
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 179.114
+  2.- FacesDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 74.938
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.75
+  4.- TotalIterationTime: 328.858
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 189.29
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.03
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.7
+  4.- TotalIterationTime: 328.512
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 187.25
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.25
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.133
+  4.- TotalIterationTime: 326.76
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 197.242
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.153
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.664
+  4.- TotalIterationTime: 335.782
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 188.907
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.165
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.351
+  4.- TotalIterationTime: 327.804
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 199.02
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.179
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 70.868
+  4.- TotalIterationTime: 341.862
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 198.686
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 62.965
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.903
+  4.- TotalIterationTime: 334.569
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 180.122
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.131
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.33
+  4.- TotalIterationTime: 320.33
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 173.704
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.703
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.068
+  4.- TotalIterationTime: 316.948
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 173.92
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.229
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.311
+  4.- TotalIterationTime: 310.9
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 163.728
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.297
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.283
+  4.- TotalIterationTime: 302.586
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 135.15
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.496
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 70.125
+  4.- TotalIterationTime: 277.566
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 144.603
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.497
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.114
+  4.- TotalIterationTime: 285.287
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 140.736
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.201
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.887
+  4.- TotalIterationTime: 281.518
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 148.929
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 70.241
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.67
+  4.- TotalIterationTime: 291.655
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 158.06
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 70.22
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.616
+  4.- TotalIterationTime: 301.383
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 147.573
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.711
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.51
+  4.- TotalIterationTime: 290.42
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 152.516
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.584
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.041
+  4.- TotalIterationTime: 288.951
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 159.093
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.064
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.66
+  4.- TotalIterationTime: 299.165
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 150.132
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.291
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.342
+  4.- TotalIterationTime: 293.757
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 173.069
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.459
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.038
+  4.- TotalIterationTime: 314.915
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 158.008
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.924
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.59
+  4.- TotalIterationTime: 300.655
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 169.799
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.121
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.626
+  4.- TotalIterationTime: 312.469
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 152.419
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.485
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.949
+  4.- TotalIterationTime: 292.118
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 157.574
+  2.- FacesDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 74.762
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.277
+  4.- TotalIterationTime: 305.322
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 160.648
+  2.- FacesDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 75.52
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.052
+  4.- TotalIterationTime: 308.718
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 157.497
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.024
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.504
+  4.- TotalIterationTime: 297.649
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 144.037
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.779
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.473
+  4.- TotalIterationTime: 282.727
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 142.8
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.835
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.115
+  4.- TotalIterationTime: 283.455
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 133.42
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 71.871
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.833
+  4.- TotalIterationTime: 278.369
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 159.48
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 62.177
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.198
+  4.- TotalIterationTime: 298.148
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 130.314
+  2.- FacesDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 73.528
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.531
+  4.- TotalIterationTime: 276.482
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 158.327
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.485
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.147
+  4.- TotalIterationTime: 297.386
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 135.225
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.066
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.102
+  4.- TotalIterationTime: 275.394
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 158.214
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.757
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.353
+  4.- TotalIterationTime: 298.836
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 154.352
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.27799999999999
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.094
+  4.- TotalIterationTime: 295.269
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 151.492
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.452
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.729
+  4.- TotalIterationTime: 294.543
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 137.9
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.156
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.79
+  4.- TotalIterationTime: 278.996
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 160.27
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 70.793
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 70.516
+  4.- TotalIterationTime: 309.277
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 170.853
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 71.865
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.086
+  4.- TotalIterationTime: 317.431
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 159.708
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 63.42
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.533
+  4.- TotalIterationTime: 298.069
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 157.054
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 71.557
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.598
+  4.- TotalIterationTime: 303.95
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 166.571
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 77.377
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.64
+  4.- TotalIterationTime: 318.241
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 145.74
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.516
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.78
+  4.- TotalIterationTime: 288.037
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 142.795
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.935
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.932
+  4.- TotalIterationTime: 283.346
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 146.816
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.233
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.487
+  4.- TotalIterationTime: 287.216
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 151.738
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.645
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.845
+  4.- TotalIterationTime: 290.244
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 148.647
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.146
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.327
+  4.- TotalIterationTime: 288.815
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 185.335
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.555
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.264
+  4.- TotalIterationTime: 327.985
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 134.794
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.03
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.629
+  4.- TotalIterationTime: 274.353
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 136.044
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.446
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.053
+  4.- TotalIterationTime: 277.117
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 141.484
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 63.034
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.273
+  4.- TotalIterationTime: 280.482
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 165.876
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 63.961
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.07
+  4.- TotalIterationTime: 302.984
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 191.797
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.661
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.661
+  4.- TotalIterationTime: 328.866
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 182.774
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.617
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.474
+  4.- TotalIterationTime: 321.96
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 212.743
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.628
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.586
+  4.- TotalIterationTime: 351.042
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 187.608
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.24
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.031
+  4.- TotalIterationTime: 325.004
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 163.928
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.221
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.876
+  4.- TotalIterationTime: 305.428
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 178.565
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.012
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.431
+  4.- TotalIterationTime: 318.765
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 175.01
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.42
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.157
+  4.- TotalIterationTime: 316.309
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 179.976
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.386
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.433
+  4.- TotalIterationTime: 317.026
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 171.028
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.802
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.114
+  4.- TotalIterationTime: 310.514
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 168.085
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.426
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.612
+  4.- TotalIterationTime: 310.936
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 165.309
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.035
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.494
+  4.- TotalIterationTime: 308.852
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 167.221
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.535
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.377
+  4.- TotalIterationTime: 309.378
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 164.893
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.189
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.886
+  4.- TotalIterationTime: 307.251
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 185.556
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.373
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.186
+  4.- TotalIterationTime: 326.788
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 182.01
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.685
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.953
+  4.- TotalIterationTime: 320.27
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 171.933
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.581
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.893
+  4.- TotalIterationTime: 313.173
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 181.19
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.877
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.861
+  4.- TotalIterationTime: 322.998
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 175.402
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 63.909
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.434
+  4.- TotalIterationTime: 311.986
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 188.625
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.172
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.656
+  4.- TotalIterationTime: 330.348
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 192.713
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.146
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.65
+  4.- TotalIterationTime: 333.344
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 170.52
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.744
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.938
+  4.- TotalIterationTime: 309.115
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 189.6
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.734
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.721
+  4.- TotalIterationTime: 332.926
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 172.652
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 63.737
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.383
+  4.- TotalIterationTime: 310.02
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 175.861
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.933
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.963
+  4.- TotalIterationTime: 317.571
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 173.784
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.295
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.756
+  4.- TotalIterationTime: 315.32
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 175.225
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.831
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.85
+  4.- TotalIterationTime: 317.34
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 166.358
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.904
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.125
+  4.- TotalIterationTime: 306.278
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 180.666
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.15100000000001
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.347
+  4.- TotalIterationTime: 319.263
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 172.063
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 70.854
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.079
+  4.- TotalIterationTime: 317.289
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 175.427
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.268
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.294
+  4.- TotalIterationTime: 315.117
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 183.412
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.618
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.084
+  4.- TotalIterationTime: 324.994
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 170.853
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.811
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.529
+  4.- TotalIterationTime: 309.292
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 175.97
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.443
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.275
+  4.- TotalIterationTime: 314.339
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 178.606
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.471
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.891
+  4.- TotalIterationTime: 319.606
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 191.327
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.27
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.876
+  4.- TotalIterationTime: 335.116
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 186.874
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.494
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.501
+  4.- TotalIterationTime: 327.478
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 193.56
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.727
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.25
+  4.- TotalIterationTime: 333.239
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 188.067
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.826
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.369
+  4.- TotalIterationTime: 327.475
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 198.749
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.451
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.407
+  4.- TotalIterationTime: 336.418
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 193.474
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.105
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.001
+  4.- TotalIterationTime: 332.855
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 211.489
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.583
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.195
+  4.- TotalIterationTime: 354.037
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 188.995
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.831
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.447
+  4.- TotalIterationTime: 328.066
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 186.312
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 63.984
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.732
+  4.- TotalIterationTime: 323.421
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 178.619
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.574
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.696
+  4.- TotalIterationTime: 318.796
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 195.014
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 76.307
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.534
+  4.- TotalIterationTime: 346.189
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 203.389
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.796
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.575
+  4.- TotalIterationTime: 343.874
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 212.046
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.282
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.584
+  4.- TotalIterationTime: 350.984
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 199.477
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 70.202
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.517
+  4.- TotalIterationTime: 342.883
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 198.61
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.558
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.78
+  4.- TotalIterationTime: 339.168
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 198.882
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.095
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.536
+  4.- TotalIterationTime: 340.537
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 193.335
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.729
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.442
+  4.- TotalIterationTime: 330.875
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 194.364
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.997
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.692
+  4.- TotalIterationTime: 333.221
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 207.386
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.433
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.526
+  4.- TotalIterationTime: 348.237
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 207.645
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.953
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.299
+  4.- TotalIterationTime: 348.687
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 213.17
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.826
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.378
+  4.- TotalIterationTime: 356.493
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 203.317
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.924
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.537
+  4.- TotalIterationTime: 343.949
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 187.843
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.369
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.46
+  4.- TotalIterationTime: 329.896
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 226.198
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.006
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.967
+  4.- TotalIterationTime: 367.253
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 213.219
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.287
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.463
+  4.- TotalIterationTime: 350.086
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 225.261
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.762
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.602
+  4.- TotalIterationTime: 367.462
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 220.112
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.441
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.392
+  4.- TotalIterationTime: 362.055
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 185.766
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.739
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.959
+  4.- TotalIterationTime: 326.074
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 205.014
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.814
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.757
+  4.- TotalIterationTime: 348.38
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 196.334
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.488
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.648
+  4.- TotalIterationTime: 336.498
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 187.398
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.141
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.502
+  4.- TotalIterationTime: 330.823
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 189.195
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.438
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.846
+  4.- TotalIterationTime: 327.281
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 215.077
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.461
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.668
+  4.- TotalIterationTime: 353.301
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 179.363
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.313
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.704
+  4.- TotalIterationTime: 323.607
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 193.97
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.631
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.044
+  4.- TotalIterationTime: 338.492
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 169.009
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.62
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.415
+  4.- TotalIterationTime: 309.045
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 205.42
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.718
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.596
+  4.- TotalIterationTime: 348.579
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 221.737
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 75.175
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.454
+  4.- TotalIterationTime: 373.724
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 195.092
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.637
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.516
+  4.- TotalIterationTime: 335.051
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 190.464
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.399
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.938
+  4.- TotalIterationTime: 333.613
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 185.032
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 70.908
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.099
+  4.- TotalIterationTime: 329.032
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 190.184
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.553
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.155
+  4.- TotalIterationTime: 333.575
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 181.377
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 62.59
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.427
+  4.- TotalIterationTime: 318.592
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 178.352
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.998
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.952
+  4.- TotalIterationTime: 319.309
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 177.265
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.392
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.784
+  4.- TotalIterationTime: 317.544
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 178.88
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 62.722
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.588
+  4.- TotalIterationTime: 315.872
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 189.168
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.519
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.699
+  4.- TotalIterationTime: 329.506
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 196.975
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.859
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.89
+  4.- TotalIterationTime: 340.436
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 175.42
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.562
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.678
+  4.- TotalIterationTime: 316.633
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 184.985
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.243
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.662
+  4.- TotalIterationTime: 324.901
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 191.291
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.931
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.554
+  4.- TotalIterationTime: 332.512
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 187.183
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.24
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.9
+  4.- TotalIterationTime: 325.383
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 179.891
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 63.18
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.559
+  4.- TotalIterationTime: 315.6
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 188.013
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.618
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.294
+  4.- TotalIterationTime: 327.994
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 204.082
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.817
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.87899999999999
+  4.- TotalIterationTime: 344.401
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 190.036
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.915
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.587
+  4.- TotalIterationTime: 331.778
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 186.921
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.005
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.76
+  4.- TotalIterationTime: 326.775
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 186.034
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.003
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.879
+  4.- TotalIterationTime: 326.544
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 187.705
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.975
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.321
+  4.- TotalIterationTime: 331.803
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 186.777
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.36
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.377
+  4.- TotalIterationTime: 327.082
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 181.265
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.19
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.75200000000001
+  4.- TotalIterationTime: 319.889
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 170.053
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.399
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.874
+  4.- TotalIterationTime: 312.998
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 164.314
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.324
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.059
+  4.- TotalIterationTime: 304.804
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 154.674
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.466
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.254
+  4.- TotalIterationTime: 295.586
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 164.932
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.022
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.123
+  4.- TotalIterationTime: 305.819
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 165.596
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.277
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.526
+  4.- TotalIterationTime: 308.065
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 157.048
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.76
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.251
+  4.- TotalIterationTime: 299.025
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 157.867
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.385
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.425
+  4.- TotalIterationTime: 300.416
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 160.926
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.411
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.759
+  4.- TotalIterationTime: 301.178
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 173.904
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.556
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.965
+  4.- TotalIterationTime: 317.507
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 156.006
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.378
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.684
+  4.- TotalIterationTime: 296.891
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 161.75
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.353
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.278
+  4.- TotalIterationTime: 302.485
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 159.871
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 63.548
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.772
+  4.- TotalIterationTime: 296.176
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 161.313
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.449
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.563
+  4.- TotalIterationTime: 299.03
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 180.472
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.854
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.727
+  4.- TotalIterationTime: 322.744
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 171.718
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.688
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.04
+  4.- TotalIterationTime: 308.401
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 175.688
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.849
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.611
+  4.- TotalIterationTime: 319.383
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 173.123
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.492
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.951
+  4.- TotalIterationTime: 313.497
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 184.616
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.819
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 71.884
+  4.- TotalIterationTime: 330.41
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 189.506
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 71.273
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.232
+  4.- TotalIterationTime: 336.07
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 172.763
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 70.927
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.244
+  4.- TotalIterationTime: 316.195
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 177.549
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.029
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.213
+  4.- TotalIterationTime: 316.411
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 222.929
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.656
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.312
+  4.- TotalIterationTime: 366.69
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 187.188
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.036
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.421
+  4.- TotalIterationTime: 329.395
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 177.631
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.205
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.093
+  4.- TotalIterationTime: 316.842
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 186.664
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.953
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.011
+  4.- TotalIterationTime: 330.405
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 187.677
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.654
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.661
+  4.- TotalIterationTime: 330.429
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 185.814
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.843
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.27
+  4.- TotalIterationTime: 327.396
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 163.742
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.951
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.112
+  4.- TotalIterationTime: 303.954
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 190.543
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.438
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.618
+  4.- TotalIterationTime: 327.794
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 182.499
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.981
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.326
+  4.- TotalIterationTime: 324.009
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 189.485
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.228
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.111
+  4.- TotalIterationTime: 334.022
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 187.835
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.18
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.685
+  4.- TotalIterationTime: 328.451
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 178.648
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.509
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.824
+  4.- TotalIterationTime: 321.578
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 177.756
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 63.121
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.686
+  4.- TotalIterationTime: 314.694
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 175.598
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.746
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.814
+  4.- TotalIterationTime: 315.767
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 182.181
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.787
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.813
+  4.- TotalIterationTime: 324.772
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 174.292
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.063
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.01
+  4.- TotalIterationTime: 313.005
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 181.222
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 63.062
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.229
+  4.- TotalIterationTime: 317.171
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 170.918
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.799
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.608
+  4.- TotalIterationTime: 314.012
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 190.177
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.521
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 70.365
+  4.- TotalIterationTime: 332.225
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 173.245
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.278
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.593
+  4.- TotalIterationTime: 313.263
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 195.377
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.996
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.986
+  4.- TotalIterationTime: 340.234
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 165.998
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.467
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.465
+  4.- TotalIterationTime: 306.751
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 183.477
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.929
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.557
+  4.- TotalIterationTime: 323.616
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 167.459
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.388
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.006
+  4.- TotalIterationTime: 308.074
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 180.196
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.867
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.207
+  4.- TotalIterationTime: 319.447
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 169.912
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 70.02
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.159
+  4.- TotalIterationTime: 314.062
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 168.393
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.996
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.45
+  4.- TotalIterationTime: 312.072
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 168.787
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.78999999999999
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.087
+  4.- TotalIterationTime: 305.825
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 170.621
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.574
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.137
+  4.- TotalIterationTime: 311.775
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 168.689
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.919
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 71.787
+  4.- TotalIterationTime: 316.096
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 180.379
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.138
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.644
+  4.- TotalIterationTime: 321.995
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 177.36
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.875
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.26
+  4.- TotalIterationTime: 318.301
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 185.023
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.548
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.011
+  4.- TotalIterationTime: 325.481
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 194.746
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.886
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.247
+  4.- TotalIterationTime: 340.679
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 194.943
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.577
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.399
+  4.- TotalIterationTime: 335.614
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 189.821
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.925
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.246
+  4.- TotalIterationTime: 327.855
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 186.526
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.779
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.492
+  4.- TotalIterationTime: 327.568
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 189.609
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.198
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.249
+  4.- TotalIterationTime: 330.263
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 178.554
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.621
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.897
+  4.- TotalIterationTime: 318.972
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 184.137
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.654
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.099
+  4.- TotalIterationTime: 326.103
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 196.687
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.315
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.101
+  4.- TotalIterationTime: 340.816
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 212.242
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.574
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.577
+  4.- TotalIterationTime: 353.197
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 194.663
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 62.751
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.361
+  4.- TotalIterationTime: 331.853
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 214.476
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.053
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.378
+  4.- TotalIterationTime: 353.157
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 203.909
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.377
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.267
+  4.- TotalIterationTime: 348.257
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 176.458
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.346
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.455
+  4.- TotalIterationTime: 319.38
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 171.12
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.383
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.417
+  4.- TotalIterationTime: 314.161
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 167.672
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.932
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.938
+  4.- TotalIterationTime: 307.731
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 172.672
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.542
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.421
+  4.- TotalIterationTime: 313.39
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 176.329
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.76
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.751
+  4.- TotalIterationTime: 318.51
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 153.331
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.94
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 70.155
+  4.- TotalIterationTime: 298.854
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 187.086
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.601
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.351
+  4.- TotalIterationTime: 329.121
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 182.206
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.61
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 71.432
+  4.- TotalIterationTime: 327.203
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 177.518
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 63.927
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.643
+  4.- TotalIterationTime: 315.612
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 179.825
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.975
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.49
+  4.- TotalIterationTime: 319.26
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 161.191
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.221
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.593
+  4.- TotalIterationTime: 302.087
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 171.054
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.219
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.708
+  4.- TotalIterationTime: 313.656
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 169.714
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.327
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 70.821
+  4.- TotalIterationTime: 314.973
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 174.209
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.693
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.204
+  4.- TotalIterationTime: 316.897
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 170.01
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.9
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.777
+  4.- TotalIterationTime: 311.426
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 171.199
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.719
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.735
+  4.- TotalIterationTime: 313.458
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 178.292
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.704
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.466
+  4.- TotalIterationTime: 320.611
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 186.762
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.989
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.56
+  4.- TotalIterationTime: 332.041
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 172.446
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.851
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.012
+  4.- TotalIterationTime: 313.425
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 171.699
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.707
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.929
+  4.- TotalIterationTime: 311.703
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 175.964
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.681
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.383
+  4.- TotalIterationTime: 316.11
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 175.641
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.667
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.239
+  4.- TotalIterationTime: 314.34
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 175.023
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.021
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.252
+  4.- TotalIterationTime: 315.518
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 160.456
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.46
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.31
+  4.- TotalIterationTime: 300.335
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 196.611
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.17
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.309
+  4.- TotalIterationTime: 336.838
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 197.845
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.625
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.541
+  4.- TotalIterationTime: 339.933
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 194.422
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.14
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.61
+  4.- TotalIterationTime: 334.327
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 196.939
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.405
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.357
+  4.- TotalIterationTime: 336.62
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 192.706
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.709
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.711
+  4.- TotalIterationTime: 334.877
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 197.531
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.98
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.254
+  4.- TotalIterationTime: 338.89
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 202.018
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.242
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.953
+  4.- TotalIterationTime: 343.462
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 194.246
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.434
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.452
+  4.- TotalIterationTime: 335.426
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 207.128
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.729
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.622
+  4.- TotalIterationTime: 348.804
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 216.054
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.37
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.672
+  4.- TotalIterationTime: 358.884
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 187.704
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.145
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.333
+  4.- TotalIterationTime: 326.795
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 184.502
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.248
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.687
+  4.- TotalIterationTime: 326.124
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 195.548
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.298
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.354
+  4.- TotalIterationTime: 337.468
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 208.33
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.025
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.154
+  4.- TotalIterationTime: 350.307
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 189.395
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.6
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.559
+  4.- TotalIterationTime: 332.678
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 191.823
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.11
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 71.685
+  4.- TotalIterationTime: 340.147
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 180.326
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.815
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.197
+  4.- TotalIterationTime: 322.573
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 196.625
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.979
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.053
+  4.- TotalIterationTime: 339.79
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 208.814
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.854
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.677
+  4.- TotalIterationTime: 350.135
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 204.326
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 70.499
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.846
+  4.- TotalIterationTime: 346.771
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 199.061
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.252
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.633
+  4.- TotalIterationTime: 340.552
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 198.874
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.188
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.412
+  4.- TotalIterationTime: 343.368
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 196.678
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 70.519
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.452
+  4.- TotalIterationTime: 342.464
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 208.689
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.147
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.284
+  4.- TotalIterationTime: 347.22
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 185.919
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.469
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.866
+  4.- TotalIterationTime: 326.514
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 188.292
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.224
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.473
+  4.- TotalIterationTime: 333.788
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 190.35
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 70.135
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 70.902
+  4.- TotalIterationTime: 338.991
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 185.566
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.943
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.577
+  4.- TotalIterationTime: 325.213
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 187.452
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.22
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.48
+  4.- TotalIterationTime: 328.239
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 190.11
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.004
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.127
+  4.- TotalIterationTime: 328.403
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 201.386
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.263
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.718
+  4.- TotalIterationTime: 342.504
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 197.957
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.743
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.072
+  4.- TotalIterationTime: 338.561
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 195.6
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.61
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.791
+  4.- TotalIterationTime: 339.106
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 186.85
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.241
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.77
+  4.- TotalIterationTime: 329.089
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 185.96
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.754
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.522
+  4.- TotalIterationTime: 328.311
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 201.591
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.221
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.071
+  4.- TotalIterationTime: 341.601
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 191.36
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.135
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.262
+  4.- TotalIterationTime: 330.475
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 202.739
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.465
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.785
+  4.- TotalIterationTime: 343.703
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 181.968
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.678
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.58
+  4.- TotalIterationTime: 322.544
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 186.343
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.917
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.102
+  4.- TotalIterationTime: 328.082
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 182.387
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.716
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.548
+  4.- TotalIterationTime: 323.491
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 191.915
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.16
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.797
+  4.- TotalIterationTime: 333.194
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 181.638
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.186
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.152
+  4.- TotalIterationTime: 319.628
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 188.334
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.391
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.01
+  4.- TotalIterationTime: 327.159
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 196.905
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.149
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.142
+  4.- TotalIterationTime: 338.315
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 198.212
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.606
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.393
+  4.- TotalIterationTime: 340.561
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 202.573
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.926
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.869
+  4.- TotalIterationTime: 341.414
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 206.509
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.674
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.106
+  4.- TotalIterationTime: 351.114
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 198.742
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.493
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.15
+  4.- TotalIterationTime: 341.128
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 206.078
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.953
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 70.053
+  4.- TotalIterationTime: 350.333
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 200.99
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.698
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.85
+  4.- TotalIterationTime: 343.638
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 170.284
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.881
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.353
+  4.- TotalIterationTime: 311.296
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 188.039
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.289
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.536
+  4.- TotalIterationTime: 328.513
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 189.836
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.919
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.409
+  4.- TotalIterationTime: 328.254
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 188.391
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 63.463
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.9
+  4.- TotalIterationTime: 325.425
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 177.702
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 63.69
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.002
+  4.- TotalIterationTime: 314.506
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 172.909
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.674
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.176
+  4.- TotalIterationTime: 313.828
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 203.161
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.887
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.978
+  4.- TotalIterationTime: 343.814
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 189.848
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 70.726
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.88
+  4.- TotalIterationTime: 332.473
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 172.703
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.235
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.818
+  4.- TotalIterationTime: 313.858
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 186.051
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.315
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.906
+  4.- TotalIterationTime: 327.181
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 174.902
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.198
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.213
+  4.- TotalIterationTime: 318.425
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 205.538
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.504
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.594
+  4.- TotalIterationTime: 345.813
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 192.746
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.579
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.048
+  4.- TotalIterationTime: 331.391
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 201.716
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.41499999999999
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.188
+  4.- TotalIterationTime: 341.702
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 194.334
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.091
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.489
+  4.- TotalIterationTime: 332.672
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 164.901
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.593
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.069
+  4.- TotalIterationTime: 306.836
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 183.961
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.483
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.746
+  4.- TotalIterationTime: 327.671
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 182.841
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 63.529
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.98
+  4.- TotalIterationTime: 321.043
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 176.223
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.362
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.502
+  4.- TotalIterationTime: 319.804
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 191.139
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.876
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.691
+  4.- TotalIterationTime: 331.473
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 177.587
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.458
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.138
+  4.- TotalIterationTime: 318.134
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 191.003
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.78
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.937
+  4.- TotalIterationTime: 331.409
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 188.9
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.902
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.784
+  4.- TotalIterationTime: 329.549
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 197.573
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.796
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.436
+  4.- TotalIterationTime: 340.87
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 178.032
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.38
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.843
+  4.- TotalIterationTime: 319.491
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 221.738
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.353
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.975
+  4.- TotalIterationTime: 364.77
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 191.969
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.114
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.741
+  4.- TotalIterationTime: 332.487
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 180.576
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.76
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.344
+  4.- TotalIterationTime: 321.77
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 178.928
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.066
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.752
+  4.- TotalIterationTime: 322.255
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 186.48
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.241
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.427
+  4.- TotalIterationTime: 327.813
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 185.642
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.116
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.112
+  4.- TotalIterationTime: 324.393
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 195.383
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.988
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.776
+  4.- TotalIterationTime: 333.28
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 178.824
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 70.407
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.848
+  4.- TotalIterationTime: 323.84
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 205.322
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.44
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.022
+  4.- TotalIterationTime: 344.284
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 201.984
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.62700000000001
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.899
+  4.- TotalIterationTime: 340.237
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 183.746
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.1
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.331
+  4.- TotalIterationTime: 321.658
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 187.648
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.81
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.01
+  4.- TotalIterationTime: 329.933
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 201.422
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 63.751
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.277
+  4.- TotalIterationTime: 337.972
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 207.116
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.273
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.554
+  4.- TotalIterationTime: 347.676
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 197.54
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.341
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.293
+  4.- TotalIterationTime: 337.331
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 189.227
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 63.801
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.291
+  4.- TotalIterationTime: 327.645
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 211.605
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.161
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.574
+  4.- TotalIterationTime: 352.001
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 206.266
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.27
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.497
+  4.- TotalIterationTime: 349.711
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 189.491
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.48
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.765
+  4.- TotalIterationTime: 329.974
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 206.262
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.385
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.429
+  4.- TotalIterationTime: 348.829
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 187.296
+  2.- FacesDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 78.898
+  3.- FacesEncoding:
+    1.- NumDetections: 2
+    2.- TotalTime: 131.85
+  4.- TotalIterationTime: 403.898
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 184.81
+  2.- FacesDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 80.071
+  3.- FacesEncoding:
+    1.- NumDetections: 2
+    2.- TotalTime: 133.455
+  4.- TotalIterationTime: 404.11
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 197.812
+  2.- FacesDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 73.601
+  3.- FacesEncoding:
+    1.- NumDetections: 2
+    2.- TotalTime: 131.533
+  4.- TotalIterationTime: 408.749
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 184.658
+  2.- FacesDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 78.289
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.956
+  4.- TotalIterationTime: 335.991
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 197.77
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.642
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.068
+  4.- TotalIterationTime: 339.196
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 185.219
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.872
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.929
+  4.- TotalIterationTime: 326.677
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 197.494
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 63.986
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.786
+  4.- TotalIterationTime: 334.86
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 190.423
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.128
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.568
+  4.- TotalIterationTime: 329.893
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 166.055
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.793
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.632
+  4.- TotalIterationTime: 306.669
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 191.048
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 69.025
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.905
+  4.- TotalIterationTime: 334.725
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 193.95
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.976
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.972
+  4.- TotalIterationTime: 336.089
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 176.144
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.138
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.595
+  4.- TotalIterationTime: 319.159
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 178.993
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.097
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.591
+  4.- TotalIterationTime: 319.103
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 180.96
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.13
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.658
+  4.- TotalIterationTime: 317.729
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 194.263
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.656
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 68.215
+  4.- TotalIterationTime: 336.913
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 204.225
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 64.988
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 70.064
+  4.- TotalIterationTime: 345.503
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 192.476
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 63.218
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.112
+  4.- TotalIterationTime: 329.44
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 172.28
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 67.806
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.632
+  4.- TotalIterationTime: 312.934
+- 1.- PersonsDetection:
+    1.- NumDetections: 2
+    2.- TotalTime: 183.598
+  2.- FacesDetection:
+    1.- NumDetections: 1
+    2.- TotalTime: 66.169
+  3.- FacesEncoding:
+    1.- NumDetections: 1
+    2.- TotalTime: 65.789
+  4.- TotalIterationTime: 321.761

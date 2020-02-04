@@ -1,19 +1,29 @@
+import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
-import seaborn as sns
+#import seaborn as sns
 import yaml
-from utils import TO_MS
-from os import listdir, path, makedirs
+# from utils import TO_MS
+from PIL import Image
+from Net.detection_network import DetectionNetwork
+from Camera.ROSCam import ROSCam
+from os import listdir, path, makedirs, chdir
+from cprint import cprint
+#sns.set()
+
+# Change the working directory in order to have access to the modules
+# abspath = path.abspath(__file__)
+# dname = path.dirname(abspath)
+# chdir(dname)
 
 
-sns.set()
+FILENAME_FORMAT = '%Y%m%d %H%M%S'
+TO_MS = np.vectorize(lambda x: x.seconds * 1000.0 + x.microseconds / 1000.0) # Auxiliary vectorized function
 
-FILENAME_FORMAT = '%Y%m%d %H%M%S.yml'
-# TO_MS = np.vectorize(lambda x: x.seconds * 1000.0 + x.microseconds / 1000.0) # Auxiliary vectorized function
 
-class Benchmarker:
-    ''' Writer for a benchmark using a certain configuration. '''
+class FollowPersonBenchmarker:
+    ''' Writer for a full-set benchmark using a certain configuration. '''
     def __init__(self, logdir):
         self.logdir = logdir
         self.description = None
@@ -119,7 +129,7 @@ class Benchmarker:
             benchmark['2.- Iterations'] = iterations
 
         if dirname is None:
-            dirname = path.join(self.logdir, datetime.now().strftime(FILENAME_FORMAT))
+            dirname = datetime.now().strftime(FILENAME_FORMAT)
 
         dirname = path.join(self.logdir, dirname)
         if not path.exists(dirname):
@@ -167,3 +177,122 @@ class Benchmarker:
         ax.set_ylabel('Time (ms)')
         figname = path.join(dirname, 'face_encoding.png')
         fig.savefig(figname)
+
+
+class SingleModelBenchmarker:
+    ''' Writer for a single model benchmark using. '''
+    def __init__(self, save_in):
+        self.save_in = save_in
+
+    def write_benchmark(self, total_times, model_name, rosbag_file, arch, write_iters=True):
+        # Convert the lapse measurements to milliseconds
+        total_ms = np.array(total_times)
+        total_ms[:, 0] = TO_MS(total_ms[:, 0])
+        # Filter the non-empty inferences
+        nonempty = total_ms[total_ms[:, 1] > 0]
+
+        dic = {}
+        # Metadata
+        dic['1.- Meta'] = {
+            '1.- ModelName': model_name,
+            '2.- ROSBag': rosbag_file,
+            '3.- Architecture': arch,
+        }
+        # Stats
+        stats_total = {
+            'Mean': f'{total_ms[:, 0].mean():.4f} ms',
+            'Std':  f'{total_ms[:, 0].std():.4f} ms',
+        }
+
+        stats_nonempty = {
+            'Mean': f'{nonempty[:, 0].mean():.4f} ms',
+            'Std':  f'{nonempty[:, 0].std():.4f} ms',
+        }
+
+        dic['2.- Stats'] = {
+            '1.- Total': stats_total,
+            '2.- NonEmpty': stats_nonempty,
+        }
+
+        if write_iters:
+            iters = {}
+            for idx, iteration in enumerate(total_ms):
+                iters[idx] = {
+                    'InferenceTime': f'{iteration[0]:.4f} ms',
+                    'NumDetections': iteration[1]
+                }
+            dic['3.- Iterations'] = iters
+
+        # Finally, dump the results into the requested file.
+        with open(self.save_in, 'w') as f:
+            yaml.dump(dic, f)
+        cprint.ok(f'Benchmark written in {self.save_in}!')
+
+
+
+
+if __name__ == '__main__':
+    description = ''' If this script is called, it will perform inferences using
+    a provided model on a test rosbag, and will store the results into a YML file. '''
+
+    parser = argparse.ArgumentParser(description=description)
+    parser.add_argument('pb_file', type=str, help='.pb file containing the frozen graph to test')
+    parser.add_argument('arch', type=str, help='Detection architecture of the provided network')
+    parser.add_argument('input_width', type=int, help='Width of the network input')
+    parser.add_argument('input_height', type=int, help='Height of the network input')
+    parser.add_argument('rosbag_file', type=str, help='ROSBag to perform the test on')
+    parser.add_argument('save_in', type=str, help='File in which write the output result')
+    # Parse the args
+    args = parser.parse_args()
+
+    # print('\n' * 10, listdir('.'), '\n' * 20)
+    pb_file = args.pb_file
+    rosbag_file = args.rosbag_file
+
+    # Check the existance of the files
+    if not path.isfile(pb_file):
+        cprint.fatal(f'Error: the provided frozen graph {pb_file} does not exist', interrupt=True)
+    if not path.isfile(rosbag_file):
+        cprint.fatal(f'Error: the provided ROSBag {rosbag_file} does not exist', interrupt=True)
+
+
+    save_in = args.save_in
+    arch = args.arch
+    input_w, input_h = args.input_width, args.input_height
+
+    # Create the ROSCam to open the ROSBag
+    topics = {'RGB': '/camera/rgb/image_raw',
+              'Depth': '/camera/depth_registered/image_raw'}
+    cam = ROSCam(topics, rosbag_file)
+
+    # Load the model into a network object to perform inferences
+    input_shape = (input_h, input_w, 3)
+    net = DetectionNetwork(arch, input_shape, pb_file)
+
+    total_times = []
+    # Iterate the rosbag
+    bag_len = cam.getBagLength(topics)
+    img_count = 0
+    while True:
+        cprint.info(f'\tImage {img_count}/{bag_len}')
+        img_count += 1
+        try:
+            image, _ = cam.getImages()
+        except StopIteration:
+            cprint.ok('ROSBag completed!')
+            break
+
+        image = np.array(Image.fromarray(image).resize(input_shape[:2]))
+        if arch == 'ssd':
+            feed_dict = {net.image_tensor: image[None, ...]}
+            out, elapsed = net._forward_pass(feed_dict)
+            n_dets = int(out[-1][0])
+        else:
+            cprint.fatal(f'{arch} benchmarking not implemented yet!', interrupt=True)
+
+        total_times.append([elapsed, n_dets])
+
+    # The benchmark is finished. We log the results now.
+    net.sess.close()
+    writer = SingleModelBenchmarker(save_in)
+    writer.write_benchmark(total_times, pb_file, rosbag_file, arch, write_iters=True)

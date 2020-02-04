@@ -2,7 +2,10 @@ NodeName: "followperson"
 Mode: "inference"
 DisplayImages: true
 Networks:
+  Arch: ssd
   DetectionModel: "optim/dl_models/ssd_mobilenet_v1_0.75_depth_coco/frozen_graph.pb"
+  DetectionWidth: 300
+  DetectionHeight: 300
   FaceEncoderModel: "optim/dl_models/facenet_inception_resnet_vggface2/frozen_graph.pb"
 
 RefFace: "resources/ref_face/refface.jpg"

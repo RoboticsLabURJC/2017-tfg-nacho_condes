@@ -61,7 +61,7 @@ class ROSCam:
         rgb_info = bag_topics[1][topics['RGB']]
         message_count = rgb_info[1]
 
-        return int(message_count / 2)
+        return message_count
 
 
     def __rgbCallback(self, rgb_data):
@@ -79,8 +79,6 @@ class ROSCam:
     def getImages(self):
         ''' Return the latest images from a rosbag or from the topic. '''
         if self.use_bag:
-            kk = next(self.rgb_iter)
-            # print(type(kk), len(kk))
             _, rgb_data, _ = next(self.rgb_iter)
             _, depth_data, _ = next(self.depth_iter)
         else:
