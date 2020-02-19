@@ -1,11 +1,10 @@
 import tensorflow as tf
 import tensorflow.contrib.tensorrt as trt # to solve compat. on bin graph
 import numpy as np
-from Camera import ROSCam
-from Net.utils import label_map_util
-import cv2
+# import cv2
 from os import path
 from PIL import Image
+from Net.utils import label_map_util, nms
 from datetime import datetime
 from cprint import cprint
 
@@ -18,7 +17,7 @@ LABELS_DICT = {'voc':   ('resources/labels/pascal_label_map.pbtxt',             
 
 
 class DetectionNetwork():
-    def __init__(self, arch, input_shape, net_model_path=None, graph_def=None, dataset='coco', confidence_threshold=0.5, path_to_root=None):
+    def __init__(self, arch, input_shape, frozen_graph=None, graph_def=None, dataset='coco', confidence_threshold=0.5, path_to_root=None):
         labels_file, max_num_classes = LABELS_DICT[dataset]
         # Append dir if provided (calling from another directory)
         if path_to_root is not None:
@@ -37,17 +36,18 @@ class DetectionNetwork():
         # Graph load. We allocate the session attribute
         self.sess = None
 
-        if net_model_path is not None:
+        if frozen_graph is not None:
             # Read the graph def from a .pb file
             graph_def = tf.compat.v1.GraphDef()
-            cprint.info(f'Loading the graph def from {net_model_path}')
-            with tf.io.gfile.GFile(net_model_path, 'rb') as f:
+            cprint.info(f'Loading the graph def from {frozen_graph}')
+            with tf.io.gfile.GFile(frozen_graph, 'rb') as f:
                 graph_def.ParseFromString(f.read())
 
             self.load_graphdef(graph_def)
 
         elif graph_def is not None:
             cprint.info('Loading the provided graph def...')
+
             self.load_graphdef(graph_def)
 
         else:
@@ -80,16 +80,14 @@ class DetectionNetwork():
 
             self.dummy_feed = {self.image_tensor: dummy_tensor}
 
-        elif self.arch == 'yolov3':
+        elif self.arch in ['yolov3', 'yolov3tiny']:
             # Inputs
-            self.input_data = self.sess.graph.get_tensor_by_name('input/input_data:0')
+            self.inputs = self.sess.graph.get_tensor_by_name('inputs:0')
             # Outputs
-            self.sbbox = self.sess.graph.get_tensor_by_name('pred_sbbox/concat_2:0')
-            self.mbbox = self.sess.graph.get_tensor_by_name('pred_mbbox/concat_2:0')
-            self.lbbox = self.sess.graph.get_tensor_by_name('pred_lbbox/concat_2:0')
+            self.output_boxes = self.sess.graph.get_tensor_by_name('output_boxes:0')
 
-            self.output_tensors = [self.sbbox, self.mbbox, self.lbbox]
-            self.dummy_feed = {self.input_data: dummy_tensor}
+            self.output_tensors = [self.output_boxes]
+            self.dummy_feed = {self.inputs: dummy_tensor}
 
         elif self.arch == 'face_yolo':
             # Inputs
@@ -105,19 +103,29 @@ class DetectionNetwork():
             self.output_tensors = [self.prob, self.x_center, self.y_center, self.w, self.h]
             self.dummy_feed = {self.input: dummy_tensor, self.training: False}
 
-
         elif self.arch == 'face_corrector':
             # Inputs
             self.input = self.sess.graph.get_tensor_by_name('img:0')
             self.training = self.sess.graph.get_tensor_by_name('training:0')
             # Outputs
-            self.X = self.sess.graph.get_tensor_by_name('prob:0')
-            self.Y = self.sess.graph.get_tensor_by_name('x_center:0')
-            self.W = self.sess.graph.get_tensor_by_name('w:0')
-            self.H = self.sess.graph.get_tensor_by_name('h:0')
+            self.X = self.sess.graph.get_tensor_by_name('X:0')
+            self.Y = self.sess.graph.get_tensor_by_name('Y:0')
+            self.W = self.sess.graph.get_tensor_by_name('W:0')
+            self.H = self.sess.graph.get_tensor_by_name('H:0')
             self.output_tensors = [self.X, self.Y, self.W, self.H]
             self.dummy_feed = {self.input: dummy_tensor, self.training: False}
 
+        elif self.arch == 'facenet':
+            # Inputs
+            self.input = self.sess.graph.get_tensor_by_name('input:0')
+            self.phase_train = self.sess.graph.get_tensor_by_name('phase_train:0')
+            # Outputs
+            self.embeddings = self.sess.graph.get_tensor_by_name('embeddings:0')
+            self.output_tensors = [self.embeddings]
+            self.dummy_feed = {self.input: dummy_tensor, self.phase_train: False}
+
+        else:
+            cprint.fatal(f'Architecture {arch} is not supported', interrupt=True)
         # First (slower) inference
         cprint.info("Performing first inference...")
         self._forward_pass(self.dummy_feed)
@@ -146,28 +154,47 @@ class DetectionNetwork():
         return out, elapsed
 
     def predict(self, img):
+        # Reshape the latest image
+        orig_h, orig_w = img.shape[:2]
+        input_image = Image.fromarray(img)
+        img_rsz = np.array(input_image.resize(self.input_shape[:2]))
+
         if self.arch == 'ssd':
-            # Reshape the latest image
-            orig_h, orig_w = img.shape[:2]
-            input_image = Image.fromarray(img)
-            img_rsz = np.array(input_image.resize(self.input_shape[:2]))
             (boxes, scores, predictions, _), elapsed = self._forward_pass({self.image_tensor: img_rsz[None, ...]})
-            boxes = np.squeeze(boxes)
-            scores = np.squeeze(scores)
-            predictions = np.squeeze(predictions).astype(int)
+            boxes = list(np.squeeze(boxes))
+            scores = list(np.squeeze(scores))
+            classes = list(np.squeeze(predictions).astype(int))
 
-            mask1 = scores > self.confidence_threshold # bool array
-            mask2 = [idx == self.person_class for idx in predictions]
+            boxes_full = []
+            for box, prob, cls in zip(boxes, scores, classes):
+                if prob >= self.confidence_threshold and cls == self.person_class:
+                    # x, y, w, h, p
+                    y1 = box[0] * orig_h
+                    x1 = box[1] * orig_w
+                    y2 = box[2] * orig_h
+                    x2 = box[3] * orig_w
 
-            # Total mask: CONFIDENT PERSONS
-            mask = np.logical_and(mask1, mask2)
-            # Boxes containing only confident humans
-            boxes = boxes[mask]
-            # Box format and reshaping...
-            boxes_ = [[b[1] * orig_w, b[0] * orig_h,
-                    b[3] * orig_w, b[2] * orig_h] for b in boxes]
-            scores_ = scores[mask]
+                    boxes_full.append([x1, y1, x2-x1, y2-y1, prob])
 
-            return np.array(boxes_), np.array(scores_), elapsed
+            return boxes_full, elapsed
+
+        elif self.arch in ['yolov3', 'yolov3tiny']:
+            detections, elapsed = self._forward_pass({self.inputs: img_rsz[None, ...]})
+            # Nxkx(NUM_CLASSES + 4 + 1) tensor containing k detections for each n-th image
+            # NMS
+            detections_filtered = nms.non_max_suppression(detections[0], 0.5)
+            # The key 0 contains the human detections.
+            persons = detections_filtered[0]
+            boxes_full = []
+            for box, prob in persons:
+                if prob >= self.confidence_threshold:
+                    # x, y, w, h, p
+                    x1 = box[0] / self.input_shape[1] * orig_w
+                    y1 = box[1] / self.input_shape[0] * orig_h
+                    x2 = box[2] / self.input_shape[1] * orig_w
+                    y2 = box[3] / self.input_shape[0] * orig_h
+                    boxes_full.append([x1, y1, x2-x1, y2-y1, prob])
+            return boxes_full, elapsed
+            # return detections_normalized, elapsed
         else:
             cprint.warn(f'Implement predict for {self.arch}!!')

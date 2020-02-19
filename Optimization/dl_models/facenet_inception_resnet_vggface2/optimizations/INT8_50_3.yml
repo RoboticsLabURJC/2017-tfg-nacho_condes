@@ -1,0 +1,1989 @@
+1.- Meta:
+  1.- ModelName: Optimization/dl_models/facenet_inception_resnet_vggface2/optimizations/INT8_50_3.pb
+  2.- ROSBag: ../bags/bag3.bag
+  3.- Architecture: facenet
+2.- Stats:
+  1.- Total:
+    Mean: 65.6623 ms
+    Std: 7.0539 ms
+  2.- NonEmpty:
+    Mean: 65.6623 ms
+    Std: 7.0539 ms
+3.- Iterations:
+  0:
+    InferenceTime: 81.0190 ms
+    NumDetections: 1
+  1:
+    InferenceTime: 59.5060 ms
+    NumDetections: 1
+  2:
+    InferenceTime: 62.1030 ms
+    NumDetections: 1
+  3:
+    InferenceTime: 58.4110 ms
+    NumDetections: 1
+  4:
+    InferenceTime: 74.4750 ms
+    NumDetections: 1
+  5:
+    InferenceTime: 59.2170 ms
+    NumDetections: 1
+  6:
+    InferenceTime: 58.3400 ms
+    NumDetections: 1
+  7:
+    InferenceTime: 58.7700 ms
+    NumDetections: 1
+  8:
+    InferenceTime: 71.7170 ms
+    NumDetections: 1
+  9:
+    InferenceTime: 59.5780 ms
+    NumDetections: 1
+  10:
+    InferenceTime: 72.5010 ms
+    NumDetections: 1
+  11:
+    InferenceTime: 59.3440 ms
+    NumDetections: 1
+  12:
+    InferenceTime: 79.6480 ms
+    NumDetections: 1
+  13:
+    InferenceTime: 59.8970 ms
+    NumDetections: 1
+  14:
+    InferenceTime: 81.3770 ms
+    NumDetections: 1
+  15:
+    InferenceTime: 70.8920 ms
+    NumDetections: 1
+  16:
+    InferenceTime: 58.6680 ms
+    NumDetections: 1
+  17:
+    InferenceTime: 78.0480 ms
+    NumDetections: 1
+  18:
+    InferenceTime: 59.0830 ms
+    NumDetections: 1
+  19:
+    InferenceTime: 58.6220 ms
+    NumDetections: 1
+  20:
+    InferenceTime: 75.5500 ms
+    NumDetections: 1
+  21:
+    InferenceTime: 59.1690 ms
+    NumDetections: 1
+  22:
+    InferenceTime: 72.2660 ms
+    NumDetections: 1
+  23:
+    InferenceTime: 70.9150 ms
+    NumDetections: 1
+  24:
+    InferenceTime: 59.2080 ms
+    NumDetections: 1
+  25:
+    InferenceTime: 73.1930 ms
+    NumDetections: 1
+  26:
+    InferenceTime: 73.6930 ms
+    NumDetections: 1
+  27:
+    InferenceTime: 68.3820 ms
+    NumDetections: 1
+  28:
+    InferenceTime: 58.9780 ms
+    NumDetections: 1
+  29:
+    InferenceTime: 59.0290 ms
+    NumDetections: 1
+  30:
+    InferenceTime: 70.8480 ms
+    NumDetections: 1
+  31:
+    InferenceTime: 74.8740 ms
+    NumDetections: 1
+  32:
+    InferenceTime: 59.0340 ms
+    NumDetections: 1
+  33:
+    InferenceTime: 60.1610 ms
+    NumDetections: 1
+  34:
+    InferenceTime: 79.1910 ms
+    NumDetections: 1
+  35:
+    InferenceTime: 71.6480 ms
+    NumDetections: 1
+  36:
+    InferenceTime: 58.7820 ms
+    NumDetections: 1
+  37:
+    InferenceTime: 76.9840 ms
+    NumDetections: 1
+  38:
+    InferenceTime: 76.8560 ms
+    NumDetections: 1
+  39:
+    InferenceTime: 58.9620 ms
+    NumDetections: 1
+  40:
+    InferenceTime: 59.4340 ms
+    NumDetections: 1
+  41:
+    InferenceTime: 59.3730 ms
+    NumDetections: 1
+  42:
+    InferenceTime: 74.8640 ms
+    NumDetections: 1
+  43:
+    InferenceTime: 59.7640 ms
+    NumDetections: 1
+  44:
+    InferenceTime: 58.9950 ms
+    NumDetections: 1
+  45:
+    InferenceTime: 71.8410 ms
+    NumDetections: 1
+  46:
+    InferenceTime: 57.5220 ms
+    NumDetections: 1
+  47:
+    InferenceTime: 69.9920 ms
+    NumDetections: 1
+  48:
+    InferenceTime: 72.7140 ms
+    NumDetections: 1
+  49:
+    InferenceTime: 59.2030 ms
+    NumDetections: 1
+  50:
+    InferenceTime: 72.8910 ms
+    NumDetections: 1
+  51:
+    InferenceTime: 59.6180 ms
+    NumDetections: 1
+  52:
+    InferenceTime: 74.5030 ms
+    NumDetections: 1
+  53:
+    InferenceTime: 58.8940 ms
+    NumDetections: 1
+  54:
+    InferenceTime: 75.5710 ms
+    NumDetections: 1
+  55:
+    InferenceTime: 58.9760 ms
+    NumDetections: 1
+  56:
+    InferenceTime: 69.7820 ms
+    NumDetections: 1
+  57:
+    InferenceTime: 75.4400 ms
+    NumDetections: 1
+  58:
+    InferenceTime: 59.2030 ms
+    NumDetections: 1
+  59:
+    InferenceTime: 59.7510 ms
+    NumDetections: 1
+  60:
+    InferenceTime: 59.1100 ms
+    NumDetections: 1
+  61:
+    InferenceTime: 69.1200 ms
+    NumDetections: 1
+  62:
+    InferenceTime: 71.3060 ms
+    NumDetections: 1
+  63:
+    InferenceTime: 58.0830 ms
+    NumDetections: 1
+  64:
+    InferenceTime: 57.4710 ms
+    NumDetections: 1
+  65:
+    InferenceTime: 57.7160 ms
+    NumDetections: 1
+  66:
+    InferenceTime: 77.0930 ms
+    NumDetections: 1
+  67:
+    InferenceTime: 69.5670 ms
+    NumDetections: 1
+  68:
+    InferenceTime: 76.0010 ms
+    NumDetections: 1
+  69:
+    InferenceTime: 60.0820 ms
+    NumDetections: 1
+  70:
+    InferenceTime: 59.2720 ms
+    NumDetections: 1
+  71:
+    InferenceTime: 71.2070 ms
+    NumDetections: 1
+  72:
+    InferenceTime: 59.6730 ms
+    NumDetections: 1
+  73:
+    InferenceTime: 69.1920 ms
+    NumDetections: 1
+  74:
+    InferenceTime: 72.5860 ms
+    NumDetections: 1
+  75:
+    InferenceTime: 71.7680 ms
+    NumDetections: 1
+  76:
+    InferenceTime: 59.0790 ms
+    NumDetections: 1
+  77:
+    InferenceTime: 58.1090 ms
+    NumDetections: 1
+  78:
+    InferenceTime: 67.9910 ms
+    NumDetections: 1
+  79:
+    InferenceTime: 71.5320 ms
+    NumDetections: 1
+  80:
+    InferenceTime: 57.3890 ms
+    NumDetections: 1
+  81:
+    InferenceTime: 71.4620 ms
+    NumDetections: 1
+  82:
+    InferenceTime: 58.4040 ms
+    NumDetections: 1
+  83:
+    InferenceTime: 59.6380 ms
+    NumDetections: 1
+  84:
+    InferenceTime: 71.0140 ms
+    NumDetections: 1
+  85:
+    InferenceTime: 73.4600 ms
+    NumDetections: 1
+  86:
+    InferenceTime: 72.1510 ms
+    NumDetections: 1
+  87:
+    InferenceTime: 59.2180 ms
+    NumDetections: 1
+  88:
+    InferenceTime: 58.3120 ms
+    NumDetections: 1
+  89:
+    InferenceTime: 59.3730 ms
+    NumDetections: 1
+  90:
+    InferenceTime: 59.0560 ms
+    NumDetections: 1
+  91:
+    InferenceTime: 63.8090 ms
+    NumDetections: 1
+  92:
+    InferenceTime: 72.9410 ms
+    NumDetections: 1
+  93:
+    InferenceTime: 72.1510 ms
+    NumDetections: 1
+  94:
+    InferenceTime: 59.2320 ms
+    NumDetections: 1
+  95:
+    InferenceTime: 59.9460 ms
+    NumDetections: 1
+  96:
+    InferenceTime: 80.1570 ms
+    NumDetections: 1
+  97:
+    InferenceTime: 70.6210 ms
+    NumDetections: 1
+  98:
+    InferenceTime: 69.6430 ms
+    NumDetections: 1
+  99:
+    InferenceTime: 57.2930 ms
+    NumDetections: 1
+  100:
+    InferenceTime: 68.4020 ms
+    NumDetections: 1
+  101:
+    InferenceTime: 71.4180 ms
+    NumDetections: 1
+  102:
+    InferenceTime: 73.0810 ms
+    NumDetections: 1
+  103:
+    InferenceTime: 59.2050 ms
+    NumDetections: 1
+  104:
+    InferenceTime: 71.4540 ms
+    NumDetections: 1
+  105:
+    InferenceTime: 60.2430 ms
+    NumDetections: 1
+  106:
+    InferenceTime: 58.9750 ms
+    NumDetections: 1
+  107:
+    InferenceTime: 72.1270 ms
+    NumDetections: 1
+  108:
+    InferenceTime: 59.4140 ms
+    NumDetections: 1
+  109:
+    InferenceTime: 70.6670 ms
+    NumDetections: 1
+  110:
+    InferenceTime: 60.3310 ms
+    NumDetections: 1
+  111:
+    InferenceTime: 58.8380 ms
+    NumDetections: 1
+  112:
+    InferenceTime: 58.9470 ms
+    NumDetections: 1
+  113:
+    InferenceTime: 58.8090 ms
+    NumDetections: 1
+  114:
+    InferenceTime: 59.1620 ms
+    NumDetections: 1
+  115:
+    InferenceTime: 59.2130 ms
+    NumDetections: 1
+  116:
+    InferenceTime: 58.8280 ms
+    NumDetections: 1
+  117:
+    InferenceTime: 59.7170 ms
+    NumDetections: 1
+  118:
+    InferenceTime: 71.7680 ms
+    NumDetections: 1
+  119:
+    InferenceTime: 59.4700 ms
+    NumDetections: 1
+  120:
+    InferenceTime: 70.6540 ms
+    NumDetections: 1
+  121:
+    InferenceTime: 58.0830 ms
+    NumDetections: 1
+  122:
+    InferenceTime: 57.4240 ms
+    NumDetections: 1
+  123:
+    InferenceTime: 58.3560 ms
+    NumDetections: 1
+  124:
+    InferenceTime: 72.4770 ms
+    NumDetections: 1
+  125:
+    InferenceTime: 71.8040 ms
+    NumDetections: 1
+  126:
+    InferenceTime: 59.1590 ms
+    NumDetections: 1
+  127:
+    InferenceTime: 70.1810 ms
+    NumDetections: 1
+  128:
+    InferenceTime: 70.6660 ms
+    NumDetections: 1
+  129:
+    InferenceTime: 72.6580 ms
+    NumDetections: 1
+  130:
+    InferenceTime: 72.6750 ms
+    NumDetections: 1
+  131:
+    InferenceTime: 70.3370 ms
+    NumDetections: 1
+  132:
+    InferenceTime: 59.0550 ms
+    NumDetections: 1
+  133:
+    InferenceTime: 58.7540 ms
+    NumDetections: 1
+  134:
+    InferenceTime: 73.6500 ms
+    NumDetections: 1
+  135:
+    InferenceTime: 58.8470 ms
+    NumDetections: 1
+  136:
+    InferenceTime: 59.2650 ms
+    NumDetections: 1
+  137:
+    InferenceTime: 59.1320 ms
+    NumDetections: 1
+  138:
+    InferenceTime: 59.4610 ms
+    NumDetections: 1
+  139:
+    InferenceTime: 59.3460 ms
+    NumDetections: 1
+  140:
+    InferenceTime: 59.6850 ms
+    NumDetections: 1
+  141:
+    InferenceTime: 59.4560 ms
+    NumDetections: 1
+  142:
+    InferenceTime: 57.7070 ms
+    NumDetections: 1
+  143:
+    InferenceTime: 59.4730 ms
+    NumDetections: 1
+  144:
+    InferenceTime: 71.5740 ms
+    NumDetections: 1
+  145:
+    InferenceTime: 68.9580 ms
+    NumDetections: 1
+  146:
+    InferenceTime: 59.8740 ms
+    NumDetections: 1
+  147:
+    InferenceTime: 70.3800 ms
+    NumDetections: 1
+  148:
+    InferenceTime: 64.4620 ms
+    NumDetections: 1
+  149:
+    InferenceTime: 70.6960 ms
+    NumDetections: 1
+  150:
+    InferenceTime: 70.6060 ms
+    NumDetections: 1
+  151:
+    InferenceTime: 69.3190 ms
+    NumDetections: 1
+  152:
+    InferenceTime: 59.3900 ms
+    NumDetections: 1
+  153:
+    InferenceTime: 75.0560 ms
+    NumDetections: 1
+  154:
+    InferenceTime: 59.0240 ms
+    NumDetections: 1
+  155:
+    InferenceTime: 57.5360 ms
+    NumDetections: 1
+  156:
+    InferenceTime: 72.4620 ms
+    NumDetections: 1
+  157:
+    InferenceTime: 71.4160 ms
+    NumDetections: 1
+  158:
+    InferenceTime: 70.8330 ms
+    NumDetections: 1
+  159:
+    InferenceTime: 58.9520 ms
+    NumDetections: 1
+  160:
+    InferenceTime: 69.6120 ms
+    NumDetections: 1
+  161:
+    InferenceTime: 70.2710 ms
+    NumDetections: 1
+  162:
+    InferenceTime: 70.4660 ms
+    NumDetections: 1
+  163:
+    InferenceTime: 60.1510 ms
+    NumDetections: 1
+  164:
+    InferenceTime: 57.6440 ms
+    NumDetections: 1
+  165:
+    InferenceTime: 70.9270 ms
+    NumDetections: 1
+  166:
+    InferenceTime: 59.9610 ms
+    NumDetections: 1
+  167:
+    InferenceTime: 70.6550 ms
+    NumDetections: 1
+  168:
+    InferenceTime: 59.1950 ms
+    NumDetections: 1
+  169:
+    InferenceTime: 73.1000 ms
+    NumDetections: 1
+  170:
+    InferenceTime: 70.4330 ms
+    NumDetections: 1
+  171:
+    InferenceTime: 73.0690 ms
+    NumDetections: 1
+  172:
+    InferenceTime: 75.9690 ms
+    NumDetections: 1
+  173:
+    InferenceTime: 59.4780 ms
+    NumDetections: 1
+  174:
+    InferenceTime: 57.4700 ms
+    NumDetections: 1
+  175:
+    InferenceTime: 59.6510 ms
+    NumDetections: 1
+  176:
+    InferenceTime: 76.6710 ms
+    NumDetections: 1
+  177:
+    InferenceTime: 74.6410 ms
+    NumDetections: 1
+  178:
+    InferenceTime: 59.8310 ms
+    NumDetections: 1
+  179:
+    InferenceTime: 70.7170 ms
+    NumDetections: 1
+  180:
+    InferenceTime: 59.3710 ms
+    NumDetections: 1
+  181:
+    InferenceTime: 59.2250 ms
+    NumDetections: 1
+  182:
+    InferenceTime: 58.4750 ms
+    NumDetections: 1
+  183:
+    InferenceTime: 59.7010 ms
+    NumDetections: 1
+  184:
+    InferenceTime: 58.9780 ms
+    NumDetections: 1
+  185:
+    InferenceTime: 73.6420 ms
+    NumDetections: 1
+  186:
+    InferenceTime: 58.4330 ms
+    NumDetections: 1
+  187:
+    InferenceTime: 59.3880 ms
+    NumDetections: 1
+  188:
+    InferenceTime: 59.0430 ms
+    NumDetections: 1
+  189:
+    InferenceTime: 80.5660 ms
+    NumDetections: 1
+  190:
+    InferenceTime: 68.5440 ms
+    NumDetections: 1
+  191:
+    InferenceTime: 68.9370 ms
+    NumDetections: 1
+  192:
+    InferenceTime: 69.6770 ms
+    NumDetections: 1
+  193:
+    InferenceTime: 70.0530 ms
+    NumDetections: 1
+  194:
+    InferenceTime: 59.0640 ms
+    NumDetections: 1
+  195:
+    InferenceTime: 71.3450 ms
+    NumDetections: 1
+  196:
+    InferenceTime: 68.2970 ms
+    NumDetections: 1
+  197:
+    InferenceTime: 70.8700 ms
+    NumDetections: 1
+  198:
+    InferenceTime: 69.0370 ms
+    NumDetections: 1
+  199:
+    InferenceTime: 59.2990 ms
+    NumDetections: 1
+  200:
+    InferenceTime: 59.2520 ms
+    NumDetections: 1
+  201:
+    InferenceTime: 58.0730 ms
+    NumDetections: 1
+  202:
+    InferenceTime: 84.6510 ms
+    NumDetections: 1
+  203:
+    InferenceTime: 71.5360 ms
+    NumDetections: 1
+  204:
+    InferenceTime: 59.5870 ms
+    NumDetections: 1
+  205:
+    InferenceTime: 74.1680 ms
+    NumDetections: 1
+  206:
+    InferenceTime: 59.4310 ms
+    NumDetections: 1
+  207:
+    InferenceTime: 65.0050 ms
+    NumDetections: 1
+  208:
+    InferenceTime: 58.2990 ms
+    NumDetections: 1
+  209:
+    InferenceTime: 77.9320 ms
+    NumDetections: 1
+  210:
+    InferenceTime: 71.2330 ms
+    NumDetections: 1
+  211:
+    InferenceTime: 58.1140 ms
+    NumDetections: 1
+  212:
+    InferenceTime: 57.7120 ms
+    NumDetections: 1
+  213:
+    InferenceTime: 72.4120 ms
+    NumDetections: 1
+  214:
+    InferenceTime: 58.6880 ms
+    NumDetections: 1
+  215:
+    InferenceTime: 70.1440 ms
+    NumDetections: 1
+  216:
+    InferenceTime: 58.5920 ms
+    NumDetections: 1
+  217:
+    InferenceTime: 59.6150 ms
+    NumDetections: 1
+  218:
+    InferenceTime: 58.9670 ms
+    NumDetections: 1
+  219:
+    InferenceTime: 69.9360 ms
+    NumDetections: 1
+  220:
+    InferenceTime: 81.3500 ms
+    NumDetections: 1
+  221:
+    InferenceTime: 60.2330 ms
+    NumDetections: 1
+  222:
+    InferenceTime: 77.1110 ms
+    NumDetections: 1
+  223:
+    InferenceTime: 75.8470 ms
+    NumDetections: 1
+  224:
+    InferenceTime: 57.6750 ms
+    NumDetections: 1
+  225:
+    InferenceTime: 71.2060 ms
+    NumDetections: 1
+  226:
+    InferenceTime: 70.4300 ms
+    NumDetections: 1
+  227:
+    InferenceTime: 58.9770 ms
+    NumDetections: 1
+  228:
+    InferenceTime: 59.2260 ms
+    NumDetections: 1
+  229:
+    InferenceTime: 56.9960 ms
+    NumDetections: 1
+  230:
+    InferenceTime: 75.3950 ms
+    NumDetections: 1
+  231:
+    InferenceTime: 57.7680 ms
+    NumDetections: 1
+  232:
+    InferenceTime: 59.5800 ms
+    NumDetections: 1
+  233:
+    InferenceTime: 70.3800 ms
+    NumDetections: 1
+  234:
+    InferenceTime: 74.4890 ms
+    NumDetections: 1
+  235:
+    InferenceTime: 59.5360 ms
+    NumDetections: 1
+  236:
+    InferenceTime: 60.2670 ms
+    NumDetections: 1
+  237:
+    InferenceTime: 82.3830 ms
+    NumDetections: 1
+  238:
+    InferenceTime: 59.2060 ms
+    NumDetections: 1
+  239:
+    InferenceTime: 61.4530 ms
+    NumDetections: 1
+  240:
+    InferenceTime: 71.0790 ms
+    NumDetections: 1
+  241:
+    InferenceTime: 59.3290 ms
+    NumDetections: 1
+  242:
+    InferenceTime: 69.8140 ms
+    NumDetections: 1
+  243:
+    InferenceTime: 70.5680 ms
+    NumDetections: 1
+  244:
+    InferenceTime: 70.4840 ms
+    NumDetections: 1
+  245:
+    InferenceTime: 69.5570 ms
+    NumDetections: 1
+  246:
+    InferenceTime: 69.8630 ms
+    NumDetections: 1
+  247:
+    InferenceTime: 68.8900 ms
+    NumDetections: 1
+  248:
+    InferenceTime: 69.6220 ms
+    NumDetections: 1
+  249:
+    InferenceTime: 59.3730 ms
+    NumDetections: 1
+  250:
+    InferenceTime: 57.3670 ms
+    NumDetections: 1
+  251:
+    InferenceTime: 72.3870 ms
+    NumDetections: 1
+  252:
+    InferenceTime: 59.0160 ms
+    NumDetections: 1
+  253:
+    InferenceTime: 59.1780 ms
+    NumDetections: 1
+  254:
+    InferenceTime: 69.6490 ms
+    NumDetections: 1
+  255:
+    InferenceTime: 58.8910 ms
+    NumDetections: 1
+  256:
+    InferenceTime: 72.3250 ms
+    NumDetections: 1
+  257:
+    InferenceTime: 68.7490 ms
+    NumDetections: 1
+  258:
+    InferenceTime: 59.7810 ms
+    NumDetections: 1
+  259:
+    InferenceTime: 59.7610 ms
+    NumDetections: 1
+  260:
+    InferenceTime: 59.2110 ms
+    NumDetections: 1
+  261:
+    InferenceTime: 72.1960 ms
+    NumDetections: 1
+  262:
+    InferenceTime: 59.0790 ms
+    NumDetections: 1
+  263:
+    InferenceTime: 60.0240 ms
+    NumDetections: 1
+  264:
+    InferenceTime: 59.1510 ms
+    NumDetections: 1
+  265:
+    InferenceTime: 73.1100 ms
+    NumDetections: 1
+  266:
+    InferenceTime: 59.8210 ms
+    NumDetections: 1
+  267:
+    InferenceTime: 74.1020 ms
+    NumDetections: 1
+  268:
+    InferenceTime: 69.7580 ms
+    NumDetections: 1
+  269:
+    InferenceTime: 57.5040 ms
+    NumDetections: 1
+  270:
+    InferenceTime: 70.8760 ms
+    NumDetections: 1
+  271:
+    InferenceTime: 58.5170 ms
+    NumDetections: 1
+  272:
+    InferenceTime: 59.9230 ms
+    NumDetections: 1
+  273:
+    InferenceTime: 59.2860 ms
+    NumDetections: 1
+  274:
+    InferenceTime: 59.9810 ms
+    NumDetections: 1
+  275:
+    InferenceTime: 59.3600 ms
+    NumDetections: 1
+  276:
+    InferenceTime: 74.8980 ms
+    NumDetections: 1
+  277:
+    InferenceTime: 70.6370 ms
+    NumDetections: 1
+  278:
+    InferenceTime: 59.4940 ms
+    NumDetections: 1
+  279:
+    InferenceTime: 59.5080 ms
+    NumDetections: 1
+  280:
+    InferenceTime: 59.2820 ms
+    NumDetections: 1
+  281:
+    InferenceTime: 70.9390 ms
+    NumDetections: 1
+  282:
+    InferenceTime: 59.0950 ms
+    NumDetections: 1
+  283:
+    InferenceTime: 59.2440 ms
+    NumDetections: 1
+  284:
+    InferenceTime: 71.0460 ms
+    NumDetections: 1
+  285:
+    InferenceTime: 59.3820 ms
+    NumDetections: 1
+  286:
+    InferenceTime: 78.6080 ms
+    NumDetections: 1
+  287:
+    InferenceTime: 69.6280 ms
+    NumDetections: 1
+  288:
+    InferenceTime: 69.0570 ms
+    NumDetections: 1
+  289:
+    InferenceTime: 59.0110 ms
+    NumDetections: 1
+  290:
+    InferenceTime: 61.4630 ms
+    NumDetections: 1
+  291:
+    InferenceTime: 59.1220 ms
+    NumDetections: 1
+  292:
+    InferenceTime: 59.4900 ms
+    NumDetections: 1
+  293:
+    InferenceTime: 71.0210 ms
+    NumDetections: 1
+  294:
+    InferenceTime: 74.2100 ms
+    NumDetections: 1
+  295:
+    InferenceTime: 80.2020 ms
+    NumDetections: 1
+  296:
+    InferenceTime: 72.9510 ms
+    NumDetections: 1
+  297:
+    InferenceTime: 78.8970 ms
+    NumDetections: 1
+  298:
+    InferenceTime: 71.0930 ms
+    NumDetections: 1
+  299:
+    InferenceTime: 69.7000 ms
+    NumDetections: 1
+  300:
+    InferenceTime: 70.8760 ms
+    NumDetections: 1
+  301:
+    InferenceTime: 59.5590 ms
+    NumDetections: 1
+  302:
+    InferenceTime: 73.9460 ms
+    NumDetections: 1
+  303:
+    InferenceTime: 70.3560 ms
+    NumDetections: 1
+  304:
+    InferenceTime: 59.4940 ms
+    NumDetections: 1
+  305:
+    InferenceTime: 71.2610 ms
+    NumDetections: 1
+  306:
+    InferenceTime: 72.1560 ms
+    NumDetections: 1
+  307:
+    InferenceTime: 59.3880 ms
+    NumDetections: 1
+  308:
+    InferenceTime: 71.2330 ms
+    NumDetections: 1
+  309:
+    InferenceTime: 58.7820 ms
+    NumDetections: 1
+  310:
+    InferenceTime: 59.1650 ms
+    NumDetections: 1
+  311:
+    InferenceTime: 59.2440 ms
+    NumDetections: 1
+  312:
+    InferenceTime: 83.3830 ms
+    NumDetections: 1
+  313:
+    InferenceTime: 58.2400 ms
+    NumDetections: 1
+  314:
+    InferenceTime: 59.5340 ms
+    NumDetections: 1
+  315:
+    InferenceTime: 62.6790 ms
+    NumDetections: 1
+  316:
+    InferenceTime: 58.9970 ms
+    NumDetections: 1
+  317:
+    InferenceTime: 59.9920 ms
+    NumDetections: 1
+  318:
+    InferenceTime: 59.9190 ms
+    NumDetections: 1
+  319:
+    InferenceTime: 70.4350 ms
+    NumDetections: 1
+  320:
+    InferenceTime: 59.0070 ms
+    NumDetections: 1
+  321:
+    InferenceTime: 71.5100 ms
+    NumDetections: 1
+  322:
+    InferenceTime: 76.2150 ms
+    NumDetections: 1
+  323:
+    InferenceTime: 70.1380 ms
+    NumDetections: 1
+  324:
+    InferenceTime: 68.7630 ms
+    NumDetections: 1
+  325:
+    InferenceTime: 59.1960 ms
+    NumDetections: 1
+  326:
+    InferenceTime: 78.5820 ms
+    NumDetections: 1
+  327:
+    InferenceTime: 59.1450 ms
+    NumDetections: 1
+  328:
+    InferenceTime: 75.5730 ms
+    NumDetections: 1
+  329:
+    InferenceTime: 74.8790 ms
+    NumDetections: 1
+  330:
+    InferenceTime: 59.7300 ms
+    NumDetections: 1
+  331:
+    InferenceTime: 76.7520 ms
+    NumDetections: 1
+  332:
+    InferenceTime: 70.1310 ms
+    NumDetections: 1
+  333:
+    InferenceTime: 71.1970 ms
+    NumDetections: 1
+  334:
+    InferenceTime: 58.8150 ms
+    NumDetections: 1
+  335:
+    InferenceTime: 59.3260 ms
+    NumDetections: 1
+  336:
+    InferenceTime: 73.4740 ms
+    NumDetections: 1
+  337:
+    InferenceTime: 70.1910 ms
+    NumDetections: 1
+  338:
+    InferenceTime: 58.8990 ms
+    NumDetections: 1
+  339:
+    InferenceTime: 70.4300 ms
+    NumDetections: 1
+  340:
+    InferenceTime: 71.2870 ms
+    NumDetections: 1
+  341:
+    InferenceTime: 67.7670 ms
+    NumDetections: 1
+  342:
+    InferenceTime: 72.0540 ms
+    NumDetections: 1
+  343:
+    InferenceTime: 73.1320 ms
+    NumDetections: 1
+  344:
+    InferenceTime: 59.2800 ms
+    NumDetections: 1
+  345:
+    InferenceTime: 59.2470 ms
+    NumDetections: 1
+  346:
+    InferenceTime: 57.8610 ms
+    NumDetections: 1
+  347:
+    InferenceTime: 68.8560 ms
+    NumDetections: 1
+  348:
+    InferenceTime: 72.3030 ms
+    NumDetections: 1
+  349:
+    InferenceTime: 71.2680 ms
+    NumDetections: 1
+  350:
+    InferenceTime: 59.3080 ms
+    NumDetections: 1
+  351:
+    InferenceTime: 59.9000 ms
+    NumDetections: 1
+  352:
+    InferenceTime: 59.5070 ms
+    NumDetections: 1
+  353:
+    InferenceTime: 59.5840 ms
+    NumDetections: 1
+  354:
+    InferenceTime: 70.8960 ms
+    NumDetections: 1
+  355:
+    InferenceTime: 59.1760 ms
+    NumDetections: 1
+  356:
+    InferenceTime: 75.3160 ms
+    NumDetections: 1
+  357:
+    InferenceTime: 71.0070 ms
+    NumDetections: 1
+  358:
+    InferenceTime: 70.5290 ms
+    NumDetections: 1
+  359:
+    InferenceTime: 70.6850 ms
+    NumDetections: 1
+  360:
+    InferenceTime: 61.8550 ms
+    NumDetections: 1
+  361:
+    InferenceTime: 59.3800 ms
+    NumDetections: 1
+  362:
+    InferenceTime: 72.1400 ms
+    NumDetections: 1
+  363:
+    InferenceTime: 58.3720 ms
+    NumDetections: 1
+  364:
+    InferenceTime: 73.3870 ms
+    NumDetections: 1
+  365:
+    InferenceTime: 71.9060 ms
+    NumDetections: 1
+  366:
+    InferenceTime: 74.0440 ms
+    NumDetections: 1
+  367:
+    InferenceTime: 72.4110 ms
+    NumDetections: 1
+  368:
+    InferenceTime: 72.0840 ms
+    NumDetections: 1
+  369:
+    InferenceTime: 72.7870 ms
+    NumDetections: 1
+  370:
+    InferenceTime: 60.9830 ms
+    NumDetections: 1
+  371:
+    InferenceTime: 71.9290 ms
+    NumDetections: 1
+  372:
+    InferenceTime: 72.7850 ms
+    NumDetections: 1
+  373:
+    InferenceTime: 59.3140 ms
+    NumDetections: 1
+  374:
+    InferenceTime: 59.1660 ms
+    NumDetections: 1
+  375:
+    InferenceTime: 71.5090 ms
+    NumDetections: 1
+  376:
+    InferenceTime: 58.9380 ms
+    NumDetections: 1
+  377:
+    InferenceTime: 57.0190 ms
+    NumDetections: 1
+  378:
+    InferenceTime: 57.7620 ms
+    NumDetections: 1
+  379:
+    InferenceTime: 71.7640 ms
+    NumDetections: 1
+  380:
+    InferenceTime: 74.7390 ms
+    NumDetections: 1
+  381:
+    InferenceTime: 58.9040 ms
+    NumDetections: 1
+  382:
+    InferenceTime: 70.6700 ms
+    NumDetections: 1
+  383:
+    InferenceTime: 59.0620 ms
+    NumDetections: 1
+  384:
+    InferenceTime: 69.1600 ms
+    NumDetections: 1
+  385:
+    InferenceTime: 59.0590 ms
+    NumDetections: 1
+  386:
+    InferenceTime: 73.7840 ms
+    NumDetections: 1
+  387:
+    InferenceTime: 57.7550 ms
+    NumDetections: 1
+  388:
+    InferenceTime: 71.2100 ms
+    NumDetections: 1
+  389:
+    InferenceTime: 73.0930 ms
+    NumDetections: 1
+  390:
+    InferenceTime: 60.2310 ms
+    NumDetections: 1
+  391:
+    InferenceTime: 59.0030 ms
+    NumDetections: 1
+  392:
+    InferenceTime: 71.8320 ms
+    NumDetections: 1
+  393:
+    InferenceTime: 70.2460 ms
+    NumDetections: 1
+  394:
+    InferenceTime: 59.0140 ms
+    NumDetections: 1
+  395:
+    InferenceTime: 73.8980 ms
+    NumDetections: 1
+  396:
+    InferenceTime: 59.9140 ms
+    NumDetections: 1
+  397:
+    InferenceTime: 71.2870 ms
+    NumDetections: 1
+  398:
+    InferenceTime: 58.8400 ms
+    NumDetections: 1
+  399:
+    InferenceTime: 57.6990 ms
+    NumDetections: 1
+  400:
+    InferenceTime: 70.7640 ms
+    NumDetections: 1
+  401:
+    InferenceTime: 69.5720 ms
+    NumDetections: 1
+  402:
+    InferenceTime: 60.0300 ms
+    NumDetections: 1
+  403:
+    InferenceTime: 57.6570 ms
+    NumDetections: 1
+  404:
+    InferenceTime: 77.2640 ms
+    NumDetections: 1
+  405:
+    InferenceTime: 59.0980 ms
+    NumDetections: 1
+  406:
+    InferenceTime: 59.3850 ms
+    NumDetections: 1
+  407:
+    InferenceTime: 75.3270 ms
+    NumDetections: 1
+  408:
+    InferenceTime: 69.0440 ms
+    NumDetections: 1
+  409:
+    InferenceTime: 85.1030 ms
+    NumDetections: 1
+  410:
+    InferenceTime: 68.8050 ms
+    NumDetections: 1
+  411:
+    InferenceTime: 57.8410 ms
+    NumDetections: 1
+  412:
+    InferenceTime: 72.0660 ms
+    NumDetections: 1
+  413:
+    InferenceTime: 58.7150 ms
+    NumDetections: 1
+  414:
+    InferenceTime: 70.4840 ms
+    NumDetections: 1
+  415:
+    InferenceTime: 58.9570 ms
+    NumDetections: 1
+  416:
+    InferenceTime: 63.7230 ms
+    NumDetections: 1
+  417:
+    InferenceTime: 72.8470 ms
+    NumDetections: 1
+  418:
+    InferenceTime: 57.4060 ms
+    NumDetections: 1
+  419:
+    InferenceTime: 58.0980 ms
+    NumDetections: 1
+  420:
+    InferenceTime: 72.6170 ms
+    NumDetections: 1
+  421:
+    InferenceTime: 71.2910 ms
+    NumDetections: 1
+  422:
+    InferenceTime: 58.8280 ms
+    NumDetections: 1
+  423:
+    InferenceTime: 58.6490 ms
+    NumDetections: 1
+  424:
+    InferenceTime: 71.5650 ms
+    NumDetections: 1
+  425:
+    InferenceTime: 71.0680 ms
+    NumDetections: 1
+  426:
+    InferenceTime: 58.6330 ms
+    NumDetections: 1
+  427:
+    InferenceTime: 71.1860 ms
+    NumDetections: 1
+  428:
+    InferenceTime: 70.2470 ms
+    NumDetections: 1
+  429:
+    InferenceTime: 71.4600 ms
+    NumDetections: 1
+  430:
+    InferenceTime: 59.0970 ms
+    NumDetections: 1
+  431:
+    InferenceTime: 71.6470 ms
+    NumDetections: 1
+  432:
+    InferenceTime: 59.5860 ms
+    NumDetections: 1
+  433:
+    InferenceTime: 59.2410 ms
+    NumDetections: 1
+  434:
+    InferenceTime: 59.6130 ms
+    NumDetections: 1
+  435:
+    InferenceTime: 59.1940 ms
+    NumDetections: 1
+  436:
+    InferenceTime: 72.0680 ms
+    NumDetections: 1
+  437:
+    InferenceTime: 58.9790 ms
+    NumDetections: 1
+  438:
+    InferenceTime: 72.9110 ms
+    NumDetections: 1
+  439:
+    InferenceTime: 58.8620 ms
+    NumDetections: 1
+  440:
+    InferenceTime: 72.6770 ms
+    NumDetections: 1
+  441:
+    InferenceTime: 71.4560 ms
+    NumDetections: 1
+  442:
+    InferenceTime: 63.0110 ms
+    NumDetections: 1
+  443:
+    InferenceTime: 69.3950 ms
+    NumDetections: 1
+  444:
+    InferenceTime: 60.1180 ms
+    NumDetections: 1
+  445:
+    InferenceTime: 74.8140 ms
+    NumDetections: 1
+  446:
+    InferenceTime: 71.4210 ms
+    NumDetections: 1
+  447:
+    InferenceTime: 73.1580 ms
+    NumDetections: 1
+  448:
+    InferenceTime: 58.0160 ms
+    NumDetections: 1
+  449:
+    InferenceTime: 70.9730 ms
+    NumDetections: 1
+  450:
+    InferenceTime: 59.0670 ms
+    NumDetections: 1
+  451:
+    InferenceTime: 72.9440 ms
+    NumDetections: 1
+  452:
+    InferenceTime: 69.2320 ms
+    NumDetections: 1
+  453:
+    InferenceTime: 59.0850 ms
+    NumDetections: 1
+  454:
+    InferenceTime: 71.5830 ms
+    NumDetections: 1
+  455:
+    InferenceTime: 77.2700 ms
+    NumDetections: 1
+  456:
+    InferenceTime: 57.4540 ms
+    NumDetections: 1
+  457:
+    InferenceTime: 59.3240 ms
+    NumDetections: 1
+  458:
+    InferenceTime: 58.4980 ms
+    NumDetections: 1
+  459:
+    InferenceTime: 72.5050 ms
+    NumDetections: 1
+  460:
+    InferenceTime: 69.9900 ms
+    NumDetections: 1
+  461:
+    InferenceTime: 75.9880 ms
+    NumDetections: 1
+  462:
+    InferenceTime: 57.8390 ms
+    NumDetections: 1
+  463:
+    InferenceTime: 59.0750 ms
+    NumDetections: 1
+  464:
+    InferenceTime: 58.1430 ms
+    NumDetections: 1
+  465:
+    InferenceTime: 57.7860 ms
+    NumDetections: 1
+  466:
+    InferenceTime: 71.0460 ms
+    NumDetections: 1
+  467:
+    InferenceTime: 59.3090 ms
+    NumDetections: 1
+  468:
+    InferenceTime: 59.9450 ms
+    NumDetections: 1
+  469:
+    InferenceTime: 58.7790 ms
+    NumDetections: 1
+  470:
+    InferenceTime: 59.1640 ms
+    NumDetections: 1
+  471:
+    InferenceTime: 73.1390 ms
+    NumDetections: 1
+  472:
+    InferenceTime: 70.2140 ms
+    NumDetections: 1
+  473:
+    InferenceTime: 58.7190 ms
+    NumDetections: 1
+  474:
+    InferenceTime: 71.7630 ms
+    NumDetections: 1
+  475:
+    InferenceTime: 81.2170 ms
+    NumDetections: 1
+  476:
+    InferenceTime: 59.3460 ms
+    NumDetections: 1
+  477:
+    InferenceTime: 74.4760 ms
+    NumDetections: 1
+  478:
+    InferenceTime: 71.8420 ms
+    NumDetections: 1
+  479:
+    InferenceTime: 72.9820 ms
+    NumDetections: 1
+  480:
+    InferenceTime: 69.1560 ms
+    NumDetections: 1
+  481:
+    InferenceTime: 58.7950 ms
+    NumDetections: 1
+  482:
+    InferenceTime: 58.9430 ms
+    NumDetections: 1
+  483:
+    InferenceTime: 71.1210 ms
+    NumDetections: 1
+  484:
+    InferenceTime: 58.9050 ms
+    NumDetections: 1
+  485:
+    InferenceTime: 71.4670 ms
+    NumDetections: 1
+  486:
+    InferenceTime: 70.3130 ms
+    NumDetections: 1
+  487:
+    InferenceTime: 77.1260 ms
+    NumDetections: 1
+  488:
+    InferenceTime: 72.9460 ms
+    NumDetections: 1
+  489:
+    InferenceTime: 71.0690 ms
+    NumDetections: 1
+  490:
+    InferenceTime: 77.8220 ms
+    NumDetections: 1
+  491:
+    InferenceTime: 73.0420 ms
+    NumDetections: 1
+  492:
+    InferenceTime: 77.3370 ms
+    NumDetections: 1
+  493:
+    InferenceTime: 59.0630 ms
+    NumDetections: 1
+  494:
+    InferenceTime: 58.3550 ms
+    NumDetections: 1
+  495:
+    InferenceTime: 58.8280 ms
+    NumDetections: 1
+  496:
+    InferenceTime: 59.0050 ms
+    NumDetections: 1
+  497:
+    InferenceTime: 73.3860 ms
+    NumDetections: 1
+  498:
+    InferenceTime: 71.8850 ms
+    NumDetections: 1
+  499:
+    InferenceTime: 70.4140 ms
+    NumDetections: 1
+  500:
+    InferenceTime: 74.1490 ms
+    NumDetections: 1
+  501:
+    InferenceTime: 71.8990 ms
+    NumDetections: 1
+  502:
+    InferenceTime: 72.2180 ms
+    NumDetections: 1
+  503:
+    InferenceTime: 73.5980 ms
+    NumDetections: 1
+  504:
+    InferenceTime: 58.8450 ms
+    NumDetections: 1
+  505:
+    InferenceTime: 75.7750 ms
+    NumDetections: 1
+  506:
+    InferenceTime: 58.6190 ms
+    NumDetections: 1
+  507:
+    InferenceTime: 58.6280 ms
+    NumDetections: 1
+  508:
+    InferenceTime: 74.7990 ms
+    NumDetections: 1
+  509:
+    InferenceTime: 59.1510 ms
+    NumDetections: 1
+  510:
+    InferenceTime: 58.9370 ms
+    NumDetections: 1
+  511:
+    InferenceTime: 59.5610 ms
+    NumDetections: 1
+  512:
+    InferenceTime: 59.1510 ms
+    NumDetections: 1
+  513:
+    InferenceTime: 60.5680 ms
+    NumDetections: 1
+  514:
+    InferenceTime: 61.5230 ms
+    NumDetections: 1
+  515:
+    InferenceTime: 71.7930 ms
+    NumDetections: 1
+  516:
+    InferenceTime: 72.6970 ms
+    NumDetections: 1
+  517:
+    InferenceTime: 57.5910 ms
+    NumDetections: 1
+  518:
+    InferenceTime: 69.5470 ms
+    NumDetections: 1
+  519:
+    InferenceTime: 72.9720 ms
+    NumDetections: 1
+  520:
+    InferenceTime: 73.4650 ms
+    NumDetections: 1
+  521:
+    InferenceTime: 58.4410 ms
+    NumDetections: 1
+  522:
+    InferenceTime: 71.5430 ms
+    NumDetections: 1
+  523:
+    InferenceTime: 59.4650 ms
+    NumDetections: 1
+  524:
+    InferenceTime: 73.0490 ms
+    NumDetections: 1
+  525:
+    InferenceTime: 58.4270 ms
+    NumDetections: 1
+  526:
+    InferenceTime: 56.7460 ms
+    NumDetections: 1
+  527:
+    InferenceTime: 57.3550 ms
+    NumDetections: 1
+  528:
+    InferenceTime: 56.5130 ms
+    NumDetections: 1
+  529:
+    InferenceTime: 59.1020 ms
+    NumDetections: 1
+  530:
+    InferenceTime: 74.6840 ms
+    NumDetections: 1
+  531:
+    InferenceTime: 57.0650 ms
+    NumDetections: 1
+  532:
+    InferenceTime: 69.5510 ms
+    NumDetections: 1
+  533:
+    InferenceTime: 59.3790 ms
+    NumDetections: 1
+  534:
+    InferenceTime: 57.4330 ms
+    NumDetections: 1
+  535:
+    InferenceTime: 59.3530 ms
+    NumDetections: 1
+  536:
+    InferenceTime: 59.9960 ms
+    NumDetections: 1
+  537:
+    InferenceTime: 58.9500 ms
+    NumDetections: 1
+  538:
+    InferenceTime: 60.0690 ms
+    NumDetections: 1
+  539:
+    InferenceTime: 59.0030 ms
+    NumDetections: 1
+  540:
+    InferenceTime: 58.9120 ms
+    NumDetections: 1
+  541:
+    InferenceTime: 58.4650 ms
+    NumDetections: 1
+  542:
+    InferenceTime: 59.8010 ms
+    NumDetections: 1
+  543:
+    InferenceTime: 58.5910 ms
+    NumDetections: 1
+  544:
+    InferenceTime: 56.6940 ms
+    NumDetections: 1
+  545:
+    InferenceTime: 71.3870 ms
+    NumDetections: 1
+  546:
+    InferenceTime: 59.2290 ms
+    NumDetections: 1
+  547:
+    InferenceTime: 58.3000 ms
+    NumDetections: 1
+  548:
+    InferenceTime: 58.8610 ms
+    NumDetections: 1
+  549:
+    InferenceTime: 59.2420 ms
+    NumDetections: 1
+  550:
+    InferenceTime: 57.8090 ms
+    NumDetections: 1
+  551:
+    InferenceTime: 58.2860 ms
+    NumDetections: 1
+  552:
+    InferenceTime: 57.9430 ms
+    NumDetections: 1
+  553:
+    InferenceTime: 59.1800 ms
+    NumDetections: 1
+  554:
+    InferenceTime: 71.5900 ms
+    NumDetections: 1
+  555:
+    InferenceTime: 73.0350 ms
+    NumDetections: 1
+  556:
+    InferenceTime: 72.2500 ms
+    NumDetections: 1
+  557:
+    InferenceTime: 73.2730 ms
+    NumDetections: 1
+  558:
+    InferenceTime: 68.0710 ms
+    NumDetections: 1
+  559:
+    InferenceTime: 59.4620 ms
+    NumDetections: 1
+  560:
+    InferenceTime: 58.7540 ms
+    NumDetections: 1
+  561:
+    InferenceTime: 57.3970 ms
+    NumDetections: 1
+  562:
+    InferenceTime: 73.6730 ms
+    NumDetections: 1
+  563:
+    InferenceTime: 71.6370 ms
+    NumDetections: 1
+  564:
+    InferenceTime: 60.0370 ms
+    NumDetections: 1
+  565:
+    InferenceTime: 57.5110 ms
+    NumDetections: 1
+  566:
+    InferenceTime: 59.0220 ms
+    NumDetections: 1
+  567:
+    InferenceTime: 58.9520 ms
+    NumDetections: 1
+  568:
+    InferenceTime: 58.8350 ms
+    NumDetections: 1
+  569:
+    InferenceTime: 71.5840 ms
+    NumDetections: 1
+  570:
+    InferenceTime: 71.3590 ms
+    NumDetections: 1
+  571:
+    InferenceTime: 72.1960 ms
+    NumDetections: 1
+  572:
+    InferenceTime: 72.3520 ms
+    NumDetections: 1
+  573:
+    InferenceTime: 73.2370 ms
+    NumDetections: 1
+  574:
+    InferenceTime: 68.5690 ms
+    NumDetections: 1
+  575:
+    InferenceTime: 58.5270 ms
+    NumDetections: 1
+  576:
+    InferenceTime: 73.8560 ms
+    NumDetections: 1
+  577:
+    InferenceTime: 59.2220 ms
+    NumDetections: 1
+  578:
+    InferenceTime: 70.9060 ms
+    NumDetections: 1
+  579:
+    InferenceTime: 58.6740 ms
+    NumDetections: 1
+  580:
+    InferenceTime: 59.2030 ms
+    NumDetections: 1
+  581:
+    InferenceTime: 70.6120 ms
+    NumDetections: 1
+  582:
+    InferenceTime: 59.0530 ms
+    NumDetections: 1
+  583:
+    InferenceTime: 73.5890 ms
+    NumDetections: 1
+  584:
+    InferenceTime: 72.9180 ms
+    NumDetections: 1
+  585:
+    InferenceTime: 71.3140 ms
+    NumDetections: 1
+  586:
+    InferenceTime: 58.8420 ms
+    NumDetections: 1
+  587:
+    InferenceTime: 68.9920 ms
+    NumDetections: 1
+  588:
+    InferenceTime: 58.6930 ms
+    NumDetections: 1
+  589:
+    InferenceTime: 71.1080 ms
+    NumDetections: 1
+  590:
+    InferenceTime: 73.1420 ms
+    NumDetections: 1
+  591:
+    InferenceTime: 71.0950 ms
+    NumDetections: 1
+  592:
+    InferenceTime: 68.1920 ms
+    NumDetections: 1
+  593:
+    InferenceTime: 69.1790 ms
+    NumDetections: 1
+  594:
+    InferenceTime: 75.9000 ms
+    NumDetections: 1
+  595:
+    InferenceTime: 70.9820 ms
+    NumDetections: 1
+  596:
+    InferenceTime: 69.8650 ms
+    NumDetections: 1
+  597:
+    InferenceTime: 58.7390 ms
+    NumDetections: 1
+  598:
+    InferenceTime: 57.4160 ms
+    NumDetections: 1
+  599:
+    InferenceTime: 60.0380 ms
+    NumDetections: 1
+  600:
+    InferenceTime: 58.5710 ms
+    NumDetections: 1
+  601:
+    InferenceTime: 60.4440 ms
+    NumDetections: 1
+  602:
+    InferenceTime: 58.9800 ms
+    NumDetections: 1
+  603:
+    InferenceTime: 58.9000 ms
+    NumDetections: 1
+  604:
+    InferenceTime: 71.5220 ms
+    NumDetections: 1
+  605:
+    InferenceTime: 58.2800 ms
+    NumDetections: 1
+  606:
+    InferenceTime: 59.4800 ms
+    NumDetections: 1
+  607:
+    InferenceTime: 58.9060 ms
+    NumDetections: 1
+  608:
+    InferenceTime: 58.9720 ms
+    NumDetections: 1
+  609:
+    InferenceTime: 58.9660 ms
+    NumDetections: 1
+  610:
+    InferenceTime: 58.7330 ms
+    NumDetections: 1
+  611:
+    InferenceTime: 58.4180 ms
+    NumDetections: 1
+  612:
+    InferenceTime: 72.7570 ms
+    NumDetections: 1
+  613:
+    InferenceTime: 59.3870 ms
+    NumDetections: 1
+  614:
+    InferenceTime: 58.9890 ms
+    NumDetections: 1
+  615:
+    InferenceTime: 71.1650 ms
+    NumDetections: 1
+  616:
+    InferenceTime: 58.7250 ms
+    NumDetections: 1
+  617:
+    InferenceTime: 58.8080 ms
+    NumDetections: 1
+  618:
+    InferenceTime: 57.9570 ms
+    NumDetections: 1
+  619:
+    InferenceTime: 58.3730 ms
+    NumDetections: 1
+  620:
+    InferenceTime: 71.0270 ms
+    NumDetections: 1
+  621:
+    InferenceTime: 57.3830 ms
+    NumDetections: 1
+  622:
+    InferenceTime: 79.3220 ms
+    NumDetections: 1
+  623:
+    InferenceTime: 58.9730 ms
+    NumDetections: 1
+  624:
+    InferenceTime: 58.5450 ms
+    NumDetections: 1
+  625:
+    InferenceTime: 69.0130 ms
+    NumDetections: 1
+  626:
+    InferenceTime: 58.8700 ms
+    NumDetections: 1
+  627:
+    InferenceTime: 71.3480 ms
+    NumDetections: 1
+  628:
+    InferenceTime: 59.1290 ms
+    NumDetections: 1
+  629:
+    InferenceTime: 70.6110 ms
+    NumDetections: 1
+  630:
+    InferenceTime: 69.3290 ms
+    NumDetections: 1
+  631:
+    InferenceTime: 69.5840 ms
+    NumDetections: 1
+  632:
+    InferenceTime: 72.0480 ms
+    NumDetections: 1
+  633:
+    InferenceTime: 58.7670 ms
+    NumDetections: 1
+  634:
+    InferenceTime: 58.3280 ms
+    NumDetections: 1
+  635:
+    InferenceTime: 82.2050 ms
+    NumDetections: 1
+  636:
+    InferenceTime: 58.5490 ms
+    NumDetections: 1
+  637:
+    InferenceTime: 69.1530 ms
+    NumDetections: 1
+  638:
+    InferenceTime: 71.5720 ms
+    NumDetections: 1
+  639:
+    InferenceTime: 59.0770 ms
+    NumDetections: 1
+  640:
+    InferenceTime: 69.5770 ms
+    NumDetections: 1
+  641:
+    InferenceTime: 70.0410 ms
+    NumDetections: 1
+  642:
+    InferenceTime: 58.7380 ms
+    NumDetections: 1
+  643:
+    InferenceTime: 58.4750 ms
+    NumDetections: 1
+  644:
+    InferenceTime: 72.0390 ms
+    NumDetections: 1
+  645:
+    InferenceTime: 70.5540 ms
+    NumDetections: 1
+  646:
+    InferenceTime: 78.7420 ms
+    NumDetections: 1
+  647:
+    InferenceTime: 71.5590 ms
+    NumDetections: 1
+  648:
+    InferenceTime: 72.8900 ms
+    NumDetections: 1
+  649:
+    InferenceTime: 71.2680 ms
+    NumDetections: 1
+  650:
+    InferenceTime: 58.5220 ms
+    NumDetections: 1
+  651:
+    InferenceTime: 81.1590 ms
+    NumDetections: 1
+  652:
+    InferenceTime: 59.5450 ms
+    NumDetections: 1
+  653:
+    InferenceTime: 71.8450 ms
+    NumDetections: 1
+  654:
+    InferenceTime: 71.6710 ms
+    NumDetections: 1
+  655:
+    InferenceTime: 58.8790 ms
+    NumDetections: 1
+  656:
+    InferenceTime: 57.3750 ms
+    NumDetections: 1
+  657:
+    InferenceTime: 74.7610 ms
+    NumDetections: 1
+  658:
+    InferenceTime: 70.6720 ms
+    NumDetections: 1

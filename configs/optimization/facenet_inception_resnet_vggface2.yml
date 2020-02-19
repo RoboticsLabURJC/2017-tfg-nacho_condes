@@ -10,13 +10,15 @@ InputNames:
 OutputNames:
   - embeddings
 
-Architecture: ssd
+Architecture: facenet
 WriteNodes: True
+RosBag: ../bags/bag3.bag
 
 OptimParams:
   Formats:
     - FP32
     - FP16
+    - INT8
   MSS:
     - 3
     - 20

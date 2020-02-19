@@ -2,15 +2,14 @@ import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
-#import seaborn as sns
 import yaml
 # from utils import TO_MS
 from PIL import Image
 from Net.detection_network import DetectionNetwork
+from Net.utils import nms
 from Camera.ROSCam import ROSCam
 from os import listdir, path, makedirs, chdir
 from cprint import cprint
-#sns.set()
 
 # Change the working directory in order to have access to the modules
 # abspath = path.abspath(__file__)
@@ -56,7 +55,7 @@ class FollowPersonBenchmarker:
         times_raw = np.array(times_list)
         # Split dropping the first (slower) inference
         iters_raw = times_raw[1:, 0]
-        total_iters = TO_MS(iters_raw)
+        total_iters = TO_MS(iters_raw)[1:]
 
         pdets_raw = np.array(list(times_raw[1:, 1]))
         total_pdets = pdets_raw.copy()
@@ -88,6 +87,10 @@ class FollowPersonBenchmarker:
             '3.- FaceEncoding': {
                 '1.- Mean': float(total_fencs_flt.mean()),
                 '2.- Std':  float(total_fencs_flt.std()),
+            },
+            '4.- IterationTime': {
+                '1.- Mean': float(total_iters.mean()),
+                '2.- Std': float(total_iters.std()),
             }
         }
         benchmark['1.- Summary'] = summary
@@ -261,7 +264,7 @@ if __name__ == '__main__':
     input_w, input_h = args.input_width, args.input_height
 
     # Create the ROSCam to open the ROSBag
-    topics = {'RGB': '/camera/rgb/image_raw',
+    topics = {'RGB':   '/camera/rgb/image_raw',
               'Depth': '/camera/depth_registered/image_raw'}
     cam = ROSCam(topics, rosbag_file)
 
@@ -273,6 +276,7 @@ if __name__ == '__main__':
     # Iterate the rosbag
     bag_len = cam.getBagLength(topics)
     img_count = 0
+    guarda = True
     while True:
         cprint.info(f'\tImage {img_count}/{bag_len}')
         img_count += 1
@@ -283,10 +287,22 @@ if __name__ == '__main__':
             break
 
         image = np.array(Image.fromarray(image).resize(input_shape[:2]))
-        if arch == 'ssd':
-            feed_dict = {net.image_tensor: image[None, ...]}
+
+        if arch in ['ssd', 'yolov3', 'yolov3tiny']:
+            dets, elapsed = net.predict(image)
+            n_dets = len(dets)
+
+        elif arch in ['face_yolo', 'face_corrector']:
+            feed_dict = {net.inputs: image[None, ...], net.training: False}
             out, elapsed = net._forward_pass(feed_dict)
-            n_dets = int(out[-1][0])
+            n_dets = len(out[0])
+
+        elif arch == 'facenet':
+            feed_dict = {net.input: image[None, ...], net.phase_train: False}
+            out, elapsed = net._forward_pass(feed_dict)
+            n_dets = len(out[0])
+
+
         else:
             cprint.fatal(f'{arch} benchmarking not implemented yet!', interrupt=True)
 

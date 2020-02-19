@@ -2,4 +2,5 @@ benchmarks/detection/*
 resources/ref_face/*
 *__pycache__
 *swp*
+*nodes.txt
 *pb

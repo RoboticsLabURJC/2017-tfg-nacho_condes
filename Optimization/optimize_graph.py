@@ -3,7 +3,7 @@
 #  @author: naxvm
 #
 
-import os; os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+import os #; os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 from cprint import cprint
 from tf_trt_models.detection import build_detection_graph
 from tensorflow.python.compiler.tensorrt import trt_convert
@@ -13,7 +13,7 @@ import tensorflow as tf
 
 MODELS_DIR = os.path.join('Optimization', 'dl_models')
 FG_NAME = 'frozen_graph.pb'
-FORCE_NMS_CPU = True # better performance except on JetPack 4.3
+FORCE_NMS_CPU = True # False if JetPack 4.3, True otherwise
 
 def writeNodes(model_path, graph_def):
     ''' Dump the node names in a graph into a text file. '''
@@ -34,7 +34,7 @@ def loadFrozenGraph(model_path, write_nodes):
         cprint.fatal(f'Error: the file {pb_path} does not exist.', interrupt=True)
 
     cprint.info('Loading the frozen graph...')
-    graph_def = tf.GraphDef()
+    graph_def = tf.compat.v1.GraphDef()
     with tf.io.gfile.GFile(pb_path, 'rb') as fid:
         serialized_graph = fid.read()
         graph_def.ParseFromString(serialized_graph)
@@ -69,7 +69,7 @@ def loadCheckpoint(model_path, write_nodes):
 
 def optim_graph(graph, blacklist_names, precision_mode, mss, mce):
     ''' Returns the TRT converted graph given the input parameters. '''
-    with tf.Session() as sess:
+    with tf.compat.v1.Session() as sess:
         converter = trt_convert.TrtGraphConverter(
             input_graph_def=graph,
             nodes_blacklist=blacklist_names,
@@ -80,6 +80,7 @@ def optim_graph(graph, blacklist_names, precision_mode, mss, mce):
             use_calibration=False)
         new_g = converter.convert()
     return new_g
+
 
 
 def saveTrtGraph(graph, model_path, save_in):
@@ -94,6 +95,7 @@ def saveTrtGraph(graph, model_path, save_in):
     cprint.ok(f'Graph saved in {save_in}')
 
 
+
 def add_arguments(parser):
     parser.add_argument('model_dir', type=str, help='Model to optimize')
     parser.add_argument('model_format', type=str, help='Format of the saved model', choices=['frozen', 'checkpoint'])
@@ -103,7 +105,7 @@ def add_arguments(parser):
     parser.add_argument('mss', type=int, help='Minimum segment size for the optimization')
     parser.add_argument('mce', type=int, help='Maximum cached engines for the optimization')
     parser.add_argument('allow_growth', type=bool, help='Whether allowing growth for the TF session allocation')
-    parser.add_argument('arch', type=str, help='Architecture of the given model', choices=['ssd', 'yolov3'])
+    parser.add_argument('arch', type=str, help='Architecture of the given model', choices=['ssd', 'yolov3', 'yolov3tiny', 'face_yolo', 'face_corrector', 'facenet'])
     parser.add_argument('save_in', type=str, help='Desired .pb in which freeze the optimized graph')
     parser.add_argument('--input_names', nargs='*', help='Input tensors')
     parser.add_argument('--output_names', nargs='*', help='Output tensors')

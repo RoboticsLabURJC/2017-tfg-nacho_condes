@@ -31,7 +31,6 @@ MODELS_DIR = 'Optimization/dl_models'
 OPTS_SUBDIR = 'optimizations'
 OPTIMIZATION_SCRIPT = 'Optimization/optimize_graph.py'
 BENCHMARKING_SCRIPT = 'logs/benchmarkers.py'
-# FORCE_NMS_CPU = False # Required for TensorRT 6.0
 
 
 model_name = cfg['ModelName']

@@ -1,15 +1,14 @@
 NodeName: "followperson"
 Mode: "benchmark"
-RosbagFile: "bags/bag1.bag"
+RosbagFile: "bags/bag3.bag"
 LogDir: "logs/benchmarks"
 DisplayImages: false
 Networks:
   Arch: ssd
-  DetectionModel: "Optimization/dl_models/ssd_mobilenet_v1_0.75_depth_coco/optimizations/FP16_50_1.pb"
-  # DetectionModel: "Optimization/dl_models/ssd_mobilenet_v1_coco/optimizations/FP16_20_1.pb"
+  DetectionModel: "Optimization/dl_models/ssd_mobilenet_v1_0.75_depth_coco/optimizations/FP16_50_3.pb"
   DetectionWidth: 300
   DetectionHeight: 300
-  FaceEncoderModel: "Optimization/dl_models/facenet_inception_resnet_vggface2/optimizations/FP32_3_1.pb"
+  FaceEncoderModel: "Optimization/dl_models/facenet_inception_resnet_vggface2/optimizations/FP32_3_3.pb"
 
 RefFace: "resources/ref_face/refface.jpg"
 

@@ -9,13 +9,15 @@ InputNames:
 OutputNames:
   - output_boxes
 
-Architecture: yolov3
+Architecture: yolov3tiny
 WriteNodes: True
+RosBag: ../bags/bag3.bag
 
 OptimParams:
   Formats:
     - FP32
     - FP16
+    - INT8
   MSS:
     - 3
     - 20

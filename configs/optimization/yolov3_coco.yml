@@ -4,20 +4,20 @@ InputWidth: 416
 InputHeight: 416
 
 InputNames:
-  - input/input_data
+  - inputs
 
 OutputNames:
-  - pred_sbbox/concat_2
-  - pred_mbbox/concat_2
-  - pred_lbbox/concat_2
+  - output_boxes
 
 Architecture: yolov3
 WriteNodes: True
+RosBag: ../bags/bag3.bag
 
 OptimParams:
   Formats:
     - FP32
     - FP16
+    - INT8
   MSS:
     - 3
     - 20

@@ -14,11 +14,13 @@ OutputNames:
 
 Architecture: ssd
 WriteNodes: True
+RosBag: ../bags/bag3.bag
 
 OptimParams:
   Formats:
     - FP32
     - FP16
+    - INT8
   MSS:
     - 3
     - 20
