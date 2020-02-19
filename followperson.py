@@ -110,33 +110,32 @@ if __name__ == '__main__':
             iter_start = step_time
         # Make an inference on the current image
         persons, scores, elapsed = pers_det.predict(image)
+
         if benchmark:
             times.append([elapsed, len(persons)])
-
         # Detect and crop
         if benchmark:
             step_time = datetime.now()
         face_detections = face_det.predict(image)
         if benchmark:
             elapsed = datetime.now() - step_time
-            times.append([elapsed, len(face_detections)])
+            times.append([elapsed, len(face_detections) if isinstance(face_detections, list) else 1])
 
         # Filter just confident faces
         # # TODO: keep only faces inside persons
         faces_flt = filter(lambda f: f[-1] > 0.9, face_detections)
         faces_cropped = [utils.crop_face(image, fdet) for fdet in faces_flt]
-
         # # elapsed_3 = motors.move(image, depth, persons, scores, faces)
 
 
         if benchmark:
             step_time = datetime.now()
-        similarities = list(map(face_enc.distanceToRef, faces_cropped))
+        similarities = face_enc.distancesToRef(faces_cropped)
         # for idx, sim in enumerate(similarities):
         #     print(idx, '\t', sim)
         if benchmark:
             elapsed = datetime.now() - step_time
-            times.append([elapsed, len(similarities)])
+            times.append([elapsed, len(similarities) if isinstance(similarities, list) else 1])
 
 
     # motors.setNetworks(network, siamese_network)
