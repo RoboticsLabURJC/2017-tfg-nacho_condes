@@ -4,10 +4,10 @@ RosbagFile: "bags/bag3.bag"
 LogDir: "logs/benchmarks"
 DisplayImages: false
 Networks:
-  Arch: ssd
-  DetectionModel: "Optimization/dl_models/ssd_mobilenet_v1_0.75_depth_coco/optimizations/FP16_50_3.pb"
-  DetectionWidth: 300
-  DetectionHeight: 300
+  Arch: yolov3tiny
+  DetectionModel: "Optimization/dl_models/yolov3_tiny_coco/optimizations/FP16_3_3.pb"
+  DetectionWidth: 416
+  DetectionHeight: 416
   FaceEncoderModel: "Optimization/dl_models/facenet_inception_resnet_vggface2/optimizations/FP32_3_3.pb"
 
 RefFace: "resources/ref_face/refface.jpg"

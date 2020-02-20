@@ -137,7 +137,7 @@ class DetectionNetwork():
         ''' Plug a graph def into the main graph of the detector session . '''
         conf = tf.compat.v1.ConfigProto(log_device_placement=False)
         conf.gpu_options.allow_growth = True
-        conf.gpu_options.per_process_gpu_memory_fraction = 0.5
+        # conf.gpu_options.per_process_gpu_memory_fraction = 0.5
         graph = tf.compat.v1.Graph()
         with graph.as_default():
             tf.import_graph_def(graph_def, name='')
@@ -184,6 +184,8 @@ class DetectionNetwork():
             # NMS
             detections_filtered = nms.non_max_suppression(detections[0], 0.5)
             # The key 0 contains the human detections.
+            if not 0 in detections_filtered:
+                return [], elapsed
             persons = detections_filtered[0]
             boxes_full = []
             for box, prob in persons:
@@ -195,6 +197,5 @@ class DetectionNetwork():
                     y2 = box[3] / self.input_shape[0] * orig_h
                     boxes_full.append([x1, y1, x2-x1, y2-y1, prob])
             return boxes_full, elapsed
-            # return detections_normalized, elapsed
         else:
             cprint.warn(f'Implement predict for {self.arch}!!')
