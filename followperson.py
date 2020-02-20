@@ -91,6 +91,8 @@ if __name__ == '__main__':
     # Register shutdown hook
     rospy.on_shutdown(shtdn_hook)
 
+
+    MAX_ITERS = 60
     if benchmark:
         ttfi = datetime.now() - zero_time
         total_times = []
@@ -109,7 +111,7 @@ if __name__ == '__main__':
             step_time = datetime.now()
             iter_start = step_time
         # Make an inference on the current image
-        persons, scores, elapsed = pers_det.predict(image)
+        persons, elapsed = pers_det.predict(image)
 
         if benchmark:
             times.append([elapsed, len(persons)])
@@ -176,9 +178,8 @@ if __name__ == '__main__':
             print(n_image)
             print('*' * len(n_image))
 
-        if iteration == n_images:
-            rospy.signal_shutdown("Finished!!")
-
+        if iteration == min(n_images, MAX_ITERS):
+            break
 
     # Finish the loop
     if benchmark:
@@ -192,3 +193,6 @@ if __name__ == '__main__':
 
     if display_imgs:
         cv2.destroyAllWindows()
+
+
+    rospy.signal_shutdown("Finished!!")
