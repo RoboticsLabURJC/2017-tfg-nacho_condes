@@ -14,6 +14,7 @@ class FaceNet:
         # Load the embedding network model
         conf = tf.compat.v1.ConfigProto(log_device_placement=False)
         conf.gpu_options.allow_growth = True
+        # conf.gpu_options.per_process_gpu_memory_fraction = 0.1
 
         detection_graph = tf.compat.v1.Graph()
         with detection_graph.as_default():
@@ -49,7 +50,8 @@ class FaceNet:
         prep_face = cv2.resize(face, dsize=(SQUARE_SIZE, SQUARE_SIZE), interpolation=cv2.INTER_CUBIC)
         # prep_face = cv2.blur(prep_face, (5,5))
         # Normalize the distribution
-        prep_face = (prep_face - prep_face.mean()) / prep_face.std()
+        prep_face = (prep_face - 127.5) * 0.0078125
+        # prep_face = (prep_face - prep_face.mean()) / prep_face.std()
 
         return prep_face
 

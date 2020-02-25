@@ -135,9 +135,9 @@ class DetectionNetwork():
 
     def load_graphdef(self, graph_def):
         ''' Plug a graph def into the main graph of the detector session . '''
-        conf = tf.compat.v1.ConfigProto(log_device_placement=False)
-        conf.gpu_options.allow_growth = True
-        # conf.gpu_options.per_process_gpu_memory_fraction = 0.5
+        conf = tf.compat.v1.ConfigProto(log_device_placement=True)
+        # conf.gpu_options.allow_growth = True
+        conf.gpu_options.per_process_gpu_memory_fraction = 0.05
         graph = tf.compat.v1.Graph()
         with graph.as_default():
             tf.import_graph_def(graph_def, name='')
