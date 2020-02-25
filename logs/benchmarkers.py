@@ -276,7 +276,6 @@ if __name__ == '__main__':
     # Iterate the rosbag
     bag_len = cam.getBagLength(topics)
     img_count = 0
-    guarda = True
     while True:
         cprint.info(f'\tImage {img_count}/{bag_len}')
         img_count += 1
@@ -293,7 +292,7 @@ if __name__ == '__main__':
             n_dets = len(dets)
 
         elif arch in ['face_yolo', 'face_corrector']:
-            feed_dict = {net.inputs: image[None, ...], net.training: False}
+            feed_dict = {net.input: image[None, ...], net.training: False}
             out, elapsed = net._forward_pass(feed_dict)
             n_dets = len(out[0])
 
