@@ -1,6 +1,7 @@
-benchmarks/detection/*
+logs/benchmarks
 resources/ref_face/*
 *__pycache__
 *swp*
 *nodes.txt
+*yml
 *pb
