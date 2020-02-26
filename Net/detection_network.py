@@ -1,7 +1,7 @@
 import tensorflow as tf
 import tensorflow.contrib.tensorrt as trt # to solve compat. on bin graph
 import numpy as np
-# import cv2
+import cv2
 from os import path
 from PIL import Image
 from Net.utils import label_map_util, nms
@@ -156,6 +156,7 @@ class DetectionNetwork():
     def predict(self, img):
         # Reshape the latest image
         orig_h, orig_w = img.shape[:2]
+        img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
         input_image = Image.fromarray(img)
         img_rsz = np.array(input_image.resize(self.input_shape[:2]))
 
