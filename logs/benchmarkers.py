@@ -26,11 +26,17 @@ class FollowPersonBenchmarker:
     def __init__(self, logdir):
         self.logdir = logdir
         self.description = None
+        # Create the benchmark folder
+        folder_name = datetime.now().strftime(FILENAME_FORMAT)
+        self.dirname = path.join(self.logdir, folder_name)
+        if not path.exists(self.dirname):
+            makedirs(self.dirname)
+
 
     def write_benchmark(self, times_list, rosbag_file,
                         pdet_model, fenc_model,
                         t_pers_det, t_face_det, t_face_enc, ttfi,
-                        display_images, write_iters=True, dirname=None):
+                        display_images, write_iters=True):
         ''' Write the metrics to the output file. '''
 
         benchmark = {}
@@ -131,13 +137,7 @@ class FollowPersonBenchmarker:
 
             benchmark['2.- Iterations'] = iterations
 
-        if dirname is None:
-            dirname = datetime.now().strftime(FILENAME_FORMAT)
-
-        dirname = path.join(self.logdir, dirname)
-        if not path.exists(dirname):
-            makedirs(dirname)
-        benchmark_name = path.join(dirname, 'benchmark.yml')
+        benchmark_name = path.join(self.dirname, 'benchmark.yml')
 
         # Dump
         with open(benchmark_name, 'w') as f:
@@ -151,7 +151,7 @@ class FollowPersonBenchmarker:
         ax.set_title('Total iteration time')
         ax.set_xlabel('Iteration')
         ax.set_ylabel('Time (ms)')
-        figname = path.join(dirname, 'iterations.png')
+        figname = path.join(self.dirname, 'iterations.png')
         fig.savefig(figname)
 
         #   Person detection time
@@ -160,7 +160,7 @@ class FollowPersonBenchmarker:
         ax.set_title('Person detection time')
         ax.set_xlabel('Iteration')
         ax.set_ylabel('Time (ms)')
-        figname = path.join(dirname, 'person_detections.png')
+        figname = path.join(self.dirname, 'person_detections.png')
         fig.savefig(figname)
 
         #   Face detection time
@@ -169,7 +169,7 @@ class FollowPersonBenchmarker:
         ax.set_title('Face detection time')
         ax.set_xlabel('Iteration')
         ax.set_ylabel('Time (ms)')
-        figname = path.join(dirname, 'face_detections.png')
+        figname = path.join(self.dirname, 'face_detections.png')
         fig.savefig(figname)
 
         #   Face encoding time
@@ -178,7 +178,7 @@ class FollowPersonBenchmarker:
         ax.set_title('Face encoding time')
         ax.set_xlabel('Iteration')
         ax.set_ylabel('Time (ms)')
-        figname = path.join(dirname, 'face_encoding.png')
+        figname = path.join(self.dirname, 'face_encoding.png')
         fig.savefig(figname)
 
 

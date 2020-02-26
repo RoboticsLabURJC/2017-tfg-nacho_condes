@@ -8,23 +8,23 @@ __author__ = '@naxvm'
 import argparse
 import sys
 from datetime import datetime, timedelta
+from os import path
 
 import numpy as np
+import yaml
 
 import cv2
 import rospy
-import yaml
-from Camera.ROSCam import ROSCam
+import utils
+from Camera.ROSCam import ROSCam, IMAGE_HEIGHT, IMAGE_WIDTH
+from cprint import cprint
 from faced.detector import FaceDetector
 from imageio import imread
+from logs.benchmarkers import FollowPersonBenchmarker
 from Motors.motors import Motors
 from Net.detection_network import DetectionNetwork
 from Net.facenet import FaceNet
 from Net.utils import visualization_utils as vis_utils
-import utils
-from logs.benchmarkers import FollowPersonBenchmarker
-from cprint import cprint
-
 
 MAX_ITERS = None
 
@@ -45,6 +45,13 @@ if __name__ == '__main__':
     if benchmark:
         cam = ROSCam(cfg['Topics'], cfg['RosbagFile'])
         n_images = cam.getBagLength(cfg['Topics'])
+        benchmarker = FollowPersonBenchmarker(cfg['LogDir'])
+
+        # Check if we have to save the video output
+        save_video = cfg['SaveVideo']
+        if save_video:
+            v_path = path.join(benchmarker.dirname, 'output.mp4')
+            v_out = cv2.VideoWriter(v_path, cv2.VideoWriter_fourcc(*'MP4V'), 20.0, (IMAGE_WIDTH, IMAGE_HEIGHT))
     else:
         cam = ROSCam(cfg['Topics'])
 
@@ -82,6 +89,7 @@ if __name__ == '__main__':
         pers_det.sess.close()
         face_det.sess.close()
         face_enc.sess.close()
+        v_out.release()
         rospy.loginfo("Cleaning and exiting...")
 
     # Register shutdown hook
@@ -89,6 +97,8 @@ if __name__ == '__main__':
 
 
     if benchmark: ttfi = datetime.now() - zero_time; total_times = []
+
+
 
     while not rospy.is_shutdown():
         if benchmark: times = []
@@ -139,10 +149,17 @@ if __name__ == '__main__':
         if display_imgs:
             display_start = datetime.now()
             img_cp = np.copy(image)
+            print(f'Number of persons: {len(persons)}')
             for person in persons:
-                print('Drawing!')
-                vis_utils.draw_bounding_box_on_image_array(img_cp, person[1], person[0],
-                                                           person[1]+person[3], person[0]+person[2], use_normalized_coordinates=False)
+                x1, y1, x2, y2 = person[0], person[1], person[0]+person[2], person[1]+person[3]
+                vis_utils.draw_bounding_box_on_image_array(img_cp, y1, x1, y2, x2, use_normalized_coordinates=False)
+
+            for face in faces_flt:
+                x1, y1, x2, y2 = face[0], face[1], face[0]+face[2], face[1]+face[3]
+                vis_utils.draw_bounding_box_on_image_array(img_cp, y1, x1, y2, x2, color='green', use_normalized_coordinates=False)
+
+            if benchmark and save_video:
+                v_out.write(img_cp)
 
             transformed = cv2.cvtColor(img_cp, cv2.COLOR_RGB2BGR)
             # if faces_cropped:
@@ -170,7 +187,6 @@ if __name__ == '__main__':
 
     # Finish the loop
     if benchmark:
-        benchmarker = FollowPersonBenchmarker(cfg['LogDir'])
         benchmarker.write_benchmark(total_times,
                                     cfg['RosbagFile'],
                                     cfg['Networks']['DetectionModel'],
