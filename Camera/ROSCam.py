@@ -20,7 +20,7 @@ IMAGE_WIDTH = 640
 
 class ROSCam:
 
-    def __init__ (self, topics, rosbag_path=None):
+    def __init__ (self, topics, rosbag_path=None, is_bgr=False):
         ''' Camera class gets new images from the ROS topics or a recorded rosbag
         and convert them into OpenCV format, offering the latest one to the caller.
 
@@ -52,6 +52,9 @@ class ROSCam:
         # Placeholders
         self.__rgb_data = None
         self.__depth_data = None
+
+        # Toggle for BGR->RGB conversion
+        self.is_bgr = is_bgr
 
         self.lock = threading.Lock()
 
@@ -87,5 +90,8 @@ class ROSCam:
 
         rgb_image = self.rgb_bridge.imgmsg_to_cv2(rgb_data, rgb_data.encoding)
         depth_image = self.depth_bridge.imgmsg_to_cv2(depth_data, depth_data.encoding)
+
+        if self.is_bgr: # Convert to RGB
+            rgb_image = cv2.cvtColor(rgb_image, cv2.COLOR_BGR2RGB)
 
         return rgb_image, depth_image
