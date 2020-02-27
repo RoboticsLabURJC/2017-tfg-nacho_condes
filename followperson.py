@@ -121,7 +121,8 @@ if __name__ == '__main__':
 
         # Filter just confident faces
         # TODO: keep only faces inside persons
-        faces_flt = filter(lambda f: f[-1] > 0.9, face_detections)
+        faces_flt = list(filter(lambda f: f[-1] > 0.9, face_detections))
+        # TODO: adapt crop_face in order to use the common bb format
         faces_cropped = [utils.crop_face(image, fdet) for fdet in faces_flt]
         # # elapsed_3 = motors.move(image, depth, persons, scores, faces)
 
@@ -149,23 +150,20 @@ if __name__ == '__main__':
         if display_imgs:
             display_start = datetime.now()
             img_cp = np.copy(image)
-            print(f'Number of persons: {len(persons)}')
+
             for person in persons:
                 x1, y1, x2, y2 = person[0], person[1], person[0]+person[2], person[1]+person[3]
                 vis_utils.draw_bounding_box_on_image_array(img_cp, y1, x1, y2, x2, use_normalized_coordinates=False)
 
             for face in faces_flt:
-                x1, y1, x2, y2 = face[0], face[1], face[0]+face[2], face[1]+face[3]
+                x1, y1, x2, y2 = face[0]-face[2]//2, face[1]-face[3]//2, face[0]+face[2]//2, face[1]+face[3]//2
                 vis_utils.draw_bounding_box_on_image_array(img_cp, y1, x1, y2, x2, color='green', use_normalized_coordinates=False)
 
-            if benchmark and save_video:
-                v_out.write(img_cp)
-
+            print(f'Persons: {len(persons)}\tFaces: {len(faces_flt)}')
             transformed = cv2.cvtColor(img_cp, cv2.COLOR_RGB2BGR)
-            # if faces_cropped:
-            #     f = cv2.cvtColor(faces_cropped[0], cv2.COLOR_RGB2BGR)
-            #     cv2.imshow('Face', f)
             cv2.imshow('Image', transformed)
+            # Write to the video output
+            if benchmark and save_video: v_out.write(transformed)
             cv2.waitKey(30)
             display_elapsed = [datetime.now() - display_start]
         else:
