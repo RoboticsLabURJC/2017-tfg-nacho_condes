@@ -52,8 +52,7 @@ class DetectionNetwork():
 
         else:
             # No graph def was provided!
-            cprint.error('The graph definition has not been loaded.')
-            raise BaseException
+            cprint.fatal('The graph definition has not been loaded.', interrupt=True)
 
 
         self.input_shape = input_shape

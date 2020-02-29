@@ -89,7 +89,8 @@ if __name__ == '__main__':
         pers_det.sess.close()
         face_det.sess.close()
         face_enc.sess.close()
-        v_out.release()
+        if benchmark and save_video:
+            v_out.release()
         rospy.loginfo("Cleaning and exiting...")
 
     # Register shutdown hook
@@ -97,7 +98,6 @@ if __name__ == '__main__':
 
 
     if benchmark: ttfi = datetime.now() - zero_time; total_times = []
-
 
 
     while not rospy.is_shutdown():
