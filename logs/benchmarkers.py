@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 import yaml
-# from utils import TO_MS
+import pickle
 from PIL import Image
 from Net.detection_network import DetectionNetwork
 from Net.utils import nms
@@ -60,18 +60,18 @@ class FollowPersonBenchmarker:
         # Process the measured times
         times_raw = np.array(times_list)
         # Split dropping the first (slower) inference
-        iters_raw = times_raw[1:, 0]
+        iters_raw = times_raw[2:, 0]
         total_iters = TO_MS(iters_raw)[1:]
 
-        pdets_raw = np.array(list(times_raw[1:, 1]))
+        pdets_raw = np.array(list(times_raw[2:, 1]))
         total_pdets = pdets_raw.copy()
         total_pdets[:, 0] = TO_MS(total_pdets[:, 0])
 
-        fdets_raw = np.array(list(times_raw[1:, 2]))
+        fdets_raw = np.array(list(times_raw[2:, 2]))
         total_fdets = fdets_raw.copy()
         total_fdets[:, 0] = TO_MS(fdets_raw[:, 0])
 
-        fencs_raw = np.array(list(times_raw[1:, 3]))
+        fencs_raw = np.array(list(times_raw[2:, 3]))
         total_fencs = fencs_raw.copy()
         total_fencs[:, 0] = TO_MS(total_fencs[:, 0])
         total_fencs_flt = total_fencs[total_fencs[:, 1] > 0]  # Just times belonging to a face filtering
@@ -145,7 +145,7 @@ class FollowPersonBenchmarker:
 
         print(f'Saved on {benchmark_name}')
         # Graphs
-        #   Total iteration time
+        #  Total iteration time
         fig, ax = plt.subplots()
         ax.plot(total_iters)
         ax.set_title('Total iteration time')
@@ -154,7 +154,7 @@ class FollowPersonBenchmarker:
         figname = path.join(self.dirname, 'iterations.png')
         fig.savefig(figname)
 
-        #   Person detection time
+        #  Person detection time
         fig, ax = plt.subplots()
         ax.plot(total_pdets[:, 0])
         ax.set_title('Person detection time')
@@ -163,7 +163,7 @@ class FollowPersonBenchmarker:
         figname = path.join(self.dirname, 'person_detections.png')
         fig.savefig(figname)
 
-        #   Face detection time
+        #  Face detection time
         fig, ax = plt.subplots()
         ax.plot(total_fdets[:, 0])
         ax.set_title('Face detection time')
@@ -172,7 +172,7 @@ class FollowPersonBenchmarker:
         figname = path.join(self.dirname, 'face_detections.png')
         fig.savefig(figname)
 
-        #   Face encoding time
+        #  Face encoding time
         fig, ax = plt.subplots()
         ax.plot(total_fencs[:, 0])
         ax.set_title('Face encoding time')
@@ -181,6 +181,10 @@ class FollowPersonBenchmarker:
         figname = path.join(self.dirname, 'face_encoding.png')
         fig.savefig(figname)
 
+        # Save the times matrix (for further inspection)
+        dump_file = path.join(self.dirname, 'times.pkl')
+        with open(dump_file, 'wb') as f:
+            pickle.dump([total_iters, total_pdets, total_fdets, total_fencs], f)
 
 class SingleModelBenchmarker:
     ''' Writer for a single model benchmark using. '''

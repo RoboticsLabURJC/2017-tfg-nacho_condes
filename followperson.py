@@ -51,7 +51,7 @@ if __name__ == '__main__':
         save_video = cfg['SaveVideo']
         if save_video:
             v_path = path.join(benchmarker.dirname, 'output.mp4')
-            v_out = cv2.VideoWriter(v_path, cv2.VideoWriter_fourcc(*'MP4V'), 20.0, (IMAGE_WIDTH, IMAGE_HEIGHT))
+            v_out = cv2.VideoWriter(v_path, cv2.VideoWriter_fourcc(*'mp4v'), 30.0, (IMAGE_WIDTH, IMAGE_HEIGHT))
     else:
         cam = ROSCam(cfg['Topics'])
 
@@ -112,10 +112,9 @@ if __name__ == '__main__':
 
         # Make an inference on the current image
         persons, elapsed = pers_det.predict(image)
+        if benchmark: times.append([elapsed, len(persons)]); step_time = datetime.now()
 
-        if benchmark: times.append([elapsed, len(persons)])
         # Detect and crop
-        if benchmark: step_time = datetime.now()
         face_detections = face_det.predict(image)
         if benchmark: elapsed = datetime.now() - step_time; times.append([elapsed, len(face_detections) if isinstance(face_detections, list) else 1])
 
@@ -146,8 +145,7 @@ if __name__ == '__main__':
         #         vert = person[1] <= face[1] <= person[3]
         #         print horz, vert
 
-
-        if display_imgs:
+        if benchmark:
             display_start = datetime.now()
             img_cp = np.copy(image)
 
@@ -159,31 +157,31 @@ if __name__ == '__main__':
                 x1, y1, x2, y2 = face[0]-face[2]//2, face[1]-face[3]//2, face[0]+face[2]//2, face[1]+face[3]//2
                 vis_utils.draw_bounding_box_on_image_array(img_cp, y1, x1, y2, x2, color='green', use_normalized_coordinates=False)
 
-            print(f'Persons: {len(persons)}\tFaces: {len(faces_flt)}')
             transformed = cv2.cvtColor(img_cp, cv2.COLOR_RGB2BGR)
-            cv2.imshow('Image', transformed)
+            if display_imgs:
+                cv2.imshow('Image', transformed)
+                cv2.waitKey(5)
             # Write to the video output
-            if benchmark and save_video: v_out.write(transformed)
-            cv2.waitKey(30)
+            if save_video:
+                v_out.write(transformed)
             display_elapsed = [datetime.now() - display_start]
-        else:
-            display_elapsed = []
 
+            # Iteration time
+            iter_elapsed = [datetime.now() - iter_start]
+            total_times.append(iter_elapsed + times + display_elapsed)
 
-        if benchmark: iter_elapsed = [datetime.now() - iter_start]; total_times.append(iter_elapsed + times + display_elapsed)
-
-
-        if benchmark:
             iteration += 1
-            n_image = f'Image {iteration}/{n_images}'
-            print(n_image)
-            print('*' * len(n_image))
+            n_image = f'\rImage {iteration}/{n_images}'
+            print(n_image, end='', flush=True)
+        else:
+            print(f'Persons: {len(persons)}\tFaces: {len(faces_flt)}', end='', flush=True)
 
         # Stop conditions
         if MAX_ITERS is not None and iteration == MAX_ITERS: break
         if iteration == n_images: break
 
     # Finish the loop
+    print()
     if benchmark:
         benchmarker.write_benchmark(total_times,
                                     cfg['RosbagFile'],

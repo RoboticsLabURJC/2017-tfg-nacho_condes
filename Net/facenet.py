@@ -24,7 +24,7 @@ class FaceNet:
                 fn_graph_def.ParseFromString(serialized_graph)
                 tf.import_graph_def(fn_graph_def, name='')
 
-        self.sess = tf.Session(graph=detection_graph, config=conf)
+        self.sess = tf.Session(graph=detection_graph)#, config=conf)
 
         # Instance of the placeholders and embedding tensors
         self.input       = self.sess.graph.get_tensor_by_name('input:0')
