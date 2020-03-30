@@ -62,7 +62,7 @@ class DetectionNetwork():
         dummy_tensor = np.zeros((1,*self.input_shape), dtype=np.int32)
 
         # Set placeholders, depending on the network architecture
-        cprint.warn(f'This is the arch: {self.arch}')
+        cprint.warn(f'Network architecture: {self.arch}')
         if self.arch == 'ssd':
             # Inputs
             self.image_tensor      = self.sess.graph.get_tensor_by_name('image_tensor:0')
@@ -134,7 +134,7 @@ class DetectionNetwork():
 
     def load_graphdef(self, graph_def):
         ''' Plug a graph def into the main graph of the detector session . '''
-        conf = tf.compat.v1.ConfigProto(log_device_placement=True)
+        conf = tf.compat.v1.ConfigProto(log_device_placement=False)
         # conf.gpu_options.allow_growth = True
         conf.gpu_options.per_process_gpu_memory_fraction = 0.1
         graph = tf.compat.v1.Graph()

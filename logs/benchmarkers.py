@@ -8,13 +8,9 @@ from PIL import Image
 from Net.detection_network import DetectionNetwork
 from Net.utils import nms
 from Camera.ROSCam import ROSCam
-from os import listdir, path, makedirs, chdir
+from os import listdir, path, makedirs
 from cprint import cprint
 
-# Change the working directory in order to have access to the modules
-# abspath = path.abspath(__file__)
-# dname = path.dirname(abspath)
-# chdir(dname)
 
 
 FILENAME_FORMAT = '%Y%m%d %H%M%S'
@@ -22,7 +18,7 @@ TO_MS = np.vectorize(lambda x: x.seconds * 1000.0 + x.microseconds / 1000.0) # A
 
 
 class FollowPersonBenchmarker:
-    ''' Writer for a full-set benchmark using a certain configuration. '''
+    '''Writer for a full-set benchmark using a certain configuration.'''
     def __init__(self, logdir):
         self.logdir = logdir
         self.description = None
@@ -36,8 +32,8 @@ class FollowPersonBenchmarker:
     def write_benchmark(self, times_list, rosbag_file,
                         pdet_model, fenc_model,
                         t_pers_det, t_face_det, t_face_enc, ttfi,
-                        display_images, write_iters=True):
-        ''' Write the metrics to the output file. '''
+                        write_iters=True):
+        '''Write the metrics to the output file.'''
 
         benchmark = {}
         summary = {}
@@ -48,55 +44,54 @@ class FollowPersonBenchmarker:
                 '2.- FaceEncodingModel':    fenc_model,
             },
             '2.- RosbagFile': rosbag_file,
-            '3.- DisplayImages': display_images,
         }
         summary['2.- LoadTimes'] = {
-            '1.- PersonDetectionNetworkLoad': float(TO_MS(t_pers_det)),
-            '2.- FaceDetectionNetworkLoad':   float(TO_MS(t_face_det)),
-            '3.- FaceEncodingNetworkLoad':    float(TO_MS(t_face_enc)),
-            '4.- TTFI':                       float(TO_MS(ttfi)),
+            '1.- PersonDetectionNetworkLoad': f'{TO_MS(t_pers_det):.4f} ms',
+            '2.- FaceDetectionNetworkLoad':   f'{TO_MS(t_face_det):.4f} ms',
+            '3.- FaceEncodingNetworkLoad':    f'{TO_MS(t_face_enc):.4f} ms',
+            '4.- TTFI':                       f'{TO_MS(ttfi):.4f} ms',
         }
 
         # Process the measured times
-        times_raw = np.array(times_list)
-        # Split dropping the first (slower) inference
-        iters_raw = times_raw[2:, 0]
-        total_iters = TO_MS(iters_raw)[1:]
+        import pickle
+        with open('times_list.pkl', 'wb') as f:
+            pickle.dump(times_list, f)
+        # Drop the first (slower) inferences
+        times_raw = np.array(times_list)[2:, :]
 
-        pdets_raw = np.array(list(times_raw[2:, 1]))
+        pdets_raw = np.array(list(times_raw[:, 0]))
         total_pdets = pdets_raw.copy()
         total_pdets[:, 0] = TO_MS(total_pdets[:, 0])
 
-        fdets_raw = np.array(list(times_raw[2:, 2]))
+        fdets_raw = np.array(list(times_raw[:, 1]))
         total_fdets = fdets_raw.copy()
         total_fdets[:, 0] = TO_MS(fdets_raw[:, 0])
 
-        fencs_raw = np.array(list(times_raw[2:, 3]))
+        fencs_raw = np.array(list(times_raw[:, 2]))
         total_fencs = fencs_raw.copy()
         total_fencs[:, 0] = TO_MS(total_fencs[:, 0])
         total_fencs_flt = total_fencs[total_fencs[:, 1] > 0]  # Just times belonging to a face filtering
         # total_fencs_flt = list(filter(lambda x: x[1] > 0, total_fencs))
 
-        if display_images:
-            disps_raw = times_raw[1:, 4]
-            total_disps = TO_MS(disps_raw)
+        iters_raw = times_raw[:, 3]
+        total_iters = TO_MS(iters_raw)[1:]
 
         summary['3.- Stats'] = {
             '1.- PersonDetection': {
-                '1.- Mean': float(total_pdets.mean()),
-                '2.- Std':  float(total_pdets.std()),
+                '1.- Mean': f'{total_pdets.mean():.4f} ms',
+                '2.- Std':  f'{total_pdets.std():.4f} ms',
             },
             '2.- FaceDetection': {
-                '1.- Mean': float(total_fdets.mean()),
-                '2.- Std':  float(total_fdets.std()),
+                '1.- Mean': f'{total_fdets.mean():.4f} ms',
+                '2.- Std':  f'{total_fdets.std():.4f} ms',
             },
             '3.- FaceEncoding': {
-                '1.- Mean': float(total_fencs_flt.mean()),
-                '2.- Std':  float(total_fencs_flt.std()),
+                '1.- Mean': f'{total_fencs_flt.mean():.4f} ms',
+                '2.- Std':  f'{total_fencs_flt.std():.4f} ms',
             },
             '4.- IterationTime': {
-                '1.- Mean': float(total_iters.mean()),
-                '2.- Std': float(total_iters.std()),
+                '1.- Mean': f'{total_iters.mean():.4f} ms',
+                '2.- Std': f'{total_iters.std():.4f} ms',
             }
         }
         benchmark['1.- Summary'] = summary
@@ -111,27 +106,27 @@ class FollowPersonBenchmarker:
                 persons_detection['1.- NumDetections'] = int(n_persons)
                 if n_persons == 0:
                     continue
-                persons_detection['2.- TotalTime'] = float(pdet.sum())
+                persons_detection['2.- TotalTime'] = f'{pdet.sum():.4f} ms'
                 # Faces detection
                 faces_detection = {}
                 n_faces = fdet[1]
                 faces_detection['1.- NumDetections'] = int(n_faces)
                 if n_faces == 0:
                     continue
-                faces_detection['2.- TotalTime'] = float(fdet.sum())
+                faces_detection['2.- TotalTime'] = f'{fdet.sum():.4f} ms'
                 # Faces encoding
                 faces_encoding = {}
                 n_faces = fenc[1]
                 faces_encoding['1.- NumDetections'] = int(n_faces)
                 if n_faces == 0:
                     continue
-                faces_encoding['2.- TotalTime'] = float(fenc.sum())
+                faces_encoding['2.- TotalTime'] = f'{fenc.sum():.4f} ms'
 
                 iteration = {
                     '1.- PersonsDetection':   persons_detection,
                     '2.- FacesDetection':     faces_detection,
                     '3.- FacesEncoding':      faces_encoding,
-                    '4.- TotalIterationTime': float(it_time),
+                    '4.- TotalIterationTime': f'{it_time:.4f} ms',
                 }
                 iterations.append(iteration)
 
@@ -148,6 +143,7 @@ class FollowPersonBenchmarker:
         #  Total iteration time
         fig, ax = plt.subplots()
         ax.plot(total_iters)
+        ax.set_ylim([0, total_iters.mean() + 2 * total_iters.std()])
         ax.set_title('Total iteration time')
         ax.set_xlabel('Iteration')
         ax.set_ylabel('Time (ms)')
@@ -157,6 +153,7 @@ class FollowPersonBenchmarker:
         #  Person detection time
         fig, ax = plt.subplots()
         ax.plot(total_pdets[:, 0])
+        ax.set_ylim([0, total_pdets.mean() + 2 * total_pdets.std()])
         ax.set_title('Person detection time')
         ax.set_xlabel('Iteration')
         ax.set_ylabel('Time (ms)')
@@ -166,6 +163,7 @@ class FollowPersonBenchmarker:
         #  Face detection time
         fig, ax = plt.subplots()
         ax.plot(total_fdets[:, 0])
+        ax.set_ylim([0, total_fdets.mean() + 2 * total_fdets.std()])
         ax.set_title('Face detection time')
         ax.set_xlabel('Iteration')
         ax.set_ylabel('Time (ms)')
@@ -175,6 +173,7 @@ class FollowPersonBenchmarker:
         #  Face encoding time
         fig, ax = plt.subplots()
         ax.plot(total_fencs[:, 0])
+        ax.set_ylim([0, total_fencs.mean() + 2 * total_fencs.std()])
         ax.set_title('Face encoding time')
         ax.set_xlabel('Iteration')
         ax.set_ylabel('Time (ms)')

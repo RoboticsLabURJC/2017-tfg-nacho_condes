@@ -59,7 +59,7 @@ class ROSCam:
         self.lock = threading.Lock()
 
     def getBagLength(self, topics):
-        ''' Retrieve the length of the bag. '''
+        '''Retrieve the length of the bag.'''
         bag_topics = self.bag.get_type_and_topic_info()
         rgb_info = bag_topics[1][topics['RGB']]
         message_count = rgb_info[1]

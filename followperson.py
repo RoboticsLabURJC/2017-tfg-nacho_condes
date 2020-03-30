@@ -23,6 +23,7 @@ from imageio import imread
 from logs.benchmarkers import FollowPersonBenchmarker
 from Motors.motors import Motors
 from Net.detection_network import DetectionNetwork
+from Net.networks_controller import NetworksController
 from Net.facenet import FaceNet
 from Net.utils import visualization_utils as vis_utils
 
@@ -38,158 +39,109 @@ if __name__ == '__main__':
 
     rospy.init_node(cfg['NodeName'])
     # Requested behavioral
-    benchmark = cfg['Mode'].lower() == 'benchmark'
+    benchmark = cfg['Benchmark']
     nets = cfg['Networks']
+
 
     # Instantiations
     if benchmark:
         cam = ROSCam(cfg['Topics'], cfg['RosbagFile'])
         n_images = cam.getBagLength(cfg['Topics'])
         benchmarker = FollowPersonBenchmarker(cfg['LogDir'])
+        # Save the video output
+        # save_video = cfg['SaveVideo']
+        v_path = path.join(benchmarker.dirname, 'output.mp4')
+        v_out = cv2.VideoWriter(v_path, cv2.VideoWriter_fourcc(*'mp4v'), 30.0, (2*IMAGE_WIDTH, 2*IMAGE_HEIGHT))
 
-        # Check if we have to save the video output
-        save_video = cfg['SaveVideo']
-        if save_video:
-            v_path = path.join(benchmarker.dirname, 'output.mp4')
-            v_out = cv2.VideoWriter(v_path, cv2.VideoWriter_fourcc(*'mp4v'), 30.0, (IMAGE_WIDTH, IMAGE_HEIGHT))
     else:
         cam = ROSCam(cfg['Topics'])
+
 
     if benchmark: zero_time = datetime.now(); step_time = zero_time
 
     # Person detection network (SSD or YOLO)
     input_shape = (nets['DetectionHeight'], nets['DetectionWidth'], 3)
     pers_det = DetectionNetwork(nets['Arch'], input_shape, nets['DetectionModel'])
+    if benchmark: t_pers_det = datetime.now() - step_time; step_time = datetime.now()
 
     # Face detection network. The frozen graphs can't be overridden as they are included in the
     # faced package. Use symlinks in order to exchange them for anothers.
-    if benchmark: t_pers_det = datetime.now() - step_time; step_time = datetime.now()
     face_det = FaceDetector()
+    if benchmark: t_face_det = datetime.now() - step_time; step_time = datetime.now()
 
     # FaceNet embedding encoder.
-    if benchmark: t_face_det = datetime.now() - step_time; step_time = datetime.now()
     face_enc = FaceNet(nets['FaceEncoderModel'])
-
-    # Now we extract the reference face
     face_img = imread(cfg['RefFace'])
     fbox = face_det.predict(face_img)
     ref_face = utils.crop_face(face_img, fbox)
-    # and plug it into the encoder
     face_enc.set_reference_face(ref_face)
     if benchmark: t_face_enc = datetime.now() - step_time; step_time = datetime.now()
 
+    # The networks are ready to be threaded!!
+    nets_c = NetworksController(pers_det, face_det, face_enc, benchmark=True)
+    # Configure the controller
+    nets_c.setCamera(cam)
+    nets_c.daemon = True
+    nets_c.start()
+    if benchmark: ttfi = datetime.now() - zero_time
+
+
+
     # Motors instance
-    # motors = Motors(cfg['Topics']['Velocity'])
-    display_imgs = cfg['DisplayImages']
+    motors = Motors(cfg['Topics']['Velocity'])
 
     iteration = 0
     elapsed_times = []
 
     def shtdn_hook():
-        pers_det.sess.close()
-        face_det.sess.close()
-        face_enc.sess.close()
-        if benchmark and save_video:
+        rospy.loginfo("\nCleaning and exiting...")
+        nets_c.close_all()
+        cv2.destroyAllWindows()
+        if benchmark:
             v_out.release()
-        rospy.loginfo("Cleaning and exiting...")
 
     # Register shutdown hook
     rospy.on_shutdown(shtdn_hook)
 
-
-    if benchmark: ttfi = datetime.now() - zero_time; total_times = []
-
-
     while not rospy.is_shutdown():
-        if benchmark: times = []
-        # Fetch the images
-        try:
-            image, depth = cam.getImages()
-        except StopIteration:
-            rospy.signal_shutdown("rosbag completed!!")
-            break
-        if benchmark: step_time = datetime.now(); iter_start = step_time
+        if not nets_c.is_activated:
+            rospy.signal_shutdown('ROSBag completed!')
+        # Draw the images.
+        image = nets_c.image
+        # depth2 = np.copy(nets_c.depth)
+        depth = 255.0 * (1 - nets_c.depth / 6.0) # 8-bit quantization of the effective Xtion range
+        transformed = np.copy(image)
 
-        # Make an inference on the current image
-        persons, elapsed = pers_det.predict(image)
-        if benchmark: times.append([elapsed, len(persons)]); step_time = datetime.now()
+        for person in nets_c.persons:
+            x1, y1, x2, y2 = person[0], person[1], person[0]+person[2], person[1]+person[3]
+            vis_utils.draw_bounding_box_on_image_array(transformed, y1, x1, y2, x2, use_normalized_coordinates=False)
 
-        # Detect and crop
-        face_detections = face_det.predict(image)
-        if benchmark: elapsed = datetime.now() - step_time; times.append([elapsed, len(face_detections) if isinstance(face_detections, list) else 1])
+        for face in nets_c.faces_flt:
+            x1, y1, x2, y2 = face[0]-face[2]//2, face[1]-face[3]//2, face[0]+face[2]//2, face[1]+face[3]//2
+            vis_utils.draw_bounding_box_on_image_array(transformed, y1, x1, y2, x2, color='green', use_normalized_coordinates=False)
 
-        # Filter just confident faces
-        # TODO: keep only faces inside persons
-        faces_flt = list(filter(lambda f: f[-1] > 0.9, face_detections))
-        # TODO: adapt crop_face in order to use the common bb format
-        faces_cropped = [utils.crop_face(image, fdet) for fdet in faces_flt]
-        # # elapsed_3 = motors.move(image, depth, persons, scores, faces)
+        # Show the images
+        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+        transformed = cv2.cvtColor(transformed, cv2.COLOR_RGB2BGR)
+        depth = cv2.applyColorMap(depth.astype(np.uint8), cv2.COLORMAP_JET)
+        inputs = np.vstack((image, depth))
+
+        moves = np.zeros_like(image)
+        outputs = np.vstack((moves, transformed))
+
+        total_out = np.hstack((inputs, outputs))
+
+        v_out.write(total_out)
+        cv2.imshow('Output', total_out)
+        cv2.waitKey(1)
 
 
-        if benchmark: step_time = datetime.now()
-        similarities = face_enc.distancesToRef(faces_cropped)
-        # for idx, sim in enumerate(similarities):
-        #     print(idx, '\t', sim)
-        if benchmark: elapsed = datetime.now() - step_time; times.append([elapsed, len(similarities) if isinstance(similarities, list) else 1])
-
-
-    # motors.setNetworks(network, siamese_network)
-    # motors.setCamera(cam)
-    # if device_type.lower() == 'kobuki':
-    #     motors.setDepth(depth)
-
-        # for face in faces:
-        #     for person in boxes:
-        #         # We check the face center belongs to a person
-        #         horz = person[0] <= face[0] <= person[2]
-        #         vert = person[1] <= face[1] <= person[3]
-        #         print horz, vert
-
-        if benchmark:
-            display_start = datetime.now()
-            img_cp = np.copy(image)
-
-            for person in persons:
-                x1, y1, x2, y2 = person[0], person[1], person[0]+person[2], person[1]+person[3]
-                vis_utils.draw_bounding_box_on_image_array(img_cp, y1, x1, y2, x2, use_normalized_coordinates=False)
-
-            for face in faces_flt:
-                x1, y1, x2, y2 = face[0]-face[2]//2, face[1]-face[3]//2, face[0]+face[2]//2, face[1]+face[3]//2
-                vis_utils.draw_bounding_box_on_image_array(img_cp, y1, x1, y2, x2, color='green', use_normalized_coordinates=False)
-
-            transformed = cv2.cvtColor(img_cp, cv2.COLOR_RGB2BGR)
-            if display_imgs:
-                cv2.imshow('Image', transformed)
-                cv2.waitKey(5)
-            # Write to the video output
-            if save_video:
-                v_out.write(transformed)
-            display_elapsed = [datetime.now() - display_start]
-
-            # Iteration time
-            iter_elapsed = [datetime.now() - iter_start]
-            total_times.append(iter_elapsed + times + display_elapsed)
-
-            iteration += 1
-            n_image = f'\rImage {iteration}/{n_images}'
-            print(n_image, end='', flush=True)
-        else:
-            print(f'Persons: {len(persons)}\tFaces: {len(faces_flt)}', end='', flush=True)
-
-        # Stop conditions
-        if MAX_ITERS is not None and iteration == MAX_ITERS: break
-        if iteration == n_images: break
-
-    # Finish the loop
-    print()
+    # Finish the execution
     if benchmark:
-        benchmarker.write_benchmark(total_times,
+        benchmarker.write_benchmark(nets_c.total_times,
                                     cfg['RosbagFile'],
                                     cfg['Networks']['DetectionModel'],
                                     cfg['Networks']['FaceEncoderModel'],
-                                    t_pers_det, t_face_det, t_face_enc, ttfi,
-                                    display_imgs, write_iters=True)
-
-    if display_imgs: cv2.destroyAllWindows()
+                                    t_pers_det, t_face_det, t_face_enc, ttfi)
 
     rospy.signal_shutdown("Finished!!")
