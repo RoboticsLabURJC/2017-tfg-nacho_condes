@@ -95,7 +95,7 @@ class NetworksController(threading.Thread):
                 iter_elapsed = datetime.now() - iter_start
                 iter_info.append(iter_elapsed)
                 self.total_times.append(iter_info)
-            print(f'\rElapsed: {iter_elapsed}\t{1e6/iter_elapsed.microseconds:.2f} fps', end='', flush=True)
+            # print(f'\rElapsed: {iter_elapsed}\t{1e6/iter_elapsed.microseconds:.2f} fps', end='', flush=True)
 
 
     def close_all(self):

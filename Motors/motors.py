@@ -11,12 +11,11 @@ from cprint import cprint
 from Motors import trackers
 
 class Motors:
-    ''' Class to process the error computed from the RGB and depth images, and send commands,
-    which will be intelligently interpreted. '''
+    '''Class to process the distance measurements and command movements.'''
 
     def __init__(self, motors_topic):
         # self.motors = motors
-        # TODO: re-write velocity controllers 
+        # TODO: re-write velocity controllers
 
         # PID controllers:
         self.w_PID = PIDDriver(
@@ -101,7 +100,7 @@ class Motors:
         # Returning also the grid, to be able to draw it on the depth image (TODO)
         return median, grid
 
-    def move(self, full_image, full_depth, persons, scores, faces):
+    def move(self, full_image, full_depth, persons, faces):
         '''
         Method called on each iteration. Detects persons and look for mom.
         Commands the robot towards mom if it is found.
@@ -192,7 +191,7 @@ class Motors:
 
         # num_detections = len(self.detection_boxes)
         # We retrieve every detected face on the current frame.
-        self.persons = self.person_tracker.evalPersons(persons, scores, full_image)
+        self.persons = self.person_tracker.evalPersons(persons, full_image)
         # self.persons = persons
         # Now, we look for faces in those persons.
         self.faces = self.person_tracker.filterFaces(self.persons, faces)
@@ -236,7 +235,7 @@ class Motors:
             cprint.ok("\t\t  Mom found")
             # goToMom(self.mom_coords, full_image.shape)
         else:
-            cprint.warn("\t\t  Looking for mom...")
+            cprint.warn("\r\t\t  Looking for mom...", end='', flush=True)
             self.v_PID.lostResponse()
             self.w_PID.lostResponse()
         if len(elapsed_times) > 0:

@@ -105,10 +105,9 @@ class FaceTracker:
 
 
 class Person:
-    def __init__(self, coords, score, counter=0, f_tracker=None, is_mom=False):
+    def __init__(self, coords, counter=0, f_tracker=None, is_mom=False):
         self.coords = coords
         self.counter = counter
-        self.score = score
 
         if f_tracker is not None:
             self.ftrk = f_tracker
@@ -125,7 +124,7 @@ class Person:
             what = 'Mom'
         else:
             what = 'Person'
-        return what + ": " + str(self.coords) + "(%.2f)" % (self.score) + '. Counter: %d' %(self.counter)
+        return what + ": " + str(self.coords) + '. Counter: %d' %(self.counter)
 
 
 class PersonTracker:
@@ -152,13 +151,11 @@ class PersonTracker:
                 if c_person.counter == self.patience:
                     # We will track this person from now.
                     aux_tracked.append(Person(c_person.coords,
-                                              c_person.score,
                                               self.patience,
                                               c_person.ftrk))
                 else:
                     # It will stay as a candidate for now.
                     aux_candidate.append(Person(c_person.coords,
-                                                c_person.score,
                                                 c_person.counter - 1,
                                                 c_person.ftrk))
         # We update the list of candidate persons.
@@ -169,16 +166,14 @@ class PersonTracker:
             if t_person.counter >= 0:
                 # The person survives.
                 aux_tracked.append(Person(t_person.coords,
-                                          t_person.score,
                                           t_person.counter - 1,
                                           t_person.ftrk,
                                           t_person.is_mom))
         self.tracked_persons = aux_tracked
 
-    def evalPersons(self, detected_persons, detection_scores, full_image):
+    def evalPersons(self, detected_persons, full_image):
         for idx in range(len(detected_persons)):
             d_person = detected_persons[idx]
-            d_score = detection_scores[idx]
 
             found = False
             # We contrast the new person with existing tracked persons.
@@ -187,7 +182,6 @@ class PersonTracker:
                     # Tracked person found in the same place (approximately).
                     # Updating person.
                     self.tracked_persons[idx] = Person(d_person,
-                                                       d_score,
                                                        min(t_person.counter, self.patience) + 2,
                                                        t_person.ftrk,
                                                        t_person.is_mom)
@@ -200,14 +194,14 @@ class PersonTracker:
                     # Candidate person found in the same place (approximately).
                     # Updating person.
                     self.candidate_persons[idx] = Person(d_person,
-                                                         d_score, min(c_person.counter, self.patience) + 2,
+                                                         min(c_person.counter, self.patience) + 2,
                                                          c_person.ftrk)
                     found = True
                     break
 
             if not found:
                 # Not present at all. New candidate!
-                self.candidate_persons.append(Person(d_person, d_score, 1))
+                self.candidate_persons.append(Person(d_person, 1))
 
         # Now, we refresh the persons counter, and move them to their new
         # list, if necessary.

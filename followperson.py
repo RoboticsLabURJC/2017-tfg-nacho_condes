@@ -88,7 +88,7 @@ if __name__ == '__main__':
 
 
     # Motors instance
-    motors = Motors(cfg['Topics']['Velocity'])
+    motors = Motors(cfg['Topics']['Motors'])
 
     iteration = 0
     elapsed_times = []
@@ -106,6 +106,11 @@ if __name__ == '__main__':
     while not rospy.is_shutdown():
         if not nets_c.is_activated:
             rospy.signal_shutdown('ROSBag completed!')
+
+        # Track the detections
+        elapsed_moving = motors.move(nets_c.image, nets_c.depth, nets_c.persons, nets_c.faces_flt)
+
+
         # Draw the images.
         image = nets_c.image
         # depth2 = np.copy(nets_c.depth)
@@ -130,10 +135,9 @@ if __name__ == '__main__':
         outputs = np.vstack((moves, transformed))
 
         total_out = np.hstack((inputs, outputs))
-
-        v_out.write(total_out)
-        cv2.imshow('Output', total_out)
+        cv2.imshow('Output', cv2.resize(total_out, dsize=(IMAGE_WIDTH, IMAGE_HEIGHT), interpolation=cv2.INTER_CUBIC))
         cv2.waitKey(1)
+        if benchmark: v_out.write(total_out)
 
 
     # Finish the execution
