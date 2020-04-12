@@ -1,12 +1,11 @@
 import numpy as np
-from time import sleep
 from cprint import cprint
 
 
-class PIDDriver:
-    ''' PID controller connected to a Turtlebot motors, which can command velocities
-    avoiding sudden stops, and also handle loss situations (with a softer response). '''
-    def __init__(self, Kc, Ki, Kd, K_loss, scaling_factor, limiter):
+class PIDController:
+    '''Given the desired gains for each component, create a PID controller to
+    compute an appropriate response for the reference person.'''
+    def __init__(self, Kp, Ki, Kd, K_loss, scaling_factor, limiter):
         # Specific parameters
         # TODO: REWRITE THE DRIVER
         #self.func = func
@@ -25,33 +24,33 @@ class PIDDriver:
         self.last_response = 0
 
 
-    def _sendCommand(self, response):
-        ''' This method sends a command to the motors, and updates the last command. '''
-        # Soften movements:
-        '''
-        if abs(response - self.last_response) > 0.2:
-            speeds = np.linspace(self.last_response, response, num=5)
-            for speed in speeds:
-                self.func(speed)
-                sleep(0.05)
-        else:
-            self.func(response)
-        self.last_response = response
-        '''
-        #print "    response: ", response
-        #print "    last res: ", self.last_response
-        resp = (response + self.last_response) / 2.0
-        #print "sending -> ", resp
-        # self.func(resp)
+    # def _sendCommand(self, response):
+    #     ''' This method sends a command to the motors, and updates the last command. '''
+    #     # Soften movements:
+    #     '''
+    #     if abs(response - self.last_response) > 0.2:
+    #         speeds = np.linspace(self.last_response, response, num=5)
+    #         for speed in speeds:
+    #             self.func(speed)
+    #             sleep(0.05)
+    #     else:
+    #         self.func(response)
+    #     self.last_response = response
+    #     '''
+    #     #print "    response: ", response
+    #     #print "    last res: ", self.last_response
+    #     resp = (response + self.last_response) / 2.0
+    #     #print "sending -> ", resp
+    #     # self.func(resp)
 
 
 
-    def brake(self):
-        self._sendCommand(0)
+    # def brake(self):
+    #     self._sendCommand(0)
 
 
     def lostResponse(self):
-        ''' Send a softened response from the last sent speed. '''
+        '''Send a softened response from the last sent speed.'''
         response = self.K_loss * self.last_response
         #print "lost called"
         if abs(response) > self.lost_limiter:
@@ -63,9 +62,8 @@ class PIDDriver:
 
 
 
-    def processError(self, error, verbose=False, debug=False):
-        ''' This method computes the proper PID response given an error, and commands
-        it to the motors (via function send() to provide softness). '''
+    def computeResponse(self, error):
+        '''Compute the appropriate response'''
 
         P = self.Kc * error * self.scaling_factor
         I = self.Ki * (error + self.cumulative_error) * self.scaling_factor
