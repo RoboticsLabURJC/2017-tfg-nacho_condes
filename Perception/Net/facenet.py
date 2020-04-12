@@ -62,13 +62,11 @@ class FaceNet:
         and check the distance to the reference one.
         '''
         nfaces = len(faces)
-        if nfaces == 0:
-            return np.infty
 
         # Tensor containing all the faces to eval
         all_faces = np.zeros((nfaces+1, SQUARE_SIZE, SQUARE_SIZE, 3))
         all_faces[0, ...] = self.ref_face
-        for ix in range(0, nfaces):
+        for ix in range(nfaces):
             all_faces[ix+1, ...] = self.preprocess(faces[ix])
 
         # Embeddings computation
@@ -77,5 +75,6 @@ class FaceNet:
 
         emb = self.sess.run(self.embeddings, feed_dict=feed_dict)
         # Compute the distances to the reference embedding
-        distances = emb[1:, :] - emb[0, :]
-        return np.linalg.norm(distances, axis=1)
+        vectors = emb[1:, :] - emb[0, :]
+        distances = np.linalg.norm(vectors, axis=1)
+        return distances

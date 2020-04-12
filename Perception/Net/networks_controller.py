@@ -29,7 +29,7 @@ class NetworksController(threading.Thread):
         self.depth = []
 
         self.persons = []
-        self.faces_flt = []
+        self.faces = []
         self.similarities = []
 
         # self.framerate = 0
@@ -51,6 +51,9 @@ class NetworksController(threading.Thread):
             # Fetch the images
             try:
                 self.image, self.depth = self.cam.getImages()
+                # _, self.depth = self.cam.getImages()
+                # import cv2
+                # self.image = cv2.cvtColor(cv2.imread("foto.jpg"), cv2.COLOR_RGB2BGR)
             except StopIteration:
                 self.is_activated = False
                 break
@@ -75,9 +78,8 @@ class NetworksController(threading.Thread):
                 iter_info.append([elapsed, len(face_detections) if isinstance(face_detections, list) else 1])
 
             # Just confident faces
-            self.faces_flt = list(filter(lambda f: f[-1] > 0.9, face_detections))
-            # TODO: filter the faces by position?
-            faces_cropped = [utils.crop_face(self.image, fdet) for fdet in self.faces_flt]
+            self.faces = list(filter(lambda f: f[-1] > 0.9, face_detections))
+            faces_cropped = [utils.crop_face(self.image, fdet) for fdet in self.faces]
             if self.benchmark: step_time = datetime.now()
 
 
@@ -86,7 +88,7 @@ class NetworksController(threading.Thread):
             self.similarities = self.fenc_network.distancesToRef(faces_cropped)
             if self.benchmark:
                 elapsed = datetime.now() - step_time
-                iter_info.append([elapsed, len(similarities) if isinstance(self.similarities, list) else 1])
+                iter_info.append([elapsed, len(self.similarities)])
 
 
 
@@ -95,7 +97,7 @@ class NetworksController(threading.Thread):
                 iter_elapsed = datetime.now() - iter_start
                 iter_info.append(iter_elapsed)
                 self.total_times.append(iter_info)
-            # print(f'\rElapsed: {iter_elapsed}\t{1e6/iter_elapsed.microseconds:.2f} fps', end='', flush=True)
+            # cprint.info(f'\r[INFERENCES] Elapsed: {iter_elapsed}\t{1e6/iter_elapsed.microseconds:.2f} fps', end='', flush=True)
 
 
     def close_all(self):

@@ -4,7 +4,7 @@ import numpy as np
 import cv2
 from os import path
 from PIL import Image
-from Net.utils import label_map_util, nms
+from Perception.Net.utils import label_map_util, nms
 from datetime import datetime
 from cprint import cprint
 
@@ -136,7 +136,7 @@ class DetectionNetwork():
         ''' Plug a graph def into the main graph of the detector session . '''
         conf = tf.compat.v1.ConfigProto(log_device_placement=False)
         # conf.gpu_options.allow_growth = True
-        conf.gpu_options.per_process_gpu_memory_fraction = 0.1
+        conf.gpu_options.per_process_gpu_memory_fraction = 0.5
         graph = tf.compat.v1.Graph()
         with graph.as_default():
             tf.import_graph_def(graph_def, name='')
