@@ -21,7 +21,8 @@ from faced.detector import FaceDetector
 from imageio import imread
 from benchmarkers import FollowPersonBenchmarker
 # from Tracking.motors import Motors
-from Tracking import tracking
+from Actuation.Tracking import tracking
+from Actuation.Moving.pid_controller import PIDController
 from Perception.Camera.ROSCam import ROSCam, IMAGE_HEIGHT, IMAGE_WIDTH
 from Perception.Net.detection_network import DetectionNetwork
 from Perception.Net.networks_controller import NetworksController
@@ -88,11 +89,11 @@ if __name__ == '__main__':
     if benchmark: ttfi = datetime.now() - zero_time
 
 
-
     # Person tracker
     p_tracker = tracking.PersonTracker(same_person_thr=60)
-    # Motors instance
-    # motors = Motors(cfg['Topics']['Motors'])
+    # PID controllers
+    x_pid = PIDController(Kp=2*5e-3, Ki=0.08*5e-3, Kd=10*5e-3, K_loss=0, limit=0.7, stop_range=(30, 50))
+    w_pid = PIDController(Kp=7*5e-4, Ki=0.5*5e-4, Kd=10*5e-4, K_loss=1, limit=1, stop_range=(-25, 25))
 
     iteration = 0
     elapsed_times = []
@@ -127,12 +128,26 @@ if __name__ == '__main__':
         # Persons ready to be fetched
         persons = p_tracker.persons
 
-        # Move towards the ref person
+
+
+        ################
+        #### MOVING ####
+        ################
+        # Compute errors
+        ref_found = False
         for person in persons:
             if person.is_ref:
                 w_error = utils.computeWError(person.coords, IMAGE_WIDTH)
                 x_error = utils.computeXError(person.coords, nets_c.depth)
-                cprint(f'w: {w_error}\tx: {x_error}')
+                ref_found = True
+                break
+        # Compute a suitable response with the PID controllers
+        if ref_found:
+            w_response = w_pid.computeResponse(w_error, verbose=True)
+            x_response = x_pid.computeResponse(x_error, verbose=True)
+            cprint.info(f'w: {w_error:.3f} => {w_response:.3f}')
+            cprint.info(f'x: {x_error:.3f} => {x_response:.3f}')
+
 
         ###############
         ### DRAWING ###
