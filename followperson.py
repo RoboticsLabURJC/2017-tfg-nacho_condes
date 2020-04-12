@@ -16,16 +16,17 @@ import yaml
 import cv2
 import rospy
 import utils
-from Camera.ROSCam import ROSCam, IMAGE_HEIGHT, IMAGE_WIDTH
 from cprint import cprint
 from faced.detector import FaceDetector
 from imageio import imread
-from logs.benchmarkers import FollowPersonBenchmarker
-from Motors.motors import Motors
-from Net.detection_network import DetectionNetwork
-from Net.networks_controller import NetworksController
-from Net.facenet import FaceNet
-from Net.utils import visualization_utils as vis_utils
+from benchmarkers import FollowPersonBenchmarker
+# from Tracking.motors import Motors
+from Tracking import tracking
+from Perception.Camera.ROSCam import ROSCam, IMAGE_HEIGHT, IMAGE_WIDTH
+from Perception.Net.detection_network import DetectionNetwork
+from Perception.Net.networks_controller import NetworksController
+from Perception.Net.facenet import FaceNet
+from Perception.Net.utils import visualization_utils as vis_utils
 
 MAX_ITERS = None
 
@@ -64,8 +65,9 @@ if __name__ == '__main__':
     pers_det = DetectionNetwork(nets['Arch'], input_shape, nets['DetectionModel'])
     if benchmark: t_pers_det = datetime.now() - step_time; step_time = datetime.now()
 
+
     # Face detection network. The frozen graphs can't be overridden as they are included in the
-    # faced package. Use symlinks in order to exchange them for anothers.
+    # faced package. Use symlinks in order to exchange them for others.
     face_det = FaceDetector()
     if benchmark: t_face_det = datetime.now() - step_time; step_time = datetime.now()
 
@@ -87,8 +89,10 @@ if __name__ == '__main__':
 
 
 
+    # Person tracker
+    p_tracker = tracking.PersonTracker(same_person_thr=60)
     # Motors instance
-    motors = Motors(cfg['Topics']['Motors'])
+    # motors = Motors(cfg['Topics']['Motors'])
 
     iteration = 0
     elapsed_times = []
@@ -107,23 +111,48 @@ if __name__ == '__main__':
         if not nets_c.is_activated:
             rospy.signal_shutdown('ROSBag completed!')
 
-        # Track the detections
-        elapsed_moving = motors.move(nets_c.image, nets_c.depth, nets_c.persons, nets_c.faces_flt)
+        ################
+        ### TRACKING ###
+        ################
+        # Forward step in the tracking using the detections
+        cprint.info('=====')
+        cprint.info(f'Detections: {len(nets_c.persons)}|{len(nets_c.faces)}')
+        p_tracker.handleDetections(nets_c.persons)
+        cprint.info(f'Tracked {len(p_tracker.persons)} persons')
+        p_tracker.handleFaces(nets_c.faces, nets_c.similarities, nets_c.image)
 
+        # And process the similarities
+        p_tracker.checkRef()
 
+        # Persons ready to be fetched
+        persons = p_tracker.persons
+
+        # Move towards the ref person
+        for person in persons:
+            if person.is_ref:
+                w_error = utils.computeWError(person.coords, IMAGE_WIDTH)
+                x_error = utils.computeXError(person.coords, nets_c.depth)
+                cprint(f'w: {w_error}\tx: {x_error}')
+
+        ###############
+        ### DRAWING ###
+        ###############
         # Draw the images.
         image = nets_c.image
-        # depth2 = np.copy(nets_c.depth)
         depth = 255.0 * (1 - nets_c.depth / 6.0) # 8-bit quantization of the effective Xtion range
         transformed = np.copy(image)
 
-        for person in nets_c.persons:
-            x1, y1, x2, y2 = person[0], person[1], person[0]+person[2], person[1]+person[3]
-            vis_utils.draw_bounding_box_on_image_array(transformed, y1, x1, y2, x2, use_normalized_coordinates=False)
+        for person in persons:
+            x1, y1, x2, y2 = person.coords[0], person.coords[1], person.coords[0]+person.coords[2], person.coords[1]+person.coords[3]
+            if person.is_ref:
+                color = 'green'
+            else:
+                color = 'red'
+            vis_utils.draw_bounding_box_on_image_array(transformed, y1, x1, y2, x2, color=color, use_normalized_coordinates=False)
 
-        for face in nets_c.faces_flt:
-            x1, y1, x2, y2 = face[0]-face[2]//2, face[1]-face[3]//2, face[0]+face[2]//2, face[1]+face[3]//2
-            vis_utils.draw_bounding_box_on_image_array(transformed, y1, x1, y2, x2, color='green', use_normalized_coordinates=False)
+            for face in person.ftrk.faces:
+                x1, y1, x2, y2 = face.coords[0]-face.coords[2]//2, face.coords[1]-face.coords[3]//2, face.coords[0]+face.coords[2]//2, face.coords[1]+face.coords[3]//2
+                vis_utils.draw_bounding_box_on_image_array(transformed, y1, x1, y2, x2, color='blue', use_normalized_coordinates=False)
 
         # Show the images
         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
