@@ -5,9 +5,9 @@ from datetime import datetime, timedelta
 import yaml
 import pickle
 from PIL import Image
-from Net.detection_network import DetectionNetwork
-from Net.utils import nms
-from Camera.ROSCam import ROSCam
+from Perception.Net.detection_network import DetectionNetwork
+from Perception.Net.utils import nms
+from Perception.Camera.ROSCam import ROSCam
 from os import listdir, path, makedirs
 from cprint import cprint
 

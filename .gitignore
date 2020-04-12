@@ -1,4 +1,4 @@
-logs/benchmarks
+resources/benchmarks/*
 resources/ref_face/*
 *__pycache__
 *swp*
