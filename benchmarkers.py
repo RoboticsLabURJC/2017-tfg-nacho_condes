@@ -53,9 +53,6 @@ class FollowPersonBenchmarker:
         }
 
         # Process the measured times
-        import pickle
-        with open('times_list.pkl', 'wb') as f:
-            pickle.dump(times_list, f)
         # Drop the first (slower) inferences
         times_raw = np.array(times_list)[2:, :]
 
