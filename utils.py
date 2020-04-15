@@ -55,7 +55,7 @@ def computeWError(coords, im_width):
     of the tracked person.'''
     person_center = coords[0] + coords[2]/2
 
-    w_error = person_center - im_width/2
+    w_error = im_width/2 - person_center
     return w_error
 
 def computeXError(coords, depth):
@@ -75,5 +75,9 @@ def computeXError(coords, depth):
     # Sample the values and compute the median depth
     sampled_depths = cropped_depth[grid].ravel()
     median = np.nanmedian(sampled_depths)
-
+    if np.isnan(median):
+        # The person is too close to estimate the distance
+        # We report 0 distance
+        return 0.0
     return median
+

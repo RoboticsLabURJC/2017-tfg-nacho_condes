@@ -169,10 +169,10 @@ class DetectionNetwork():
             for box, prob, cls in zip(boxes, scores, classes):
                 if prob >= self.confidence_threshold and cls == self.person_class:
                     # x, y, w, h, p
-                    y1 = box[0] * orig_h
-                    x1 = box[1] * orig_w
-                    y2 = box[2] * orig_h
-                    x2 = box[3] * orig_w
+                    y1 = max(box[0], 0.0) * orig_h
+                    x1 = max(box[1], 0.0) * orig_w
+                    y2 = min(box[2], 1.0) * orig_h
+                    x2 = min(box[3], 1.0) * orig_w
 
                     boxes_full.append([x1, y1, x2-x1, y2-y1, prob])
 
@@ -191,10 +191,10 @@ class DetectionNetwork():
             for box, prob in persons:
                 if prob >= self.confidence_threshold:
                     # x, y, w, h, p
-                    x1 = box[0] / self.input_shape[1] * orig_w
-                    y1 = box[1] / self.input_shape[0] * orig_h
-                    x2 = box[2] / self.input_shape[1] * orig_w
-                    y2 = box[3] / self.input_shape[0] * orig_h
+                    x1 = max(box[0]/self.input_shape[1], 0.0) * orig_w
+                    y1 = max(box[1]/self.input_shape[0], 0.0) * orig_h
+                    x2 = min(box[2]/self.input_shape[1], 1.0) * orig_w
+                    y2 = min(box[3]/self.input_shape[0], 1.0) * orig_h
                     boxes_full.append([x1, y1, x2-x1, y2-y1, prob])
             return boxes_full, elapsed
         else:
