@@ -27,6 +27,7 @@ class NetworksController(threading.Thread):
 
         self.image = []
         self.depth = []
+        self.frame_counter = -1
 
         self.persons = []
         self.faces = []
@@ -38,11 +39,12 @@ class NetworksController(threading.Thread):
 
         # Benchmarking purposes
         self.benchmark = benchmark
-        self.total_times = []
+        self.total_times = {}
 
     def setCamera(self, camera):
         self.cam = camera
         self.image, self.depth = self.cam.getImages()
+        self.frame_counter += 1
 
     def run(self):
         ''' Updates the thread. '''
@@ -51,9 +53,7 @@ class NetworksController(threading.Thread):
             # Fetch the images
             try:
                 self.image, self.depth = self.cam.getImages()
-                # _, self.depth = self.cam.getImages()
-                # import cv2
-                # self.image = cv2.cvtColor(cv2.imread("foto.jpg"), cv2.COLOR_RGB2BGR)
+                self.frame_counter += 1
             except StopIteration:
                 self.is_activated = False
                 break
@@ -63,7 +63,7 @@ class NetworksController(threading.Thread):
 
 
 
-            # Person detection
+            ### Person detection ###
             self.persons, elapsed = self.pdet_network.predict(self.image)
             if self.benchmark:
                 iter_info.append([elapsed, len(self.persons)])
@@ -71,7 +71,7 @@ class NetworksController(threading.Thread):
 
 
 
-            # Face detection and cropping
+            ### Face detection and cropping ###
             face_detections = self.fdet_network.predict(self.image)
             if self.benchmark:
                 elapsed = datetime.now() - step_time
@@ -84,7 +84,7 @@ class NetworksController(threading.Thread):
 
 
 
-            # Face similarities
+            ### Face similarities ###
             self.similarities = self.fenc_network.distancesToRef(faces_cropped)
             if self.benchmark:
                 elapsed = datetime.now() - step_time
@@ -96,8 +96,9 @@ class NetworksController(threading.Thread):
             if self.benchmark:
                 iter_elapsed = datetime.now() - iter_start
                 iter_info.append(iter_elapsed)
-                self.total_times.append(iter_info)
-            # cprint.info(f'\r[INFERENCES] Elapsed: {iter_elapsed}\t{1e6/iter_elapsed.microseconds:.2f} fps', end='', flush=True)
+                self.total_times[self.frame_counter] = iter_info
+
+                # cprint.info(f'\r[INFERENCES] Elapsed: {iter_elapsed}\t{1e6/iter_elapsed.microseconds:.2f} fps', end='', flush=True)
 
 
     def close_all(self):

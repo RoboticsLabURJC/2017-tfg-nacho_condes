@@ -4,9 +4,12 @@
 #
 
 from datetime import datetime, timedelta
-import yaml
 from os import listdir, path
+
+import cv2
 import numpy as np
+import yaml
+import colorsys
 
 FILENAME_FORMAT = '%Y%m%d %H%M%S.yml'
 
@@ -81,3 +84,46 @@ def computeXError(coords, depth):
         return 0.0
     return median
 
+
+def arrowColor(rate):
+    '''Return the RGB color for drawing an arrow
+    given the rate of the response.'''
+
+    # Compute the hue, mapping the response to a red-orange gradient
+    # H = 0 -> red
+    # H = 50 -> yellow
+
+    # Linear mapping
+    H = 50 * (1-rate) / 100
+    S = V = 1.0
+    # Convert to RGB space
+    B, G, R = colorsys.hsv_to_rgb(H, S, V)
+    rgb_color = (int(R*255), int(G*255), int(B*255))
+
+    return rgb_color
+
+
+
+def movesImage(shape, xlim, xval, wlim, wval):
+    '''Render a crosshair representing the response sent to the robot.'''
+    img = np.zeros(shape, dtype=np.uint8)
+    start_point = (shape[1]//2, shape[0]//2)
+
+    # w
+    w_rate = wval/wlim
+    # Scale to the maximum length, and trim to avoid the edges
+    w_len = int(0.95 * w_rate * shape[1]/2)
+    w_ep = (shape[1]//2 - w_len, shape[0]//2)
+    # Find the appropriate color
+    w_col = arrowColor(w_rate)
+    # Draw!
+    img = cv2.arrowedLine(img, start_point, w_ep, w_col, thickness=4)
+
+    # x
+    # Same procedure
+    x_rate = xval/xlim
+    x_len = int(0.95 * x_rate * shape[1]/2)
+    x_ep = (shape[1]//2, shape[0]//2 - x_len)
+    x_col = arrowColor(x_rate)
+    img = cv2.arrowedLine(img, start_point, x_ep, x_col, thickness=4)
+    return img

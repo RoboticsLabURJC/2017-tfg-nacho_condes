@@ -15,6 +15,7 @@ import yaml
 
 import cv2
 import rospy
+from geometry_msgs.msg import Twist
 import utils
 from cprint import cprint
 from faced.detector import FaceDetector
@@ -92,11 +93,21 @@ if __name__ == '__main__':
     # Person tracker
     p_tracker = tracking.PersonTracker(same_person_thr=60)
     # PID controllers
-    x_pid = PIDController(Kp=2*5e-3, Ki=0.08*5e-3, Kd=10*5e-3, K_loss=0, limit=0.7, stop_range=(30, 50))
-    w_pid = PIDController(Kp=7*5e-4, Ki=0.5*5e-4, Kd=10*5e-4, K_loss=1, limit=1, stop_range=(-25, 25))
+    xlim = 0.7
+    wlim = 1
+    x_pid = PIDController(Kp=2*5e-3, Ki=0.08*5e-3, Kd=10*5e-3,
+                          K_loss=0, limit=xlim, stop_range=(1.30, 1.85),
+                          soften=True, verbose=True)
+    w_pid = PIDController(Kp=7*5e-4, Ki=0.5*5e-4, Kd=10*5e-4,
+                          K_loss=1, limit=wlim, stop_range=(-200, +200),
+                          soften=True, verbose=True)
+    # Twist messages publisher for moving the robot
+    tw_pub = rospy.Publisher(cfg['Topics']['Motors'], Twist, queue_size=10)
+
 
     iteration = 0
-    elapsed_times = []
+    sent_responses = {}
+    ref_errors = {}
 
     def shtdn_hook():
         rospy.loginfo("\nCleaning and exiting...")
@@ -112,6 +123,10 @@ if __name__ == '__main__':
         if not nets_c.is_activated:
             rospy.signal_shutdown('ROSBag completed!')
 
+        image = nets_c.image
+        depth = nets_c.depth
+        frame_counter = nets_c.frame_counter
+
         ################
         ### TRACKING ###
         ################
@@ -120,7 +135,7 @@ if __name__ == '__main__':
         cprint.info(f'Detections: {len(nets_c.persons)}|{len(nets_c.faces)}')
         p_tracker.handleDetections(nets_c.persons)
         cprint.info(f'Tracked {len(p_tracker.persons)} persons')
-        p_tracker.handleFaces(nets_c.faces, nets_c.similarities, nets_c.image)
+        p_tracker.handleFaces(nets_c.faces, nets_c.similarities, image)
 
         # And process the similarities
         p_tracker.checkRef()
@@ -138,22 +153,35 @@ if __name__ == '__main__':
         for person in persons:
             if person.is_ref:
                 w_error = utils.computeWError(person.coords, IMAGE_WIDTH)
-                x_error = utils.computeXError(person.coords, nets_c.depth)
+                x_error = utils.computeXError(person.coords, depth)
                 ref_found = True
                 break
         # Compute a suitable response with the PID controllers
         if ref_found:
-            w_response = w_pid.computeResponse(w_error, verbose=True)
-            x_response = x_pid.computeResponse(x_error, verbose=True)
+            w_response = w_pid.computeResponse(w_error)
+            x_response = x_pid.computeResponse(x_error)
             cprint.info(f'w: {w_error:.3f} => {w_response:.3f}')
             cprint.info(f'x: {x_error:.3f} => {x_response:.3f}')
+            # Send the response to the robot
+            if not benchmark:
+                msg = Twist()
+                msg.linear.x  = x_response
+                msg.angular.z = w_response
+                tw_pub.publish(msg)
+        else:
+            if benchmark:
+                w_error = None
+                x_error = None
+                w_response = 0.0
+                x_response = 0.0
 
-
+        if benchmark:
+            ref_errors[frame_counter] = (w_error, x_error)
+            sent_responses[frame_counter] = (w_response, x_response)
         ###############
         ### DRAWING ###
         ###############
         # Draw the images.
-        image = nets_c.image
         depth = 255.0 * (1 - nets_c.depth / 6.0) # 8-bit quantization of the effective Xtion range
         transformed = np.copy(image)
 
@@ -175,10 +203,11 @@ if __name__ == '__main__':
         depth = cv2.applyColorMap(depth.astype(np.uint8), cv2.COLORMAP_JET)
         inputs = np.vstack((image, depth))
 
-        moves = np.zeros_like(image)
+        moves = utils.movesImage(image.shape, xlim, x_response, wlim, w_response)
         outputs = np.vstack((moves, transformed))
 
         total_out = np.hstack((inputs, outputs))
+        cv2.putText(total_out, f'Frame #{frame_counter}', (2*IMAGE_WIDTH-250,30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2)
         cv2.imshow('Output', cv2.resize(total_out, dsize=(IMAGE_WIDTH, IMAGE_HEIGHT), interpolation=cv2.INTER_CUBIC))
         cv2.waitKey(1)
         if benchmark: v_out.write(total_out)
@@ -190,6 +219,7 @@ if __name__ == '__main__':
                                     cfg['RosbagFile'],
                                     cfg['Networks']['DetectionModel'],
                                     cfg['Networks']['FaceEncoderModel'],
-                                    t_pers_det, t_face_det, t_face_enc, ttfi)
+                                    t_pers_det, t_face_det, t_face_enc, ttfi,
+                                    ref_errors, sent_responses)
 
     rospy.signal_shutdown("Finished!!")

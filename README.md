@@ -1,6 +1,6 @@
 __Project under revision__: you can find the TFG delivery [here](https://github.com/RoboticsLabURJC/2017-tfg-nacho_condes/releases/tag/TFG)
 
-# Current framework (on Jetson TX2 - JetPack 4.3)
+# Current framework (on Jetson TX2 - JetPack 4.2)
 * Python 3.6
 * ROS Melodic
 * OpenCV 4
@@ -95,7 +95,6 @@ _Sony EVI D100P_:
 `python2 followperson.py ptz.yml`
 
 (give it a time to build and load the network instance from the files.)
-
 
 ***
 ### Object Detector

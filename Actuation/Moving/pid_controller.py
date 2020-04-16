@@ -5,7 +5,7 @@ from cprint import cprint
 class PIDController:
     '''Given the desired gains for each component, create a PID controller to
     compute an appropriate response for the reference person.'''
-    def __init__(self, Kp, Ki, Kd, K_loss, limit, stop_range, verbose):
+    def __init__(self, Kp, Ki, Kd, K_loss, limit, stop_range, soften, verbose):
         # Specific parameters
         self.Kp = Kp
         self.Ki = Ki
@@ -21,8 +21,9 @@ class PIDController:
         # Internal attributes for the response calculation
         self.prev_error = 0
         self.cumulative_error = 0
-        self.prev_response = 0
+        self.last_response = 0
 
+        self.soften = soften
         self.verbose = verbose
 
     def lostResponse(self):
@@ -75,7 +76,12 @@ class PIDController:
         # Update parameters for the next iteration
         self.prev_error = rel_error
         self.cumulative_error += rel_error
+
+        if self.soften:
+            response = np.mean([self.last_response, response])
+
         self.last_response = response
+
         # Returning the response value
         return response
 
