@@ -105,10 +105,11 @@ class PersonTracker:
     '''This class stores the current persons on scene, and refreshes them using
     the latest inferences.'''
 
-    def __init__(self, patience=5, ref_sim_thr=1.00, same_person_thr=20):
+    def __init__(self, patience, ref_sim_thr, same_person_thr):
         # Placeholders
         self.persons = []
         self.candidates = []
+        self.tracked_counter = 0
         # Parameters
         self.same_person_thr = same_person_thr
         self.ref_sim_thr = ref_sim_thr
@@ -141,6 +142,7 @@ class PersonTracker:
 
             if not found:
                 # The person is a new candidate
+                self.tracked_counter += 1
                 c = Person(det)
                 self.candidates.append(c)
 

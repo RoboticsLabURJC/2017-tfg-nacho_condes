@@ -22,15 +22,16 @@ from faced.detector import FaceDetector
 from imageio import imread
 from benchmarkers import FollowPersonBenchmarker
 # from Tracking.motors import Motors
-from Actuation.Tracking import tracking
-from Actuation.Moving.pid_controller import PIDController
+from Actuation import tracking
+from Actuation.pid_controller import PIDController
 from Perception.Camera.ROSCam import ROSCam, IMAGE_HEIGHT, IMAGE_WIDTH
 from Perception.Net.detection_network import DetectionNetwork
 from Perception.Net.networks_controller import NetworksController
 from Perception.Net.facenet import FaceNet
 from Perception.Net.utils import visualization_utils as vis_utils
 
-MAX_ITERS = None
+XLIM = 0.7
+WLIM = 1
 
 if __name__ == '__main__':
     # Parameter parsing
@@ -91,22 +92,30 @@ if __name__ == '__main__':
 
 
     # Person tracker
-    p_tracker = tracking.PersonTracker(same_person_thr=60)
+    ptcfg = cfg['PersonTracker']
+    p_tracker = tracking.PersonTracker(ptcfg['Patience'], ptcfg['RefSimThr'], ptcfg['SamePersonThr'])
     # PID controllers
-    xlim = 0.7
-    wlim = 1
-    x_pid = PIDController(Kp=2*5e-3, Ki=0.08*5e-3, Kd=10*5e-3,
-                          K_loss=0, limit=xlim, stop_range=(1.30, 1.85),
+    xcfg = cfg['XController']
+    x_pid = PIDController(xcfg['Kp'], xcfg['Ki'], xcfg['Kd'], K_loss=0,
+                          limit=XLIM, stop_range=(xcfg['Min'], xcfg['Max']),
                           soften=True, verbose=True)
-    w_pid = PIDController(Kp=7*5e-4, Ki=0.5*5e-4, Kd=10*5e-4,
-                          K_loss=1, limit=wlim, stop_range=(-200, +200),
+
+    wcfg = cfg['WController']
+    w_pid = PIDController(wcfg['Kp'], wcfg['Ki'], wcfg['Kd'], K_loss=1,
+                          limit=WLIM, stop_range=(wcfg['Min'], wcfg['Max']),
                           soften=True, verbose=True)
     # Twist messages publisher for moving the robot
     tw_pub = rospy.Publisher(cfg['Topics']['Motors'], Twist, queue_size=10)
 
-
+    if benchmark:
+        # Save the configuration on the benchmarker
+        benchmarker.makeConfig(nets['DetectionModel'], nets['FaceEncoderModel'], cfg['RosbagFile'], xcfg, wcfg, ptcfg)
+        benchmarker.makeLoadTimes(t_pers_det, t_face_det, t_face_enc, ttfi)
+    # Data structures to save the results
     iteration = 0
+    frames_with_ref = 0
     sent_responses = {}
+    num_trackings = {}
     ref_errors = {}
 
     def shtdn_hook():
@@ -155,6 +164,7 @@ if __name__ == '__main__':
                 w_error = utils.computeWError(person.coords, IMAGE_WIDTH)
                 x_error = utils.computeXError(person.coords, depth)
                 ref_found = True
+                frames_with_ref += 1
                 break
         # Compute a suitable response with the PID controllers
         if ref_found:
@@ -176,8 +186,10 @@ if __name__ == '__main__':
                 x_response = 0.0
 
         if benchmark:
+            num_trackings[frame_counter] = len(persons)
             ref_errors[frame_counter] = (w_error, x_error)
             sent_responses[frame_counter] = (w_response, x_response)
+
         ###############
         ### DRAWING ###
         ###############
@@ -203,7 +215,7 @@ if __name__ == '__main__':
         depth = cv2.applyColorMap(depth.astype(np.uint8), cv2.COLORMAP_JET)
         inputs = np.vstack((image, depth))
 
-        moves = utils.movesImage(image.shape, xlim, x_response, wlim, w_response)
+        moves = utils.movesImage(image.shape, XLIM, x_response, WLIM, w_response)
         outputs = np.vstack((moves, transformed))
 
         total_out = np.hstack((inputs, outputs))
@@ -215,11 +227,9 @@ if __name__ == '__main__':
 
     # Finish the execution
     if benchmark:
-        benchmarker.write_benchmark(nets_c.total_times,
-                                    cfg['RosbagFile'],
-                                    cfg['Networks']['DetectionModel'],
-                                    cfg['Networks']['FaceEncoderModel'],
-                                    t_pers_det, t_face_det, t_face_enc, ttfi,
-                                    ref_errors, sent_responses)
+        benchmarker.makeDetectionStats(nets_c.total_times)
+        benchmarker.makeTrackingStats(p_tracker.tracked_counter, frames_with_ref)
+        benchmarker.makeIters(nets_c.total_times, num_trackings, ref_errors, sent_responses)
+        benchmarker.writeBenchmark()
 
     rospy.signal_shutdown("Finished!!")

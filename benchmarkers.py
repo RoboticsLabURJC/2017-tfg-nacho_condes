@@ -9,19 +9,27 @@ from Perception.Net.detection_network import DetectionNetwork
 from Perception.Net.utils import nms
 from Perception.Camera.ROSCam import ROSCam
 from os import listdir, path, makedirs
+from scipy.stats import median_absolute_deviation as mad
 from cprint import cprint
 
 
 
 FILENAME_FORMAT = '%Y%m%d %H%M%S'
-TO_MS = np.vectorize(lambda x: x.seconds * 1000.0 + x.microseconds / 1000.0) # Auxiliary vectorized function
+TO_MS = lambda x: x.seconds*1000.0 + x.microseconds/1000.0 # Auxiliary vectorized function
 
 
 class FollowPersonBenchmarker:
     '''Writer for a full-set benchmark using a certain configuration.'''
     def __init__(self, logdir):
         self.logdir = logdir
-        self.description = None
+        # Sections
+        self.config = None
+        self.load_times = None
+        self.detection_stats = None
+        self.tracking_stats = None
+        self.iterations = None
+
+        self.plot_times = {}
         # Create the benchmark folder
         folder_name = datetime.now().strftime(FILENAME_FORMAT)
         self.dirname = path.join(self.logdir, folder_name)
@@ -29,105 +37,158 @@ class FollowPersonBenchmarker:
             makedirs(self.dirname)
 
 
-    def write_benchmark(self, times_list, rosbag_file,
-                        pdet_model, fenc_model,
-                        t_pers_det, t_face_det, t_face_enc, ttfi,
-                        write_iters=True):
-        '''Write the metrics to the output file.'''
-
-        benchmark = {}
-        summary = {}
-        summary['1.- Configuration'] = {
+    def makeConfig(self, pdet_model, fenc_model, rosbag_file, xcfg, wcfg, ptcfg):
+        '''Build the config section for the benchmark report.'''
+        config = {
             '1.- Networks': {
-                '1.- PersonDetectionModel': pdet_model,
-                # '2.- FaceDetectionModel':   fdet_model,
-                '2.- FaceEncodingModel':    fenc_model,
+                '1.- PersonDetectionmodel': pdet_model,
+                '2.- FaceEncodingModel': fenc_model,
             },
             '2.- RosbagFile': rosbag_file,
+            '3.- Tracker': {
+                    '1.- Patience': ptcfg['Patience'],
+                    '2.- RefSimThr': ptcfg['RefSimThr'],
+                    '3.- SamePersonThr': ptcfg['SamePersonThr'],
+            },
+            '4.- XController': {
+                '1.- Kp': xcfg['Kp'],
+                '2.- Ki': xcfg['Ki'],
+                '3.- Kd': xcfg['Kd'],
+            },
+            '5.- WController': {
+                '1.- Kp': wcfg['Kp'],
+                '2.- Ki': wcfg['Ki'],
+                '3.- Kd': wcfg['Kd'],
+            },
         }
-        summary['2.- LoadTimes'] = {
-            '1.- PersonDetectionNetworkLoad': f'{TO_MS(t_pers_det):.4f} ms',
-            '2.- FaceDetectionNetworkLoad':   f'{TO_MS(t_face_det):.4f} ms',
-            '3.- FaceEncodingNetworkLoad':    f'{TO_MS(t_face_enc):.4f} ms',
-            '4.- TTFI':                       f'{TO_MS(ttfi):.4f} ms',
+        self.config = config
+
+    def makeLoadTimes(self, t_pers_det, t_face_det, t_face_enc, ttfi):
+        '''Build the load times section for the benchmark report.'''
+
+        load_times = {
+            '1.- PersonDetectionNetworkLoad': t_pers_det,
+            '2.- FaceDetectionNetworkLoad': t_face_det,
+            '3.- FaceEncodingNetworkLoad': t_face_enc,
+            '4.- TTFI': ttfi,
         }
+        self.load_times = load_times
 
-        # Process the measured times
-        # Drop the first (slower) inferences
-        times_raw = np.array(times_list)[2:, :]
+    def makeDetectionStats(self, frames_times):
+        '''Build the detection statistics section for the benchmark report.'''
 
-        pdets_raw = np.array(list(times_raw[:, 0]))
-        total_pdets = pdets_raw.copy()
-        total_pdets[:, 0] = TO_MS(total_pdets[:, 0])
+        # Convert the times to an array
+        measured_times = np.array(list(frames_times.values()))
 
-        fdets_raw = np.array(list(times_raw[:, 1]))
-        total_fdets = fdets_raw.copy()
-        total_fdets[:, 0] = TO_MS(fdets_raw[:, 0])
+        # Split into the components
+        ## Person detection times
+        pdet_times = np.array([TO_MS(dt) for dt, _ in measured_times[:, 0]])
+        self.plot_times['pdet'] = pdet_times
+        ## Face detection times
+        fdet_times = np.array([TO_MS(dt) for dt, _ in measured_times[:, 1]])
+        self.plot_times['fdet'] = fdet_times
+        ## Face encoding times (and filtered version with only iterations including faces)
+        fenc_times = np.array([TO_MS(dt) for dt, _ in measured_times[:, 2]])
+        self.plot_times['fenc'] = fenc_times
+        fenc_times_flt = np.array([TO_MS(dt) for dt, count in measured_times[:, 2] if count>0])
+        ## Iteration times
+        iter_times = np.array(list(map(TO_MS, measured_times[:, 3])))
+        self.plot_times['iter'] = iter_times
 
-        fencs_raw = np.array(list(times_raw[:, 2]))
-        total_fencs = fencs_raw.copy()
-        total_fencs[:, 0] = TO_MS(total_fencs[:, 0])
-        total_fencs_flt = total_fencs[total_fencs[:, 1] > 0]  # Just times belonging to a face filtering
-        # total_fencs_flt = list(filter(lambda x: x[1] > 0, total_fencs))
-
-        iters_raw = times_raw[:, 3]
-        total_iters = TO_MS(iters_raw)[1:]
-
-        summary['3.- Stats'] = {
+        # Build the stats!
+        # Median + Median Absolute Deviation
+        detection_stats = {
             '1.- PersonDetection': {
-                '1.- Mean': f'{total_pdets.mean():.4f} ms',
-                '2.- Std':  f'{total_pdets.std():.4f} ms',
+                '1.- Median': f'{np.median(pdet_times):.4f} ms',
+                '2.- MAD':    f'{mad(pdet_times):.4f} ms',
             },
             '2.- FaceDetection': {
-                '1.- Mean': f'{total_fdets.mean():.4f} ms',
-                '2.- Std':  f'{total_fdets.std():.4f} ms',
+                '1.- Median': f'{np.median(fdet_times):.4f} ms',
+                '2.- MAD':  f'{mad(fdet_times):.4f} ms',
             },
             '3.- FaceEncoding': {
-                '1.- Mean': f'{total_fencs_flt.mean():.4f} ms',
-                '2.- Std':  f'{total_fencs_flt.std():.4f} ms',
+                '1.- Median': f'{np.median(fenc_times_flt):.4f} ms',
+                '2.- MAD':  f'{mad(fenc_times_flt):.4f} ms',
             },
-            '4.- IterationTime': {
-                '1.- Mean': f'{total_iters.mean():.4f} ms',
-                '2.- Std': f'{total_iters.std():.4f} ms',
+            '4.- NeuralTime': {
+                '1.- Median': f'{np.median(iter_times):.4f} ms',
+                '2.- MAD': f'{mad(iter_times):.4f} ms',
             }
         }
-        benchmark['1.- Summary'] = summary
+        self.detection_stats = detection_stats
 
-        if write_iters:
-            iterations = []
-            for it_time, pdet, fdet, fenc in zip(total_iters, total_pdets, total_fdets, total_fencs):
-                iteration = {}
-                # Persons detection
-                persons_detection = {}
-                n_persons = len(pdet)
-                persons_detection['1.- NumDetections'] = int(n_persons)
-                if n_persons == 0:
-                    continue
-                persons_detection['2.- TotalTime'] = f'{pdet.sum():.4f} ms'
-                # Faces detection
-                faces_detection = {}
-                n_faces = fdet[1]
-                faces_detection['1.- NumDetections'] = int(n_faces)
-                if n_faces == 0:
-                    continue
-                faces_detection['2.- TotalTime'] = f'{fdet.sum():.4f} ms'
-                # Faces encoding
-                faces_encoding = {}
-                n_faces = fenc[1]
-                faces_encoding['1.- NumDetections'] = int(n_faces)
-                if n_faces == 0:
-                    continue
-                faces_encoding['2.- TotalTime'] = f'{fenc.sum():.4f} ms'
+    def makeTrackingStats(self, tracked_persons, frames_with_ref):
+        '''Build the tracking statistics section for the benchmark report.'''
 
-                iteration = {
-                    '1.- PersonsDetection':   persons_detection,
-                    '2.- FacesDetection':     faces_detection,
-                    '3.- FacesEncoding':      faces_encoding,
-                    '4.- TotalIterationTime': f'{it_time:.4f} ms',
-                }
-                iterations.append(iteration)
+        tracking_stats = {
+            '1.- TrackedPersons': tracked_persons,
+            '2.- FramesWithRef': frames_with_ref,
+        }
+        self.tracking_stats = tracking_stats
 
-            benchmark['2.- Iterations'] = iterations
+    def makeIters(self, frames_times, frames_numtrackings, frames_errors, frames_responses):
+        '''Write the iterations for each processed frame in the benchmark.'''
+
+        iterations = []
+        for frame, times in frames_times.items():
+            # Fill selectively for each frame
+            frame_info = {}
+
+            frame_info['1.- Frame'] = frame
+
+            frame_info['2.- PersonDetection'] = {
+                    '1.- Elapsed': f'{TO_MS(times[0][0]):.4f} ms',
+                    '2.- Number': f'{times[0][1]}',
+            }
+
+            frame_info['3.- FaceDetection'] = {
+                    '1.- Elapsed': f'{TO_MS(times[1][0]):.4f} ms',
+                    '2.- Number': f'{times[1][1]}',
+            }
+
+            frame_info['4.- FaceEncoding'] = {
+                    '1.- Elapsed': f'{TO_MS(times[2][0]):.4f} ms',
+                    '2.- Number': f'{times[2][1]}',
+            }
+
+            frame_info['5.- NeuralTime'] = f'{TO_MS(times[3]):.4f} ms'
+
+            # From now on, each frame might not having been tracked
+            val = frames_numtrackings.get(frame, '')
+            frame_info['6.- Tracking'] = {
+                '1.- TrackedPersons': val,
+            }
+
+            errors = frames_errors.get(frame, ['', ''])
+            responses = frames_responses.get(frame, ['', ''])
+
+            frame_info['7.- XControl'] = {
+                '1.- Error': errors[1],
+                '2.- Response': responses[1],
+            }
+
+            frame_info['8.- WControl'] = {
+                '1.- Error': errors[0],
+                '2.- Response': responses[0],
+            }
+            iterations.append(frame_info)
+
+        self.iterations = iterations
+
+
+    def writeBenchmark(self):
+        '''Write the metrics to the output file.'''
+
+        # Build the entire structure
+        benchmark = {
+            '1.- Summary': {
+                '1.- Config': self.config,
+                '2.- LoadTimes': self.load_times,
+                '3.- DetectionStats': self.detection_stats,
+                '4.- TrackingStats': self.tracking_stats,
+            },
+            '2.- Iterations': self.iterations
+        }
 
         benchmark_name = path.join(self.dirname, 'benchmark.yml')
 
@@ -136,51 +197,60 @@ class FollowPersonBenchmarker:
             yaml.dump(benchmark, f)
 
         print(f'Saved on {benchmark_name}')
-        # Graphs
-        #  Total iteration time
+
+        # Graphs spanning ± 2σ from mean
+        ## Total iteration time
         fig, ax = plt.subplots()
-        ax.plot(total_iters)
-        ax.set_ylim([0, total_iters.mean() + 2 * total_iters.std()])
+        times = self.plot_times['iter']
+        ax.plot(times)
+        ylim = [max([0, times.mean() - 2*times.std()]), times.mean() + 2*times.std()]
+        ax.set_ylim(ylim)
         ax.set_title('Total iteration time')
         ax.set_xlabel('Iteration')
         ax.set_ylabel('Time (ms)')
         figname = path.join(self.dirname, 'iterations.png')
         fig.savefig(figname)
 
-        #  Person detection time
+        ## Person detection time
         fig, ax = plt.subplots()
-        ax.plot(total_pdets[:, 0])
-        ax.set_ylim([0, total_pdets.mean() + 2 * total_pdets.std()])
+        times = self.plot_times['pdet']
+        ax.plot(times)
+        ylim = [max([0, times.mean() - 2*times.std()]), times.mean() + 2*times.std()]
+        ax.set_ylim(ylim)
         ax.set_title('Person detection time')
         ax.set_xlabel('Iteration')
         ax.set_ylabel('Time (ms)')
         figname = path.join(self.dirname, 'person_detections.png')
         fig.savefig(figname)
 
-        #  Face detection time
+        ## Face detection time
         fig, ax = plt.subplots()
-        ax.plot(total_fdets[:, 0])
-        ax.set_ylim([0, total_fdets.mean() + 2 * total_fdets.std()])
+        times = self.plot_times['fdet']
+        ax.plot(times)
+        ylim = [max([0, times.mean() - 2*times.std()]), times.mean() + 2*times.std()]
+        ax.set_ylim(ylim)
         ax.set_title('Face detection time')
         ax.set_xlabel('Iteration')
         ax.set_ylabel('Time (ms)')
         figname = path.join(self.dirname, 'face_detections.png')
         fig.savefig(figname)
 
-        #  Face encoding time
+        ## Face encoding time
         fig, ax = plt.subplots()
-        ax.plot(total_fencs[:, 0])
-        ax.set_ylim([0, total_fencs.mean() + 2 * total_fencs.std()])
+        times = self.plot_times['fenc']
+        ax.plot(times)
+        ylim = [max([0, times.mean() - 2*times.std()]), times.mean() + 2*times.std()]
+        ax.set_ylim(ylim)
         ax.set_title('Face encoding time')
         ax.set_xlabel('Iteration')
         ax.set_ylabel('Time (ms)')
         figname = path.join(self.dirname, 'face_encoding.png')
         fig.savefig(figname)
 
-        # Save the times matrix (for further inspection)
-        dump_file = path.join(self.dirname, 'times.pkl')
+        # Save the times dict (for further inspection)
+        dump_file = path.join(self.dirname, 'plot_times.pkl')
         with open(dump_file, 'wb') as f:
-            pickle.dump([total_iters, total_pdets, total_fdets, total_fencs], f)
+            pickle.dump(self.plot_times, f)
 
 class SingleModelBenchmarker:
     ''' Writer for a single model benchmark using. '''
