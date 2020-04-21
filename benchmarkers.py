@@ -16,6 +16,7 @@ from cprint import cprint
 
 FILENAME_FORMAT = '%Y%m%d %H%M%S'
 TO_MS = lambda x: x.seconds*1000.0 + x.microseconds/1000.0 # Auxiliary vectorized function
+TO_MS_VEC = np.vectorize(TO_MS)
 
 
 class FollowPersonBenchmarker:
@@ -67,10 +68,10 @@ class FollowPersonBenchmarker:
         '''Build the load times section for the benchmark report.'''
 
         load_times = {
-            '1.- PersonDetectionNetworkLoad': t_pers_det,
-            '2.- FaceDetectionNetworkLoad': t_face_det,
-            '3.- FaceEncodingNetworkLoad': t_face_enc,
-            '4.- TTFI': ttfi,
+            '1.- PersonDetectionNetworkLoad': TO_MS(t_pers_det),
+            '2.- FaceDetectionNetworkLoad':   TO_MS(t_face_det),
+            '3.- FaceEncodingNetworkLoad':    TO_MS(t_face_enc),
+            '4.- TTFI':                       TO_MS(ttfi),
         }
         self.load_times = load_times
 
@@ -138,17 +139,17 @@ class FollowPersonBenchmarker:
 
             frame_info['2.- PersonDetection'] = {
                     '1.- Elapsed': f'{TO_MS(times[0][0]):.4f} ms',
-                    '2.- Number': f'{times[0][1]}',
+                    '2.- Number': times[0][1],
             }
 
             frame_info['3.- FaceDetection'] = {
                     '1.- Elapsed': f'{TO_MS(times[1][0]):.4f} ms',
-                    '2.- Number': f'{times[1][1]}',
+                    '2.- Number': times[1][1],
             }
 
             frame_info['4.- FaceEncoding'] = {
                     '1.- Elapsed': f'{TO_MS(times[2][0]):.4f} ms',
-                    '2.- Number': f'{times[2][1]}',
+                    '2.- Number': times[2][1],
             }
 
             frame_info['5.- NeuralTime'] = f'{TO_MS(times[3]):.4f} ms'
@@ -163,13 +164,13 @@ class FollowPersonBenchmarker:
             responses = frames_responses.get(frame, ['', ''])
 
             frame_info['7.- XControl'] = {
-                '1.- Error': errors[1],
-                '2.- Response': responses[1],
+                '1.- Error': f'{errors[1]}',
+                '2.- Response': f'{responses[1]}',
             }
 
             frame_info['8.- WControl'] = {
-                '1.- Error': errors[0],
-                '2.- Response': responses[0],
+                '1.- Error': f'{errors[0]}',
+                '2.- Response': f'{responses[0]}',
             }
             iterations.append(frame_info)
 
@@ -260,7 +261,7 @@ class SingleModelBenchmarker:
     def write_benchmark(self, total_times, model_name, rosbag_file, arch, write_iters=True):
         # Convert the lapse measurements to milliseconds
         total_ms = np.array(total_times)
-        total_ms[:, 0] = TO_MS(total_ms[:, 0])
+        total_ms[:, 0] = TO_MS_VEC(total_ms[:, 0])
         # Filter the non-empty inferences
         nonempty = total_ms[total_ms[:, 1] > 0]
 
@@ -347,7 +348,8 @@ if __name__ == '__main__':
     bag_len = cam.getBagLength(topics)
     img_count = 0
     while True:
-        cprint.info(f'\tImage {img_count}/{bag_len}')
+        cprint.info(f'\rImage {img_count}/{bag_len}', end='', flush=True)
+        print()
         img_count += 1
         try:
             image, _ = cam.getImages()

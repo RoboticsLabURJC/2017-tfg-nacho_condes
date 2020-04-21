@@ -30,7 +30,7 @@ BAGS_DIR = 'bags'
 MODELS_DIR = 'Optimization/dl_models'
 OPTS_SUBDIR = 'optimizations'
 OPTIMIZATION_SCRIPT = 'Optimization/optimize_graph.py'
-BENCHMARKING_SCRIPT = 'logs/benchmarkers.py'
+BENCHMARKING_SCRIPT = 'benchmarkers.py'
 
 
 model_name = cfg['ModelName']
