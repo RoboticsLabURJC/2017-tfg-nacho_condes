@@ -156,7 +156,7 @@ if __name__ == '__main__':
                 break
         # Compute a suitable response with the PID controllers
         if ref_found:
-            if not ref_tracked:
+            if not ref_tracked and not benchmark:
                 # Sound if just found
                 sn_pub.publish(Sound.CLEANINGEND)
             ref_tracked = True
@@ -171,7 +171,7 @@ if __name__ == '__main__':
                 msg.angular.z = w_response
                 tw_pub.publish(msg)
         else:
-            if ref_tracked:
+            if ref_tracked and not benchmark:
                 # Sound if just lost
                 sn_pub.publish(Sound.CLEANINGSTART)
 
