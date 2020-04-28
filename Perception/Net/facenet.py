@@ -14,7 +14,7 @@ class FaceNet:
         # Load the embedding network model
         conf = tf.compat.v1.ConfigProto(log_device_placement=False)
         # conf.gpu_options.allow_growth = True
-        # conf.gpu_options.per_process_gpu_memory_fraction = 0.1
+        # conf.gpu_options.per_process_gpu_memory_fraction = 0.3
 
         detection_graph = tf.compat.v1.Graph()
         with detection_graph.as_default():
@@ -24,7 +24,7 @@ class FaceNet:
                 fn_graph_def.ParseFromString(serialized_graph)
                 tf.import_graph_def(fn_graph_def, name='')
 
-        self.sess = tf.compat.v1.Session(graph=detection_graph)#, config=conf)
+        self.sess = tf.compat.v1.Session(graph=detection_graph, config=conf)
 
         # Instance of the placeholders and embedding tensors
         self.input       = self.sess.graph.get_tensor_by_name('input:0')
@@ -34,7 +34,7 @@ class FaceNet:
         cprint.info("FaceNet ready!")
 
 
-    def set_reference_face(self, ref_crop):
+    def setReferenceFace(self, ref_crop):
         ''' Set the reference face (previously cropped by the detector). '''
 
         # Set the reference face

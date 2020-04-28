@@ -15,21 +15,17 @@ import yaml
 
 import cv2
 import rospy
-from geometry_msgs.msg import Twist
 import utils
-from cprint import cprint
-from faced.detector import FaceDetector
-from imageio import imread
-from benchmarkers import FollowPersonBenchmarker
-# from Tracking.motors import Motors
 from Actuation import tracking
 from Actuation.pid_controller import PIDController
-from Perception.Camera.ROSCam import ROSCam, IMAGE_HEIGHT, IMAGE_WIDTH
-from Perception.Net.detection_network import DetectionNetwork
+from benchmarkers import FollowPersonBenchmarker, TO_MS
+from cprint import cprint
+from geometry_msgs.msg import Twist
+from kobuki_msgs.msg import Sound
+from Perception.Camera.ROSCam import IMAGE_HEIGHT, IMAGE_WIDTH, ROSCam
 from Perception.Net.networks_controller import NetworksController
-from Perception.Net.facenet import FaceNet
 from Perception.Net.utils import visualization_utils as vis_utils
-
+from time import sleep
 XLIM = 0.7
 WLIM = 1
 
@@ -44,7 +40,7 @@ if __name__ == '__main__':
     rospy.init_node(cfg['NodeName'])
     # Requested behavioral
     benchmark = cfg['Benchmark']
-    nets = cfg['Networks']
+    nets_cfg = cfg['Networks']
 
 
     # Instantiations
@@ -61,62 +57,55 @@ if __name__ == '__main__':
         cam = ROSCam(cfg['Topics'])
 
 
-    if benchmark: zero_time = datetime.now(); step_time = zero_time
-
-    # Person detection network (SSD or YOLO)
-    input_shape = (nets['DetectionHeight'], nets['DetectionWidth'], 3)
-    pers_det = DetectionNetwork(nets['Arch'], input_shape, nets['DetectionModel'])
-    if benchmark: t_pers_det = datetime.now() - step_time; step_time = datetime.now()
-
-
-    # Face detection network. The frozen graphs can't be overridden as they are included in the
-    # faced package. Use symlinks in order to exchange them for others.
-    face_det = FaceDetector()
-    if benchmark: t_face_det = datetime.now() - step_time; step_time = datetime.now()
-
-    # FaceNet embedding encoder.
-    face_enc = FaceNet(nets['FaceEncoderModel'])
-    face_img = imread(cfg['RefFace'])
-    fbox = face_det.predict(face_img)
-    ref_face = utils.crop_face(face_img, fbox)
-    face_enc.set_reference_face(ref_face)
-    if benchmark: t_face_enc = datetime.now() - step_time; step_time = datetime.now()
-
-    # The networks are ready to be threaded!!
-    nets_c = NetworksController(pers_det, face_det, face_enc, benchmark=True)
-    # Configure the controller
+    # Create the networks controller
+    # It configures itself after starting
+    nets_c = NetworksController(nets_cfg, cfg['RefFace'], benchmark=True)
     nets_c.setCamera(cam)
     nets_c.daemon = True
     nets_c.start()
-    if benchmark: ttfi = datetime.now() - zero_time
 
 
     # Person tracker
     ptcfg = cfg['PersonTracker']
     p_tracker = tracking.PersonTracker(ptcfg['Patience'], ptcfg['RefSimThr'], ptcfg['SamePersonThr'])
+
+
     # PID controllers
     xcfg = cfg['XController']
-    x_pid = PIDController(xcfg['Kp'], xcfg['Ki'], xcfg['Kd'], K_loss=0,
+    x_pid = PIDController(xcfg['Kp'], xcfg['Ki'], xcfg['Kd'], K_loss=0.75,
                           limit=XLIM, stop_range=(xcfg['Min'], xcfg['Max']),
-                          soften=True, verbose=True)
+                          soften=True, verbose=False)
 
     wcfg = cfg['WController']
-    w_pid = PIDController(wcfg['Kp'], wcfg['Ki'], wcfg['Kd'], K_loss=1,
+    w_pid = PIDController(wcfg['Kp'], wcfg['Ki'], wcfg['Kd'], K_loss=0.75,
                           limit=WLIM, stop_range=(wcfg['Min'], wcfg['Max']),
                           soften=True, verbose=True)
+
+
     # Twist messages publisher for moving the robot
-    tw_pub = rospy.Publisher(cfg['Topics']['Motors'], Twist, queue_size=10)
+    if not benchmark:
+        tw_pub = rospy.Publisher(cfg['Topics']['Motors'], Twist, queue_size=1)
+        sn_pub = rospy.Publisher(cfg['Topics']['Sound'], Sound, queue_size=1)
+
+
+    # Everything ready. Wait for the controller to be set.
+    while not nets_c.is_activated:
+        sleep(1)
 
     if benchmark:
         # Save the configuration on the benchmarker
-        benchmarker.makeConfig(nets['DetectionModel'], nets['FaceEncoderModel'], cfg['RosbagFile'], xcfg, wcfg, ptcfg)
-        benchmarker.makeLoadTimes(t_pers_det, t_face_det, t_face_enc, ttfi)
+        benchmarker.makeConfig(nets_cfg['DetectionModel'], nets_cfg['FaceEncoderModel'], cfg['RosbagFile'], xcfg, wcfg, ptcfg)
+        benchmarker.makeLoadTimes(nets_c.t_pers_det, nets_c.t_face_det, nets_c.t_face_enc, nets_c.ttfi)
+
     # Data structures to save the results
     iteration = 0
     frames_with_ref = 0
     sent_responses = {}
     num_trackings = {}
     ref_errors = {}
+
+    ref_tracked = False
+    fps_str = 'N/A'
 
     def shtdn_hook():
         rospy.loginfo("\nCleaning and exiting...")
@@ -153,7 +142,6 @@ if __name__ == '__main__':
         persons = p_tracker.persons
 
 
-
         ################
         #### MOVING ####
         ################
@@ -168,6 +156,10 @@ if __name__ == '__main__':
                 break
         # Compute a suitable response with the PID controllers
         if ref_found:
+            if not ref_tracked:
+                # Sound if just found
+                sn_pub.publish(Sound.CLEANINGEND)
+            ref_tracked = True
             w_response = w_pid.computeResponse(w_error)
             x_response = x_pid.computeResponse(x_error)
             cprint.info(f'w: {w_error:.3f} => {w_response:.3f}')
@@ -179,11 +171,15 @@ if __name__ == '__main__':
                 msg.angular.z = w_response
                 tw_pub.publish(msg)
         else:
-            if benchmark:
-                w_error = None
-                x_error = None
-                w_response = 0.0
-                x_response = 0.0
+            if ref_tracked:
+                # Sound if just lost
+                sn_pub.publish(Sound.CLEANINGSTART)
+
+            ref_tracked = False
+            w_error = None
+            x_error = None
+            w_response = w_pid.lostResponse()
+            x_response = x_pid.lostResponse()
 
         if benchmark:
             num_trackings[frame_counter] = len(persons)
@@ -219,7 +215,14 @@ if __name__ == '__main__':
         outputs = np.vstack((moves, transformed))
 
         total_out = np.hstack((inputs, outputs))
-        cv2.putText(total_out, f'Frame #{frame_counter}', (2*IMAGE_WIDTH-250,30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2)
+        cv2.putText(total_out, f'Frame #{frame_counter}', (2*IMAGE_WIDTH-280,30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2)
+        if frame_counter % 10 == 0:
+            # Update the fps
+            last_elapsed = nets_c.last_elapsed
+            fps_str = f'{1000/TO_MS(last_elapsed):.2f} fps'
+
+        cv2.putText(total_out, f'Neural rate: {fps_str}', (2*IMAGE_WIDTH-280,60), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,255,255), 1)
+
         cv2.imshow('Output', cv2.resize(total_out, dsize=(IMAGE_WIDTH, IMAGE_HEIGHT), interpolation=cv2.INTER_CUBIC))
         cv2.waitKey(1)
         if benchmark: v_out.write(total_out)

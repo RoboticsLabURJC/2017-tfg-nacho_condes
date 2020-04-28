@@ -8,22 +8,30 @@ import threading
 import time
 from datetime import datetime
 
-from cprint import cprint
-
 import utils
+from cprint import cprint
+from utils import crop_face
+from imageio import imread
+from faced import FaceDetector
+from Perception.Net.facenet import FaceNet
+from Perception.Net.detection_network import DetectionNetwork
 
 
 class NetworksController(threading.Thread):
 
-    def __init__(self, pdet_network, fdet_network, fenc_network, benchmark=False):
+    def __init__(self, nets_cfg, ref_img_path, benchmark=False):
         ''' Threading class for running neural inferences on a sequential way. '''
 
         super(NetworksController, self).__init__()
 
-        # Set the attributes
-        self.pdet_network = pdet_network
-        self.fdet_network = fdet_network
-        self.fenc_network = fenc_network
+        # Arguments for the networks
+        self.nets_cfg = nets_cfg
+        self.ref_img_path = ref_img_path
+
+        # Placeholders
+        self.pdet_network = None
+        self.fdet_network = None
+        self.fenc_network = None
 
         self.image = []
         self.depth = []
@@ -33,21 +41,72 @@ class NetworksController(threading.Thread):
         self.faces = []
         self.similarities = []
 
-        # self.framerate = 0
-        self.is_activated = True
-        # self.t_cycle = 50  # ms
+        # Timing purposes
+        self.last_elapsed = 0
+        self.is_activated = False
 
         # Benchmarking purposes
         self.benchmark = benchmark
         self.total_times = {}
+        self.t_pers_det = None
+        self.t_face_det = None
+        self.t_face_enc = None
+        self.ttfi = None
+
+    def createPersonDetector(self):
+        '''Instantiate the "person" detection network.'''
+        start = datetime.now()
+        input_shape = (self.nets_cfg['DetectionHeight'], self.nets_cfg['DetectionWidth'], 3)
+        pdet_network = DetectionNetwork(self.nets_cfg['Arch'], input_shape, self.nets_cfg['DetectionModel'])
+        elapsed = datetime.now() - start
+        # Assign the attributes
+        self.pdet_network = pdet_network
+        self.t_pers_det = elapsed
+
+    def createFaceDetector(self):
+        '''Instantiate the face detection network.'''
+        start = datetime.now()
+        fdet_network = FaceDetector()
+        elapsed = datetime.now() - start
+        # Assign the attributes
+        self.fdet_network = fdet_network
+        self.t_face_det = elapsed
+
+    def createFaceEncoder(self):
+        '''Instantiate the face encoding network.'''
+        start = datetime.now()
+        fenc_network = FaceNet(self.nets_cfg['FaceEncoderModel'])
+        elapsed = datetime.now() - start
+        # Assign the attributes
+        self.fenc_network = fenc_network
+        self.t_face_enc = elapsed
+
 
     def setCamera(self, camera):
+        '''Set the camera object and get the first RGB-D pair.'''
         self.cam = camera
         self.image, self.depth = self.cam.getImages()
         self.frame_counter += 1
 
+
     def run(self):
-        ''' Updates the thread. '''
+        '''Main method of the thread.'''
+
+        # Create the networks
+        zero_time = datetime.now()
+        self.createPersonDetector()
+        self.createFaceDetector()
+        self.createFaceEncoder()
+
+        # Set the reference face
+        ref_img = imread(self.ref_img_path)
+        ref_box = self.fdet_network.predict(ref_img)
+        ref_face = crop_face(ref_img, ref_box)
+        self.fenc_network.setReferenceFace(ref_face)
+
+        self.ttfi = datetime.now() - zero_time
+        # Indicate we are ready to go
+        self.is_activated = True
         while self.is_activated:
             iter_info = []
             # Fetch the images
@@ -95,6 +154,7 @@ class NetworksController(threading.Thread):
             # Finishing the loop
             if self.benchmark:
                 iter_elapsed = datetime.now() - iter_start
+                self.last_elapsed = iter_elapsed
                 iter_info.append(iter_elapsed)
                 self.total_times[self.frame_counter] = iter_info
 
