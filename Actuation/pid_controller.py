@@ -29,6 +29,7 @@ class PIDController:
     def lostResponse(self):
         '''Stop with a controlled inertia.'''
         response = self.K_loss * self.last_response
+        self.last_response = response
         return response
 
     def isInRange(self, error):

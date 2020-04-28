@@ -89,9 +89,7 @@ def arrowColor(rate):
     '''Return the RGB color for drawing an arrow
     given the rate of the response.'''
 
-    # Compute the hue, mapping the response to a red-orange gradient
-    # H = 0 -> red
-    # H = 50 -> yellow
+    # Compute the hue, mapping the response to a color gradient
 
     # Linear mapping
     H = 50 * (1-rate) / 100
@@ -123,7 +121,7 @@ def movesImage(shape, xlim, xval, wlim, wval):
     # Same procedure
     x_rate = xval/xlim
     x_len = int(0.95 * x_rate * shape[1]/2)
-    x_ep = (shape[1]//2, shape[0]//2 - x_len)
+    x_ep = (shape[1]//2, max([0, shape[0]//2 - x_len]))
     x_col = arrowColor(x_rate)
     img = cv2.arrowedLine(img, start_point, x_ep, x_col, thickness=4)
     return img
