@@ -88,8 +88,15 @@ class ROSCam:
             rgb_data = self.__rgb_data
             depth_data = self.__depth_data
 
-        rgb_image = self.rgb_bridge.imgmsg_to_cv2(rgb_data, rgb_data.encoding)
-        depth_image = self.depth_bridge.imgmsg_to_cv2(depth_data, depth_data.encoding)
+        if rgb_data is None:
+            rgb_image = np.zeros((IMAGE_HEIGHT, IMAGE_WIDTH, 3))
+        else:
+            rgb_image = self.rgb_bridge.imgmsg_to_cv2(rgb_data, rgb_data.encoding)
+
+        if depth_data is None:
+            depth_image = np.zeros((IMAGE_HEIGHT, IMAGE_WIDTH, 3))
+        else:
+            depth_image = self.depth_bridge.imgmsg_to_cv2(depth_data, depth_data.encoding)
 
         if self.is_bgr: # Convert to RGB
             rgb_image = cv2.cvtColor(rgb_image, cv2.COLOR_BGR2RGB)
