@@ -75,6 +75,7 @@ def optim_graph(graph, blacklist_names, precision_mode, mss, mce):
             nodes_blacklist=blacklist_names,
             precision_mode=precision_mode,
             max_batch_size=1,
+            max_workspace_size_bytes=int(5e8),
             minimum_segment_size=mss,
             maximum_cached_engines=mce,
             use_calibration=False)
