@@ -19,7 +19,8 @@ import utils
 from Actuation import tracking
 from Actuation.pid_controller import PIDController
 from benchmarkers import FollowPersonBenchmarker, TO_MS
-from cprint import cprint
+from cprint import cprint  # this import is added from the GitHub source as the pip version is outdated
+# https://github.com/EVasseure/cprint
 from geometry_msgs.msg import Twist
 from kobuki_msgs.msg import Sound
 from Perception.Camera.ROSCam import IMAGE_HEIGHT, IMAGE_WIDTH, ROSCam
@@ -41,7 +42,6 @@ if __name__ == '__main__':
     # Requested behavioral
     benchmark = cfg['Benchmark']
     nets_cfg = cfg['Networks']
-
 
     # Instantiations
     if benchmark:
