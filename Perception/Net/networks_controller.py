@@ -20,7 +20,7 @@ from Perception.Net.detection_network import DetectionNetwork
 class NetworksController(threading.Thread):
 
     def __init__(self, nets_cfg, ref_img_path, benchmark=False):
-        ''' Threading class for running neural inferences on a sequential way. '''
+        """ Threading class for running neural inferences on a sequential way. """
 
         super(NetworksController, self).__init__()
 
@@ -53,8 +53,11 @@ class NetworksController(threading.Thread):
         self.t_face_enc = None
         self.ttfi = None
 
+        self.cam = None
+        self.tracker = None
+
     def createPersonDetector(self):
-        '''Instantiate the "person" detection network.'''
+        """Instantiate the "person" detection network."""
         start = datetime.now()
         input_shape = (self.nets_cfg['DetectionHeight'], self.nets_cfg['DetectionWidth'], 3)
         pdet_network = DetectionNetwork(self.nets_cfg['Arch'], input_shape, self.nets_cfg['DetectionModel'])
@@ -82,15 +85,19 @@ class NetworksController(threading.Thread):
         self.t_face_enc = elapsed
 
 
-    def setCamera(self, camera):
-        '''Set the camera object and get the first RGB-D pair.'''
+    def setCam(self, camera):
+        """Set the camera object and get the first RGB-D pair."""
         self.cam = camera
         self.image, self.depth = self.cam.getImages()
         self.frame_counter += 1
 
+    def setTracker(self, tracker):
+        """Set the tracker (CPU thread to be updated with the
+        latest inferences."""
+        self.tracker = tracker
 
     def run(self):
-        '''Main method of the thread.'''
+        """Main method of the thread."""
 
         # Create the networks
         zero_time = datetime.now()
@@ -107,11 +114,18 @@ class NetworksController(threading.Thread):
         self.ttfi = datetime.now() - zero_time
         # Indicate we are ready to go
         self.is_activated = True
+        self.tracker.is_activated = True
         while self.is_activated:
+            print('net!!!')
             iter_info = []
             # Fetch the images
             try:
-                self.image, self.depth = self.cam.getImages()
+                # self.image, self.depth = self.cam.getImages()
+                # We get it from the tracker, in order not to consume the
+                # iterator if the images come from a ROSBag
+                self.is_activated = self.tracker.is_activated
+                self.image = self.tracker.image
+                self.depth = self.tracker.depth
                 self.frame_counter += 1
             except StopIteration:
                 self.is_activated = False
@@ -149,7 +163,10 @@ class NetworksController(threading.Thread):
                 elapsed = datetime.now() - step_time
                 iter_info.append([elapsed, len(self.similarities)])
 
-
+            # Make the tracking thread to update the persons
+            self.tracker.updateWithDetections(self.persons, self.faces, self.similarities)
+            # self.tracker.faces = self.faces
+            # self.tracker.similarities = self.similarities
 
             # Finishing the loop
             if self.benchmark:

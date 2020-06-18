@@ -4,7 +4,6 @@
 #
 __author__ = '@naxvm'
 
-
 import argparse
 import sys
 from datetime import datetime, timedelta
@@ -16,7 +15,7 @@ import yaml
 import cv2
 import rospy
 import utils
-from Actuation import tracking
+from Actuation import people_tracker
 from Actuation.pid_controller import PIDController
 from benchmarkers import FollowPersonBenchmarker, TO_MS
 from cprint import cprint  # this import is added from the GitHub source as the pip version is outdated
@@ -27,6 +26,7 @@ from Perception.Camera.ROSCam import IMAGE_HEIGHT, IMAGE_WIDTH, ROSCam
 from Perception.Net.networks_controller import NetworksController
 from Perception.Net.utils import visualization_utils as vis_utils
 from time import sleep
+
 XLIM = 0.7
 WLIM = 1
 
@@ -51,24 +51,26 @@ if __name__ == '__main__':
         # Save the video output
         # save_video = cfg['SaveVideo']
         v_path = path.join(benchmarker.dirname, 'output.mp4')
-        v_out = cv2.VideoWriter(v_path, cv2.VideoWriter_fourcc(*'mp4v'), 30.0, (2*IMAGE_WIDTH, 2*IMAGE_HEIGHT))
+        v_out = cv2.VideoWriter(v_path, cv2.VideoWriter_fourcc(*'mp4v'), 30.0, (2 * IMAGE_WIDTH, 2 * IMAGE_HEIGHT))
 
     else:
         cam = ROSCam(cfg['Topics'])
 
-
-    # Create the networks controller
+    # Create the networks controller (thread running on the GPU)
     # It configures itself after starting
     nets_c = NetworksController(nets_cfg, cfg['RefFace'], benchmark=True)
-    nets_c.setCamera(cam)
+    nets_c.setCam(cam)
     nets_c.daemon = True
     nets_c.start()
 
+    # Person tracker (thread running on the CPU)
+    ptcfg = cfg['PeopleTracker']
+    p_tracker = people_tracker.PeopleTracker(ptcfg['Patience'], ptcfg['RefSimThr'], ptcfg['SamePersonThr'])
+    p_tracker.setCam(cam)
+    p_tracker.daemon = True
 
-    # Person tracker
-    ptcfg = cfg['PersonTracker']
-    p_tracker = tracking.PersonTracker(ptcfg['Patience'], ptcfg['RefSimThr'], ptcfg['SamePersonThr'])
-
+    # Link the networks to the tracker, to update the references with the inferences
+    nets_c.setTracker(p_tracker)
 
     # PID controllers
     xcfg = cfg['XController']
@@ -79,22 +81,23 @@ if __name__ == '__main__':
     wcfg = cfg['WController']
     w_pid = PIDController(wcfg['Kp'], wcfg['Ki'], wcfg['Kd'], K_loss=0.75,
                           limit=WLIM, stop_range=(wcfg['Min'], wcfg['Max']),
-                          soften=True, verbose=True)
-
+                          soften=True, verbose=False)
 
     # Twist messages publisher for moving the robot
     if not benchmark:
         tw_pub = rospy.Publisher(cfg['Topics']['Motors'], Twist, queue_size=1)
         sn_pub = rospy.Publisher(cfg['Topics']['Sound'], Sound, queue_size=1)
 
-
     # Everything ready. Wait for the controller to be set.
     while not nets_c.is_activated:
         sleep(1)
+    # When the networks are ready, the tracker is started
+    p_tracker.start()
 
     if benchmark:
         # Save the configuration on the benchmarker
-        benchmarker.makeConfig(nets_cfg['DetectionModel'], nets_cfg['FaceEncoderModel'], cfg['RosbagFile'], xcfg, wcfg, ptcfg)
+        benchmarker.makeConfig(nets_cfg['DetectionModel'], nets_cfg['FaceEncoderModel'], cfg['RosbagFile'], xcfg, wcfg,
+                               ptcfg)
         benchmarker.makeLoadTimes(nets_c.t_pers_det, nets_c.t_face_det, nets_c.t_face_enc, nets_c.ttfi)
 
     # Data structures to save the results
@@ -107,6 +110,7 @@ if __name__ == '__main__':
     ref_tracked = False
     fps_str = 'N/A'
 
+
     def shtdn_hook():
         rospy.loginfo("\nCleaning and exiting...")
         nets_c.close_all()
@@ -114,15 +118,16 @@ if __name__ == '__main__':
         if benchmark:
             v_out.release()
 
+
     # Register shutdown hook
     rospy.on_shutdown(shtdn_hook)
 
     while not rospy.is_shutdown():
-        if not nets_c.is_activated:
+        if not nets_c.is_activated or not p_tracker.is_activated:
             rospy.signal_shutdown('ROSBag completed!')
 
-        image = nets_c.image
-        depth = nets_c.depth
+        image = p_tracker.image
+        depth = p_tracker.depth
         frame_counter = nets_c.frame_counter
 
         ################
@@ -130,27 +135,29 @@ if __name__ == '__main__':
         ################
         # Forward step in the tracking using the detections
         cprint.info('=====')
-        cprint.info(f'Detections: {len(nets_c.persons)}|{len(nets_c.faces)}')
-        p_tracker.handleDetections(nets_c.persons)
+        cprint.info(f'Detections: {len(p_tracker.persons)}|{len(p_tracker.faces)}')
+        # p_tracker.handleDetections(nets_c.persons)
         cprint.info(f'Tracked {len(p_tracker.persons)} persons')
-        p_tracker.handleFaces(nets_c.faces, nets_c.similarities, image)
+        # p_tracker.handleFaces(nets_c.faces, nets_c.similarities, image)
 
         # And process the similarities
-        p_tracker.checkRef()
+        # p_tracker.checkRef()
 
         # Persons ready to be fetched
         persons = p_tracker.persons
 
-
         ################
-        #### MOVING ####
+        #    MOVING    #
         ################
         # Compute errors
         ref_found = False
         for person in persons:
             if person.is_ref:
                 w_error = utils.computeWError(person.coords, IMAGE_WIDTH)
-                x_error = utils.computeXError(person.coords, depth)
+                # The depth might not be sampleable
+                new_x_error = utils.computeXError(person.coords, depth)
+                if new_x_error is not None:
+                    x_error = new_x_error
                 ref_found = True
                 frames_with_ref += 1
                 break
@@ -167,7 +174,7 @@ if __name__ == '__main__':
             # Send the response to the robot
             if not benchmark:
                 msg = Twist()
-                msg.linear.x  = x_response
+                msg.linear.x = x_response
                 msg.angular.z = w_response
                 tw_pub.publish(msg)
         else:
@@ -190,20 +197,19 @@ if __name__ == '__main__':
         ### DRAWING ###
         ###############
         # Draw the images.
-        depth = 255.0 * (1 - nets_c.depth / 6.0) # 8-bit quantization of the effective Xtion range
+        depth = 255.0 * (1 - depth / 6.0)  # 8-bit quantization of the effective Xtion range
         transformed = np.copy(image)
 
         for person in persons:
-            x1, y1, x2, y2 = person.coords[0], person.coords[1], person.coords[0]+person.coords[2], person.coords[1]+person.coords[3]
-            if person.is_ref:
-                color = 'green'
-            else:
-                color = 'red'
-            vis_utils.draw_bounding_box_on_image_array(transformed, y1, x1, y2, x2, color=color, use_normalized_coordinates=False)
+            x1, y1, x2, y2 = utils.corner2Corners(person.coords)
+            color = utils.BOX_COLOR[person.is_ref]
+            vis_utils.draw_bounding_box_on_image_array(transformed, y1, x1, y2, x2, color=color,
+                                                       use_normalized_coordinates=False)
 
             for face in person.ftrk.faces:
-                x1, y1, x2, y2 = face.coords[0]-face.coords[2]//2, face.coords[1]-face.coords[3]//2, face.coords[0]+face.coords[2]//2, face.coords[1]+face.coords[3]//2
-                vis_utils.draw_bounding_box_on_image_array(transformed, y1, x1, y2, x2, color='blue', use_normalized_coordinates=False)
+                x1, y1, x2, y2 = utils.center2Corners(face.coords)
+                vis_utils.draw_bounding_box_on_image_array(transformed, y1, x1, y2, x2, color='blue',
+                                                           use_normalized_coordinates=False)
 
         # Show the images
         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
@@ -215,18 +221,19 @@ if __name__ == '__main__':
         outputs = np.vstack((moves, transformed))
 
         total_out = np.hstack((inputs, outputs))
-        cv2.putText(total_out, f'Frame #{frame_counter}', (2*IMAGE_WIDTH-280,30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2)
+        cv2.putText(total_out, f'Frame #{frame_counter}', (2 * IMAGE_WIDTH - 280, 30), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                    (255, 255, 255), 2)
         if frame_counter % 10 == 0:
             # Update the fps
             last_elapsed = nets_c.last_elapsed
-            fps_str = f'{1000/TO_MS(last_elapsed):.2f} fps'
+            fps_str = f'{1000 / TO_MS(last_elapsed):.2f} fps'
 
-        cv2.putText(total_out, f'Neural rate: {fps_str}', (2*IMAGE_WIDTH-280,60), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,255,255), 1)
+        cv2.putText(total_out, f'Neural rate: {fps_str}', (2 * IMAGE_WIDTH - 280, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.8,
+                    (255, 255, 255), 1)
 
         cv2.imshow('Output', cv2.resize(total_out, dsize=(IMAGE_WIDTH, IMAGE_HEIGHT), interpolation=cv2.INTER_CUBIC))
         cv2.waitKey(1)
         if benchmark: v_out.write(total_out)
-
 
     # Finish the execution
     if benchmark:

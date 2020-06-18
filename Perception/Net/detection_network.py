@@ -1,5 +1,5 @@
 import tensorflow as tf
-# import tensorflow.contrib.tensorrt as trt # to solve compat. on bin graph
+import tensorflow.contrib.tensorrt as trt # to solve compat. on bin graph
 import numpy as np
 import cv2
 from os import path
@@ -8,30 +8,30 @@ from Perception.Net.utils import label_map_util, nms
 from datetime import datetime
 from cprint import cprint
 
-LABELS_DICT = {'voc':   ('resources/labels/pascal_label_map.pbtxt',             20),
-               'coco':  ('resources/labels/mscoco_label_map.pbtxt',             80),
-               'kitti': ('resources/labels/kitti_label_map.txt',                8),
-               'oid':   ('resources/labels/oid_bboc_trainable_label_map.pbtxt', 600),
-               'pet':   ('resources/labels/pet_label_map.pbtxt',                37),
+LABELS_DICT = {'voc': ('resources/labels/pascal_label_map.pbtxt', 20),
+               'coco': ('resources/labels/mscoco_label_map.pbtxt', 80),
+               'kitti': ('resources/labels/kitti_label_map.txt', 8),
+               'oid': ('resources/labels/oid_bboc_trainable_label_map.pbtxt', 600),
+               'pet': ('resources/labels/pet_label_map.pbtxt', 37),
                }
 
 
 class DetectionNetwork():
-    def __init__(self, arch, input_shape, frozen_graph=None, graph_def=None, dataset='coco', confidence_threshold=0.5, path_to_root=None):
+    def __init__(self, arch, input_shape, frozen_graph=None, graph_def=None, dataset='coco', confidence_threshold=0.5,
+                 path_to_root=None):
         labels_file, max_num_classes = LABELS_DICT[dataset]
         # Append dir if provided (calling from another directory)
         if path_to_root is not None:
             labels_file = path.join(path_to_root, labels_file)
-        label_map = label_map_util.load_labelmap(labels_file) # loads the labels map.
+        label_map = label_map_util.load_labelmap(labels_file)  # loads the labels map.
         categories = label_map_util.convert_label_map_to_categories(label_map, max_num_classes=max_num_classes)
         category_index = label_map_util.create_category_index(categories)
-        self.classes = {k:str(v['name']) for k, v in category_index.items()}
+        self.classes = {k: str(v['name']) for k, v in category_index.items()}
         # Find person index
         for idx, class_ in self.classes.items():
             if class_ == 'person':
                 self.person_class = idx
                 break
-
 
         # Graph load. We allocate the session attribute
         self.sess = None
@@ -54,28 +54,28 @@ class DetectionNetwork():
             # No graph def was provided!
             cprint.fatal('The graph definition has not been loaded.', interrupt=True)
 
-
         self.input_shape = input_shape
         self.arch = arch
 
         # Dummy tensor to be used for the first inference.
-        dummy_tensor = np.zeros((1,*self.input_shape), dtype=np.int32)
+        dummy_tensor = np.zeros((1, *self.input_shape), dtype=np.int32)
 
         # Set placeholders, depending on the network architecture
         cprint.warn(f'Network architecture: {self.arch}')
         if self.arch == 'ssd':
             # Inputs
-            self.image_tensor      = self.sess.graph.get_tensor_by_name('image_tensor:0')
+            self.image_tensor = self.sess.graph.get_tensor_by_name('image_tensor:0')
             # Outputs
-            self.detection_boxes   = self.sess.graph.get_tensor_by_name('detection_boxes:0')
-            self.detection_scores  = self.sess.graph.get_tensor_by_name('detection_scores:0')
+            self.detection_boxes = self.sess.graph.get_tensor_by_name('detection_boxes:0')
+            self.detection_scores = self.sess.graph.get_tensor_by_name('detection_scores:0')
             self.detection_classes = self.sess.graph.get_tensor_by_name('detection_classes:0')
-            self.num_detections    = self.sess.graph.get_tensor_by_name('num_detections:0')
+            self.num_detections = self.sess.graph.get_tensor_by_name('num_detections:0')
             self.boxes = []
             self.scores = []
             self.predictions = []
 
-            self.output_tensors = [self.detection_boxes, self.detection_scores, self.detection_classes, self.num_detections]
+            self.output_tensors = [self.detection_boxes, self.detection_scores, self.detection_classes,
+                                   self.num_detections]
 
             self.dummy_feed = {self.image_tensor: dummy_tensor}
 
@@ -174,7 +174,7 @@ class DetectionNetwork():
                     y2 = min(box[2], 1.0) * orig_h
                     x2 = min(box[3], 1.0) * orig_w
 
-                    boxes_full.append([x1, y1, x2-x1, y2-y1, prob])
+                    boxes_full.append([x1, y1, x2 - x1, y2 - y1, prob])
 
             return boxes_full, elapsed
 
@@ -191,11 +191,11 @@ class DetectionNetwork():
             for box, prob in persons:
                 if prob >= self.confidence_threshold:
                     # x, y, w, h, p
-                    x1 = max(box[0]/self.input_shape[1], 0.0) * orig_w
-                    y1 = max(box[1]/self.input_shape[0], 0.0) * orig_h
-                    x2 = min(box[2]/self.input_shape[1], 1.0) * orig_w
-                    y2 = min(box[3]/self.input_shape[0], 1.0) * orig_h
-                    boxes_full.append([x1, y1, x2-x1, y2-y1, prob])
+                    x1 = max(box[0] / self.input_shape[1], 0.0) * orig_w
+                    y1 = max(box[1] / self.input_shape[0], 0.0) * orig_h
+                    x2 = min(box[2] / self.input_shape[1], 1.0) * orig_w
+                    y2 = min(box[3] / self.input_shape[0], 1.0) * orig_h
+                    boxes_full.append([x1, y1, x2 - x1, y2 - y1, prob])
             return boxes_full, elapsed
         else:
             cprint.warn(f'Implement predict for {self.arch}!!')
