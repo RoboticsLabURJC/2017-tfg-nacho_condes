@@ -1,4 +1,6 @@
+.idea
 resources/benchmarks/*
+resources/bags
 resources/ref_face/*
 *__pycache__
 *swp*
