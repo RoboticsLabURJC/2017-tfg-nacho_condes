@@ -44,6 +44,8 @@ class PeopleTracker(threading.Thread):
     def setCam(self, cam):
         self.cam = cam
         self.image, self.depth = self.cam.getImages()
+        print('in the tracker')
+        print(self.image.shape, self.image.dtype, self.image.min(), self.image.max())
 
     def setPrior(self):
         """Set the first image on the tracker."""
@@ -236,7 +238,9 @@ class PeopleTracker(threading.Thread):
                     self.persons[pi].is_ref = False
 
     def run(self):
+        self.lock.acquire()
         self.image, self.depth = self.cam.getImages()
+        self.lock.release()
         self.setPrior()
         # print(f'prior set. {len(self.persons)} persons, {len(self.candidates)} candidates')
         elapsed = np.infty

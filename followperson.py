@@ -37,8 +37,9 @@ if __name__ == '__main__':
     args = parser.parse_args()
     with open(args.config_file, 'r') as f:
         cfg = yaml.safe_load(f)
-
+    print('BEFORE:', rospy.is_shutdown())
     rospy.init_node(cfg['NodeName'])
+    print('AFTER:', rospy.is_shutdown())
     # Requested behavioral
     benchmark = cfg['Benchmark']
     nets_cfg = cfg['Networks']
@@ -59,18 +60,20 @@ if __name__ == '__main__':
     # Create the networks controller (thread running on the GPU)
     # It configures itself after starting
     nets_c = NetworksController(nets_cfg, cfg['RefFace'], benchmark=True)
-    nets_c.setCam(cam)
+    nets_c.name = 'NetworksControllerThread'
+    # nets_c.setCam(cam)
     nets_c.daemon = True
-    nets_c.start()
 
     # Person tracker (thread running on the CPU)
     ptcfg = cfg['PeopleTracker']
     p_tracker = people_tracker.PeopleTracker(ptcfg['Patience'], ptcfg['RefSimThr'], ptcfg['SamePersonThr'])
+    p_tracker.name = 'PeopleTrackerThread'
     p_tracker.setCam(cam)
     p_tracker.daemon = True
 
     # Link the networks to the tracker, to update the references with the inferences
     nets_c.setTracker(p_tracker)
+    nets_c.start()
 
     # PID controllers
     xcfg = cfg['XController']
@@ -113,6 +116,7 @@ if __name__ == '__main__':
 
     def shtdn_hook():
         rospy.loginfo("\nCleaning and exiting...")
+        p_tracker.is_activated = False
         nets_c.close_all()
         cv2.destroyAllWindows()
         if benchmark:

@@ -35,7 +35,7 @@ class NetworksController(threading.Thread):
 
         self.image = []
         self.depth = []
-        self.frame_counter = -1
+        self.frame_counter = 0
 
         self.persons = []
         self.faces = []
@@ -53,7 +53,7 @@ class NetworksController(threading.Thread):
         self.t_face_enc = None
         self.ttfi = None
 
-        self.cam = None
+        # self.cam = None
         self.tracker = None
 
     def createPersonDetector(self):
@@ -85,16 +85,19 @@ class NetworksController(threading.Thread):
         self.t_face_enc = elapsed
 
 
-    def setCam(self, camera):
-        """Set the camera object and get the first RGB-D pair."""
-        self.cam = camera
-        self.image, self.depth = self.cam.getImages()
-        self.frame_counter += 1
+    # def setCam(self, camera):
+    #     """Set the camera object and get the first RGB-D pair."""
+    #     self.cam = camera
+    #     self.image, self.depth = self.cam.getImages()
+    #     self.frame_counter += 1
 
     def setTracker(self, tracker):
         """Set the tracker (CPU thread to be updated with the
         latest inferences."""
         self.tracker = tracker
+        self.image = self.tracker.image
+        self.depth = self.tracker.depth
+
 
     def run(self):
         """Main method of the thread."""
@@ -137,6 +140,8 @@ class NetworksController(threading.Thread):
 
 
             ### Person detection ###
+            print('la shape')
+            print(self.image.shape, self.image.dtype, self.image.min(), self.image.max())
             self.persons, elapsed = self.pdet_network.predict(self.image)
             if self.benchmark:
                 iter_info.append([elapsed, len(self.persons)])

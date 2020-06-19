@@ -68,12 +68,14 @@ class ROSCam:
 
 
     def __rgbCallback(self, rgb_data):
+        print('rgb callback!')
         self.lock.acquire()
         self.__rgb_data = rgb_data
         rospy.logdebug("RGB updated")
         self.lock.release()
 
     def __depthCallback(self, depth_data):
+        print('depth callback!')
         self.lock.acquire()
         self.__depth_data = depth_data
         rospy.logdebug("Depth updated")
@@ -89,11 +91,13 @@ class ROSCam:
             depth_data = self.__depth_data
 
         if rgb_data is None:
+            print('CAM: rgb_data is None!!!!!')
             rgb_image = np.zeros((IMAGE_HEIGHT, IMAGE_WIDTH, 3))
         else:
             rgb_image = self.rgb_bridge.imgmsg_to_cv2(rgb_data, rgb_data.encoding)
 
         if depth_data is None:
+            print('CAM: depth_data is None!!!!!')
             depth_image = np.zeros((IMAGE_HEIGHT, IMAGE_WIDTH, 3))
         else:
             depth_image = self.depth_bridge.imgmsg_to_cv2(depth_data, depth_data.encoding)
