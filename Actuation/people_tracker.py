@@ -2,6 +2,7 @@ import cv2
 import threading
 import time
 from datetime import datetime
+from cprint import cprint
 from Actuation.tracking_classes import *
 
 FEATURE_PARAMS = dict(maxCorners=100,
@@ -22,6 +23,8 @@ class PeopleTracker(threading.Thread):
 
     def __init__(self, patience, ref_sim_thr, same_person_thr):
         super(PeopleTracker, self).__init__()
+        self.name = 'PeopleTrackerThread'
+        self.daemon = True
         # Placeholders
         self.persons = []
         self.candidates = []
@@ -38,20 +41,23 @@ class PeopleTracker(threading.Thread):
         self.faces = []
         self.similarities = []
 
-        self.is_activated = False
+        self.is_activated = True
         self.lock = threading.Lock()
 
     def setCam(self, cam):
         self.cam = cam
-        self.image, self.depth = self.cam.getImages()
-        print('in the tracker')
-        print(self.image.shape, self.image.dtype, self.image.min(), self.image.max())
 
     def setPrior(self):
         """Set the first image on the tracker."""
         self.gray_image = cv2.cvtColor(self.image, cv2.COLOR_RGB2GRAY)
         keypoints = cv2.goodFeaturesToTrack(self.gray_image, **FEATURE_PARAMS)
         self.keypoints = keypoints.squeeze()
+
+
+    def getImages(self):
+        """Serve the latest available images from the Camera."""
+        return self.image, self.depth
+
 
     def stepAll(self):
         """Propagate the candidate/tracked persons using the latest image."""
@@ -135,53 +141,6 @@ class PeopleTracker(threading.Thread):
         self.handleFaces()
         self.checkRef()
 
-    # def setGroundTruth(self, image, boxes):
-    #     """Updates the tracker with the latest ground truth coming from the networks."""
-    #     print('[x] setGroundTruth called!!')
-    #     # Propagate existing candidates and persons
-    #     for candidate in self.candidates:
-    #         candidate.step(image)
-    #     for person in self.persons:
-    #         person.step(image)
-
-    # Now, map the new bounding boxes to the existing persons
-
-    # def handleDetections(self, detections):
-    #     """Update the position of a detected person if it is found to be
-    #     near enough one of the passed ones. Otherwise, insert it as a candidate."""
-    #
-    #     for det in detections:
-    #         found = False
-    #         # Look for matches in the tracked persons
-    #         for idx, person in enumerate(self.persons):
-    #             if distanceBetweenBoxes(person.coords, det) < self.same_person_thr:
-    #                 # Update the person
-    #                 self.persons[idx].coords = det
-    #                 self.persons[idx].counter = self.patience
-    #                 found = True
-    #                 break
-    #
-    #         if not found:
-    #             # Look into the candidates now
-    #             for idx, cand in enumerate(self.candidates):
-    #                 if distanceBetweenBoxes(cand.coords, det) < self.same_person_thr:
-    #                     # Update the candidate
-    #                     self.candidates[idx].coords = det
-    #                     self.candidates[idx].counter += 2
-    #                     found = True
-    #                     break
-    #
-    #         if not found:
-    #             # The person is a new candidate
-    #             self.tracked_counter += 1
-    #             c = Person(det)
-    #             self.candidates.append(c)
-    #
-    #     # Refresh everything and return
-    #     self.refresh()
-    #     return self.persons
-    #
-    #
 
     def refresh(self):
         """Update the stored persons."""
@@ -242,14 +201,13 @@ class PeopleTracker(threading.Thread):
         self.image, self.depth = self.cam.getImages()
         self.lock.release()
         self.setPrior()
-        # print(f'prior set. {len(self.persons)} persons, {len(self.candidates)} candidates')
         elapsed = np.infty
         counter = 0
         while self.is_activated:
             # Control the rate
+            print(f'tracker[{counter}]:elapsed:{elapsed:.3f} s')
             if elapsed <= PERIOD:
                 time.sleep(PERIOD - elapsed)
-            print('\tIteration on the person tracking:', counter)
             start = time.time()
             # Fetch the images
             self.lock.acquire()
@@ -273,4 +231,3 @@ class PeopleTracker(threading.Thread):
             elapsed = time.time() - start
             # print("elapsed", elapsed)
             counter += 1
-        print('STOPPED')

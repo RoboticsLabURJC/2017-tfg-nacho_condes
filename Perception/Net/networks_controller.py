@@ -23,6 +23,8 @@ class NetworksController(threading.Thread):
         """ Threading class for running neural inferences on a sequential way. """
 
         super(NetworksController, self).__init__()
+        self.name = 'NetworksControllerThread'
+        self.daemon = True
 
         # Arguments for the networks
         self.nets_cfg = nets_cfg
@@ -119,7 +121,7 @@ class NetworksController(threading.Thread):
         self.is_activated = True
         self.tracker.is_activated = True
         while self.is_activated:
-            print('net!!!')
+            # cprint.info('\tnetworkController: iterating')
             iter_info = []
             # Fetch the images
             try:
@@ -127,8 +129,7 @@ class NetworksController(threading.Thread):
                 # We get it from the tracker, in order not to consume the
                 # iterator if the images come from a ROSBag
                 self.is_activated = self.tracker.is_activated
-                self.image = self.tracker.image
-                self.depth = self.tracker.depth
+                self.image, self.depth = self.tracker.getImages()
                 self.frame_counter += 1
             except StopIteration:
                 self.is_activated = False
@@ -140,8 +141,7 @@ class NetworksController(threading.Thread):
 
 
             ### Person detection ###
-            print('la shape')
-            print(self.image.shape, self.image.dtype, self.image.min(), self.image.max())
+            cprint.info('\tla shape', self.image.shape, self.image.dtype, self.image.min(), self.image.max())
             self.persons, elapsed = self.pdet_network.predict(self.image)
             if self.benchmark:
                 iter_info.append([elapsed, len(self.persons)])

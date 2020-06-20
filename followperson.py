@@ -15,7 +15,7 @@ import yaml
 import cv2
 import rospy
 import utils
-from Actuation import people_tracker
+from Actuation.people_tracker import PeopleTracker
 from Actuation.pid_controller import PIDController
 from benchmarkers import FollowPersonBenchmarker, TO_MS
 from cprint import cprint  # this import is added from the GitHub source as the pip version is outdated
@@ -37,9 +37,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
     with open(args.config_file, 'r') as f:
         cfg = yaml.safe_load(f)
-    print('BEFORE:', rospy.is_shutdown())
-    rospy.init_node(cfg['NodeName'])
-    print('AFTER:', rospy.is_shutdown())
     # Requested behavioral
     benchmark = cfg['Benchmark']
     nets_cfg = cfg['Networks']
@@ -56,20 +53,17 @@ if __name__ == '__main__':
 
     else:
         cam = ROSCam(cfg['Topics'])
-
+    rospy.init_node(cfg['NodeName'])
     # Create the networks controller (thread running on the GPU)
     # It configures itself after starting
     nets_c = NetworksController(nets_cfg, cfg['RefFace'], benchmark=True)
-    nets_c.name = 'NetworksControllerThread'
-    # nets_c.setCam(cam)
-    nets_c.daemon = True
 
     # Person tracker (thread running on the CPU)
     ptcfg = cfg['PeopleTracker']
-    p_tracker = people_tracker.PeopleTracker(ptcfg['Patience'], ptcfg['RefSimThr'], ptcfg['SamePersonThr'])
-    p_tracker.name = 'PeopleTrackerThread'
+    p_tracker = PeopleTracker(ptcfg['Patience'], ptcfg['RefSimThr'], ptcfg['SamePersonThr'])
     p_tracker.setCam(cam)
-    p_tracker.daemon = True
+    sleep(2)
+    p_tracker.start()
 
     # Link the networks to the tracker, to update the references with the inferences
     nets_c.setTracker(p_tracker)
@@ -86,6 +80,7 @@ if __name__ == '__main__':
                           limit=WLIM, stop_range=(wcfg['Min'], wcfg['Max']),
                           soften=True, verbose=False)
 
+
     # Twist messages publisher for moving the robot
     if not benchmark:
         tw_pub = rospy.Publisher(cfg['Topics']['Motors'], Twist, queue_size=1)
@@ -94,8 +89,6 @@ if __name__ == '__main__':
     # Everything ready. Wait for the controller to be set.
     while not nets_c.is_activated:
         sleep(1)
-    # When the networks are ready, the tracker is started
-    p_tracker.start()
 
     if benchmark:
         # Save the configuration on the benchmarker
@@ -129,9 +122,7 @@ if __name__ == '__main__':
     while not rospy.is_shutdown():
         if not nets_c.is_activated or not p_tracker.is_activated:
             rospy.signal_shutdown('ROSBag completed!')
-
-        image = p_tracker.image
-        depth = p_tracker.depth
+        image, depth = p_tracker.getImages()
         frame_counter = nets_c.frame_counter
 
         ################
