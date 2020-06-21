@@ -1,5 +1,5 @@
 import tensorflow as tf
-import tensorflow.contrib.tensorrt as trt # to solve compat. on bin graph
+# import tensorflow.contrib.tensorrt as trt # to solve compat. on bin graph
 import numpy as np
 import cv2
 from os import path
@@ -16,7 +16,7 @@ LABELS_DICT = {'voc': ('resources/labels/pascal_label_map.pbtxt', 20),
                }
 
 
-class DetectionNetwork():
+class DetectionNetwork:
     def __init__(self, arch, input_shape, frozen_graph=None, graph_def=None, dataset='coco', confidence_threshold=0.5,
                  path_to_root=None):
         labels_file, max_num_classes = LABELS_DICT[dataset]
@@ -133,7 +133,7 @@ class DetectionNetwork():
         cprint.ok("Detection network ready!")
 
     def load_graphdef(self, graph_def):
-        ''' Plug a graph def into the main graph of the detector session . '''
+        """ Plug a graph def into the main graph of the detector session . """
         conf = tf.compat.v1.ConfigProto(log_device_placement=False)
         # conf.gpu_options.allow_growth = True
         conf.gpu_options.per_process_gpu_memory_fraction = 0.4
@@ -146,7 +146,7 @@ class DetectionNetwork():
         cprint.ok('Loaded the graph definition!')
 
     def _forward_pass(self, feed_dict):
-        ''' Perform a forward pass of the provided feed_dict through the network. '''
+        """ Perform a forward pass of the provided feed_dict through the network. """
         start = datetime.now()
         out = self.sess.run(self.output_tensors, feed_dict=feed_dict)
         elapsed = datetime.now() - start
@@ -184,7 +184,7 @@ class DetectionNetwork():
             # NMS
             detections_filtered = nms.non_max_suppression(detections[0], 0.5)
             # The key 0 contains the human detections.
-            if not 0 in detections_filtered:
+            if 0 not in detections_filtered:
                 return [], elapsed
             persons = detections_filtered[0]
             boxes_full = []

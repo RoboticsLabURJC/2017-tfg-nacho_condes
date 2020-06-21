@@ -37,7 +37,6 @@ class NetworksController(threading.Thread):
 
         self.image = []
         self.depth = []
-        self.frame_counter = 0
 
         self.persons = []
         self.faces = []
@@ -69,7 +68,7 @@ class NetworksController(threading.Thread):
         self.t_pers_det = elapsed
 
     def createFaceDetector(self):
-        '''Instantiate the face detection network.'''
+        """Instantiate the face detection network."""
         start = datetime.now()
         fdet_network = FaceDetector()
         elapsed = datetime.now() - start
@@ -78,20 +77,13 @@ class NetworksController(threading.Thread):
         self.t_face_det = elapsed
 
     def createFaceEncoder(self):
-        '''Instantiate the face encoding network.'''
+        """Instantiate the face encoding network."""
         start = datetime.now()
         fenc_network = FaceNet(self.nets_cfg['FaceEncoderModel'])
         elapsed = datetime.now() - start
         # Assign the attributes
         self.fenc_network = fenc_network
         self.t_face_enc = elapsed
-
-
-    # def setCam(self, camera):
-    #     """Set the camera object and get the first RGB-D pair."""
-    #     self.cam = camera
-    #     self.image, self.depth = self.cam.getImages()
-    #     self.frame_counter += 1
 
     def setTracker(self, tracker):
         """Set the tracker (CPU thread to be updated with the
@@ -120,8 +112,14 @@ class NetworksController(threading.Thread):
         # Indicate we are ready to go
         self.is_activated = True
         self.tracker.is_activated = True
+        # import numpy as np
+        # elapsed_ = np.infty
+        # PERIOD = 1/2
         while self.is_activated:
-            # cprint.info('\tnetworkController: iterating')
+            # cprint.info('---networks---')
+            # if elapsed_ <= PERIOD:
+            #     time.sleep(PERIOD - elapsed_)
+            # start = time.time()
             iter_info = []
             # Fetch the images
             try:
@@ -130,7 +128,6 @@ class NetworksController(threading.Thread):
                 # iterator if the images come from a ROSBag
                 self.is_activated = self.tracker.is_activated
                 self.image, self.depth = self.tracker.getImages()
-                self.frame_counter += 1
             except StopIteration:
                 self.is_activated = False
                 break
@@ -141,7 +138,7 @@ class NetworksController(threading.Thread):
 
 
             ### Person detection ###
-            cprint.info('\tla shape', self.image.shape, self.image.dtype, self.image.min(), self.image.max())
+            # cprint.info('\tla shape', self.image.shape, self.image.dtype, self.image.min(), self.image.max())
             self.persons, elapsed = self.pdet_network.predict(self.image)
             if self.benchmark:
                 iter_info.append([elapsed, len(self.persons)])
@@ -169,22 +166,31 @@ class NetworksController(threading.Thread):
                 iter_info.append([elapsed, len(self.similarities)])
 
             # Make the tracking thread to update the persons
+            cprint.info(f'{len(self.persons)} persons and {len(self.faces)} faces going into the tracker...')
+            cprint.info('BEFORE')
+            cprint.info(f'Candidates: {self.tracker.candidates}')
+            cprint.info(f'Persons: {self.tracker.persons}')
+            cprint.info('>>>>>>>>')
             self.tracker.updateWithDetections(self.persons, self.faces, self.similarities)
+            cprint.info('<<<<<<<<')
+            cprint.info('AFTER')
+            cprint.info(f'Candidates: {self.tracker.candidates}')
+            cprint.info(f'Persons: {self.tracker.persons}')
+            cprint.info('====ale====')
             # self.tracker.faces = self.faces
             # self.tracker.similarities = self.similarities
-
+            # elapsed_ = time.time() - start
             # Finishing the loop
             if self.benchmark:
                 iter_elapsed = datetime.now() - iter_start
                 self.last_elapsed = iter_elapsed
                 iter_info.append(iter_elapsed)
-                self.total_times[self.frame_counter] = iter_info
+                self.total_times[self.tracker.frame_counter] = iter_info
 
                 # cprint.info(f'\r[INFERENCES] Elapsed: {iter_elapsed}\t{1e6/iter_elapsed.microseconds:.2f} fps', end='', flush=True)
 
-
     def close_all(self):
-        '''Function to stop the inferences.'''
+        """Function to stop the inferences."""
         self.is_activated = False
         # Finish current inferences
         time.sleep(1)

@@ -106,6 +106,8 @@ if __name__ == '__main__':
     ref_tracked = False
     fps_str = 'N/A'
 
+    # PERIOD = 1/2
+    # elapsed_ = np.infty
 
     def shtdn_hook():
         rospy.loginfo("\nCleaning and exiting...")
@@ -120,29 +122,28 @@ if __name__ == '__main__':
     rospy.on_shutdown(shtdn_hook)
 
     while not rospy.is_shutdown():
+        print('---main---')
+        # import time
+        #
+        # if elapsed_ <= PERIOD:
+        #     time.sleep(PERIOD - elapsed_)
+        # start = time.time()
         if not nets_c.is_activated or not p_tracker.is_activated:
             rospy.signal_shutdown('ROSBag completed!')
         image, depth = p_tracker.getImages()
-        frame_counter = nets_c.frame_counter
+        frame_counter = p_tracker.frame_counter
 
         ################
         ### TRACKING ###
         ################
         # Forward step in the tracking using the detections
-        cprint.info('=====')
-        cprint.info(f'Detections: {len(p_tracker.persons)}|{len(p_tracker.faces)}')
-        # p_tracker.handleDetections(nets_c.persons)
-        cprint.info(f'Tracked {len(p_tracker.persons)} persons')
-        # p_tracker.handleFaces(nets_c.faces, nets_c.similarities, image)
-
-        # And process the similarities
-        # p_tracker.checkRef()
-
-        # Persons ready to be fetched
+        print('=====')
+        print(f'Detections: {len(nets_c.persons)}|{len(nets_c.faces)}')
+        print(f'Tracker: {len(p_tracker.persons)}')
         persons = p_tracker.persons
 
         ################
-        #    MOVING    #
+        #### MOVING ####
         ################
         # Compute errors
         ref_found = False
@@ -164,8 +165,8 @@ if __name__ == '__main__':
             ref_tracked = True
             w_response = w_pid.computeResponse(w_error)
             x_response = x_pid.computeResponse(x_error)
-            cprint.info(f'w: {w_error:.3f} => {w_response:.3f}')
-            cprint.info(f'x: {x_error:.3f} => {x_response:.3f}')
+            # cprint.info(f'w: {w_error:.3f} => {w_response:.3f}')
+            # cprint.info(f'x: {x_error:.3f} => {x_response:.3f}')
             # Send the response to the robot
             if not benchmark:
                 msg = Twist()
@@ -200,11 +201,14 @@ if __name__ == '__main__':
             color = utils.BOX_COLOR[person.is_ref]
             vis_utils.draw_bounding_box_on_image_array(transformed, y1, x1, y2, x2, color=color,
                                                        use_normalized_coordinates=False)
-
-            for face in person.ftrk.faces:
+            face = person.face
+            if face is not None:
+                # print('has face!')
                 x1, y1, x2, y2 = utils.center2Corners(face.coords)
                 vis_utils.draw_bounding_box_on_image_array(transformed, y1, x1, y2, x2, color='blue',
                                                            use_normalized_coordinates=False)
+            # else:
+            #     print("hasn't face")
 
         # Show the images
         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
@@ -216,6 +220,7 @@ if __name__ == '__main__':
         outputs = np.vstack((moves, transformed))
 
         total_out = np.hstack((inputs, outputs))
+        # print('frame_counter:', frame_counter)
         cv2.putText(total_out, f'Frame #{frame_counter}', (2 * IMAGE_WIDTH - 280, 30), cv2.FONT_HERSHEY_SIMPLEX, 1,
                     (255, 255, 255), 2)
         if frame_counter % 10 == 0:
@@ -229,7 +234,7 @@ if __name__ == '__main__':
         cv2.imshow('Output', cv2.resize(total_out, dsize=(IMAGE_WIDTH, IMAGE_HEIGHT), interpolation=cv2.INTER_CUBIC))
         cv2.waitKey(1)
         if benchmark: v_out.write(total_out)
-
+        # elapsed_ = time.time() - start
     # Finish the execution
     if benchmark:
         benchmarker.makeDetectionStats(nets_c.total_times)

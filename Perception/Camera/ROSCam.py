@@ -18,15 +18,16 @@ import rosbag
 IMAGE_HEIGHT = 480
 IMAGE_WIDTH = 640
 
+
 class ROSCam:
 
-    def __init__ (self, topics, rosbag_path=None, is_bgr=False):
-        ''' Camera class gets new images from the ROS topics or a recorded rosbag
+    def __init__(self, topics, rosbag_path=None, is_bgr=False):
+        """ Camera class gets new images from the ROS topics or a recorded rosbag
         and convert them into OpenCV format, offering the latest one to the caller.
 
         A control thread is not necessary (the subscribers are controlled
         by rospy threads).
-        '''
+        """
         self.use_bag = rosbag_path is not None
         if self.use_bag:
             # Create iterators for the rosbag
@@ -81,7 +82,7 @@ class ROSCam:
         self.lock.release()
 
     def getImages(self):
-        ''' Return the latest images from a rosbag or from the topic. '''
+        """ Return the latest images from a rosbag or from the topic. """
         if self.use_bag:
             _, rgb_data, _ = next(self.rgb_iter)
             _, depth_data, _ = next(self.depth_iter)

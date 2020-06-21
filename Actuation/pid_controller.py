@@ -27,18 +27,17 @@ class PIDController:
         self.verbose = verbose
 
     def lostResponse(self):
-        '''Stop with a controlled inertia.'''
+        """Stop with a controlled inertia."""
         response = self.K_loss * self.last_response
         self.last_response = response
         return response
 
     def isInRange(self, error):
-        '''Check if the error is inside the dead range.'''
-        return error >= self.stop_range[0] and error <= self.stop_range[1]
-
+        """Check if the error is inside the dead range."""
+        return self.stop_range[0] <= error <= self.stop_range[1]
 
     def computeResponse(self, error):
-        '''Compute the appropriate response.'''
+        """Compute the appropriate response."""
 
         if np.isnan(error):
             return self.last_response
@@ -48,7 +47,8 @@ class PIDController:
             self.prev_error = 0
             self.cumulative_error = 0
             self.last_response = 0
-            cprint.ok('\tNull response (target in range)')
+            if self.verbose:
+                cprint.ok('\tNull response (target in range)')
             return 0
 
         # Compute the response from
@@ -87,6 +87,6 @@ class PIDController:
         return response
 
     def resetError(self):
-        ''' Sets the cumulative error again to 0 (called when the target is recovered). '''
+        """ Sets the cumulative error again to 0 (called when the target is recovered). """
         self.cumulative_error = 0
         self.prev_error = 0

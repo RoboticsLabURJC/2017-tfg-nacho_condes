@@ -89,12 +89,12 @@ def computeXError(coords, depth):
     bb_depth = depth[coords[1]:coords[1]+coords[3], coords[0]:coords[0]+coords[2]]
     ph, pw = bb_depth.shape
     cropped_depth = bb_depth[ph//10:-ph//10, pw//10:-pw//10]
-    print('coords', coords, 'cropped_depth', cropped_depth.shape)
+    # print('coords', coords, 'cropped_depth', cropped_depth.shape)
     # Create a 10x10 mesh to sample the depth values
     vg = np.linspace(0, cropped_depth.shape[0]-1, num=10, dtype=np.int)
     hg = np.linspace(0, cropped_depth.shape[1]-1, num=10, dtype=np.int)
     grid = np.meshgrid(vg, hg)
-    print('depth size:', depth.shape, 'vg:', vg, 'hg', hg)
+    # print('depth size:', depth.shape, 'vg:', vg, 'hg', hg)
 
     # Sample the values and compute the median depth
     sampled_depths = cropped_depth[tuple(grid)].ravel()

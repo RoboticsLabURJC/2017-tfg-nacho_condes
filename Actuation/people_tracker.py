@@ -3,9 +3,11 @@ import threading
 import time
 from datetime import datetime
 from cprint import cprint
+import utils
 from Actuation.tracking_classes import *
-
-FEATURE_PARAMS = dict(maxCorners=100,
+import numpy as np
+np.set_printoptions(precision=2)
+FEATURE_PARAMS = dict(maxCorners=120,
                       qualityLevel=0.3,
                       minDistance=7,
                       blockSize=7)
@@ -38,8 +40,9 @@ class PeopleTracker(threading.Thread):
         self.ref_sim_thr = ref_sim_thr
         self.patience = patience
         self.cam = None
-        self.faces = []
-        self.similarities = []
+        self.frame_counter = 0
+        # self.faces = []
+        # self.similarities = []
 
         self.is_activated = True
         self.lock = threading.Lock()
@@ -86,18 +89,20 @@ class PeopleTracker(threading.Thread):
 
     def updateWithDetections(self, boxes, faces, similarities):
         """Reassign the person to the most suitable bounding box."""
-        # TODO: is it necessary to call stepAll here?
         for box in boxes:
+            cprint.ok('~~~~~')
+            cprint.ok('now this box:', box)
             pers_distances = np.array(list(map(lambda x: distanceBetweenBoxes(box, x.coords), self.persons)))
             cand_distances = np.array(list(map(lambda x: distanceBetweenBoxes(box, x.coords), self.candidates)))
-            # print("distances", pers_distances, cand_distances)
+            cprint.ok('distances to candidates', cand_distances)
+            cprint.ok('distances to persons', pers_distances)
             # Assign to the nearest person, or create one if required
             near_pers = np.where(pers_distances <= self.same_person_thr)[0]
             near_cand = np.where(cand_distances <= self.same_person_thr)[0]
-            # print("near_cand", near_cand, len(near_cand))
-            # print("near_pers", near_pers, len(near_pers))
+            # cprint.warn("near_cand", near_cand, len(near_cand))
+            # cprint.warn("near_pers", near_pers, len(near_pers))
             if len(near_pers) > 0 and len(near_cand) == 0:
-                # print('to a person')
+                # cprint.warn('to a person')
                 # Closest close person
                 lowest_idx = np.argmin(pers_distances[near_pers])
                 if isinstance(lowest_idx, np.ndarray):
@@ -106,7 +111,7 @@ class PeopleTracker(threading.Thread):
                 # The person is still found
                 self.persons[lowest_idx].counter = self.patience
             elif len(near_cand) > 0 and len(near_pers) == 0:
-                # print('to a candidate')
+                # cprint.warn('to a candidate')
                 # Closest close candidate
                 lowest_idx = np.argmin(cand_distances[near_cand])
                 if isinstance(lowest_idx, np.ndarray):
@@ -115,39 +120,46 @@ class PeopleTracker(threading.Thread):
                 # The candidate is still found
                 self.candidates[lowest_idx].counter += 2
             elif len(near_cand) > 0 and len(near_pers) > 0:
-                # print('both nearby')
+                # cprint.warn('both nearby, ', end='')
                 # Nearby candidate and persons. Pick the closest
                 min_dist_cand = min(cand_distances[near_cand])
                 min_dist_pers = min(pers_distances[near_pers])
                 if min_dist_cand < min_dist_pers:
+                    # cprint.warn('the closest is a candidate')
                     lowest_idx = np.argmin(cand_distances[near_cand])
                     if isinstance(lowest_idx, np.ndarray):
                         lowest_idx = lowest_idx[0]
                     self.candidates[lowest_idx].coords = box
                     self.candidates[lowest_idx].counter += 2
                 else:
+                    # cprint.warn('the closest is a person')
                     lowest_idx = np.argmin(pers_distances[near_pers])
                     if isinstance(lowest_idx, np.ndarray):
                         lowest_idx = lowest_idx[0]
                     self.persons[lowest_idx].coords = box
                     self.persons[lowest_idx].counter = self.patience
             else:
-                # print('new candidate')
+                # cprint.warn('No one nearby. New candidate')
                 # This detection can't be assigned to anyone. We create a new candidate
                 candidate = Person(box)
                 self.candidates.append(candidate)
-        self.faces = faces
-        self.similarities = similarities
-        self.handleFaces()
+        # cprint.warn('=====')
+        # self.similarities = similarities
+        # And refresh the present persons with the new information
+        self.handleFaces(faces, similarities)
         self.checkRef()
+        self.refresh()
 
 
     def refresh(self):
         """Update the stored persons."""
+        # cprint.warn('BEGINNING tracker.refresh')
         new_persons = []
         new_candidates = []
         # Candidates:
+        # cprint.warn('candidates')
         for cand in self.candidates:
+            # cprint.warn(cand)
             if cand.counter >= 0:
                 # Survive
                 if cand.counter >= self.patience:
@@ -161,51 +173,64 @@ class PeopleTracker(threading.Thread):
         self.candidates = new_candidates
 
         # Persons:
+        # cprint.warn('persons')
         for person in self.persons:
+            # cprint.warn(person)
             if person.counter >= 0:
                 # Survive
                 person.counter -= 1
                 new_persons.append(person)
         self.persons = new_persons
+        # cprint.warn('ENDING tracker.refresh')
 
-    def handleFaces(self):
-        faces = self.faces
-        similarities = self.similarities
+    def handleFaces(self, faces, similarities):
         """Check if a detected face belongs (spatially) to a person, and track it. Discard it otherwise."""
         for face, sim in zip(faces, similarities):
-            face_std = [face[0] - face[2] // 2, face[1] - face[3] // 2, face[2], face[1]]
+            face_std = utils.center2Corner(face)
             for person in self.persons:
                 if bb1inbb2(face_std, person.coords):
-                    # The face belongs to this person. We update it.
-                    person.ftrk.handleDetection(face, sim)
+                    # cprint.warn('the face has been updated for a person')
+                    # The face is inside this person's box.
+                    # Update it if its position is higher than the existing one
+                    if person.face is None or face[1] > person.face.coords[1] + person.face.coords[3]//2:
+                        person.setFace(face, sim)
+                    # person.ftrk.handleDetection(face, sim)
+                # else:
+                #     cprint.warn('unknown face...')
+
+        for idx in range(len(self.persons)):
+            if self.persons[idx].face is not None:
+                self.persons[idx].face.counter -= 1
+
 
     def checkRef(self):
         """Look for the reference faces among the tracked ones."""
         min_similarity = np.inf
         ref_idx = None
         for pi, person in enumerate(self.persons):
-            for fi, face in enumerate(person.ftrk.faces):
-                if face.similarity < self.ref_sim_thr and face.similarity < min_similarity:
-                    ref_idx = (pi, fi)
-                    min_similarity = face.similarity
+            if person.face is not None and person.face.similarity < self.ref_sim_thr and person.face.similarity < min_similarity:
+                ref_idx = pi
+                min_similarity = person.face.similarity
         # Update the reference person
         if ref_idx is not None:
-            for pi in range(len(self.persons)):
-                if pi == ref_idx[0]:
-                    self.persons[pi].is_ref = True
-                else:
-                    self.persons[pi].is_ref = False
+            self.persons[ref_idx].is_ref = True
+            # for pi in range(len(self.persons)):
+            #
+            #     if pi == ref_idx[0]:
+            #         self.persons[pi].is_ref = True
+            #     else:
+            #         self.persons[pi].is_ref = False
 
     def run(self):
         self.lock.acquire()
         self.image, self.depth = self.cam.getImages()
+        self.frame_counter += 1
         self.lock.release()
         self.setPrior()
         elapsed = np.infty
-        counter = 0
         while self.is_activated:
             # Control the rate
-            print(f'tracker[{counter}]:elapsed:{elapsed:.3f} s')
+            print(f'tracker[{self.frame_counter}]:elapsed:{elapsed:.3f} s')
             if elapsed <= PERIOD:
                 time.sleep(PERIOD - elapsed)
             start = time.time()
@@ -213,6 +238,7 @@ class PeopleTracker(threading.Thread):
             self.lock.acquire()
             try:
                 self.image, self.depth = self.cam.getImages()
+                self.frame_counter += 1
             except StopIteration:
                 self.is_activated = False
                 break
@@ -226,8 +252,6 @@ class PeopleTracker(threading.Thread):
             # print(f"after {len(self.candidates)} candidates, {len(self.persons)} persons")
             # print("========")
             # And refresh candidates and persons
-            self.refresh()
 
             elapsed = time.time() - start
             # print("elapsed", elapsed)
-            counter += 1
