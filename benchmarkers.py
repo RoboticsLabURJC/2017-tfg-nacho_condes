@@ -20,7 +20,7 @@ TO_MS_VEC = np.vectorize(TO_MS)
 
 
 class FollowPersonBenchmarker:
-    '''Writer for a full-set benchmark using a certain configuration.'''
+    """Writer for a full-set benchmark using a certain configuration."""
     def __init__(self, logdir):
         self.logdir = logdir
         # Sections
@@ -39,7 +39,7 @@ class FollowPersonBenchmarker:
 
 
     def makeConfig(self, pdet_model, fenc_model, rosbag_file, xcfg, wcfg, ptcfg):
-        '''Build the config section for the benchmark report.'''
+        """Build the config section for the benchmark report."""
         config = {
             '1.- Networks': {
                 '1.- PersonDetectionmodel': pdet_model,
@@ -65,7 +65,7 @@ class FollowPersonBenchmarker:
         self.config = config
 
     def makeLoadTimes(self, t_pers_det, t_face_det, t_face_enc, ttfi):
-        '''Build the load times section for the benchmark report.'''
+        """Build the load times section for the benchmark report."""
 
         load_times = {
             '1.- PersonDetectionNetworkLoad': TO_MS(t_pers_det),
@@ -76,7 +76,7 @@ class FollowPersonBenchmarker:
         self.load_times = load_times
 
     def makeDetectionStats(self, frames_times):
-        '''Build the detection statistics section for the benchmark report.'''
+        """Build the detection statistics section for the benchmark report."""
 
         # Convert the times to an array
         measured_times = np.array(list(frames_times.values()))
@@ -119,7 +119,7 @@ class FollowPersonBenchmarker:
         self.detection_stats = detection_stats
 
     def makeTrackingStats(self, tracked_persons, frames_with_ref):
-        '''Build the tracking statistics section for the benchmark report.'''
+        """Build the tracking statistics section for the benchmark report."""
 
         tracking_stats = {
             '1.- TrackedPersons': tracked_persons,
@@ -128,7 +128,7 @@ class FollowPersonBenchmarker:
         self.tracking_stats = tracking_stats
 
     def makeIters(self, frames_times, frames_numtrackings, frames_errors, frames_responses):
-        '''Write the iterations for each processed frame in the benchmark.'''
+        """Write the iterations for each processed frame in the benchmark."""
 
         iterations = []
         for frame, times in frames_times.items():
@@ -178,7 +178,7 @@ class FollowPersonBenchmarker:
 
 
     def writeBenchmark(self):
-        '''Write the metrics to the output file.'''
+        """Write the metrics to the output file."""
 
         # Build the entire structure
         benchmark = {
