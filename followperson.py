@@ -63,7 +63,6 @@ if __name__ == '__main__':
     p_tracker = PeopleTracker(ptcfg['Patience'], ptcfg['RefSimThr'], ptcfg['SamePersonThr'])
     p_tracker.setCam(cam)
     sleep(2)
-    p_tracker.start()
 
     # Link the networks to the tracker, to update the references with the inferences
     nets_c.setTracker(p_tracker)
@@ -90,6 +89,8 @@ if __name__ == '__main__':
     while not nets_c.is_activated:
         sleep(1)
 
+    p_tracker.start()
+
     if benchmark:
         # Save the configuration on the benchmarker
         benchmarker.makeConfig(nets_cfg['DetectionModel'], nets_cfg['FaceEncoderModel'], cfg['RosbagFile'], xcfg, wcfg,
@@ -102,6 +103,7 @@ if __name__ == '__main__':
     sent_responses = {}
     num_trackings = {}
     ref_errors = {}
+    ref_coords = {}
 
     ref_tracked = False
     fps_str = 'N/A'
@@ -147,6 +149,7 @@ if __name__ == '__main__':
         ################
         # Compute errors
         ref_found = False
+        person = None
         for person in persons:
             if person.is_ref:
                 w_error = utils.computeWError(person.coords, IMAGE_WIDTH)
@@ -188,6 +191,8 @@ if __name__ == '__main__':
             num_trackings[frame_counter] = len(persons)
             ref_errors[frame_counter] = (w_error, x_error)
             sent_responses[frame_counter] = (w_response, x_response)
+            if person is not None:
+                ref_coords[frame_counter] = person.coords
 
         ###############
         ### DRAWING ###
@@ -203,7 +208,6 @@ if __name__ == '__main__':
                                                        use_normalized_coordinates=False)
             face = person.face
             if face is not None:
-                # print('has face!')
                 x1, y1, x2, y2 = utils.center2Corners(face.coords)
                 vis_utils.draw_bounding_box_on_image_array(transformed, y1, x1, y2, x2, color='blue',
                                                            use_normalized_coordinates=False)
@@ -239,7 +243,7 @@ if __name__ == '__main__':
     if benchmark:
         benchmarker.makeDetectionStats(nets_c.total_times)
         benchmarker.makeTrackingStats(p_tracker.tracked_counter, frames_with_ref)
-        benchmarker.makeIters(nets_c.total_times, num_trackings, ref_errors, sent_responses)
+        benchmarker.makeIters(nets_c.total_times, num_trackings, ref_errors, ref_coords, sent_responses)
         benchmarker.writeBenchmark()
 
     rospy.signal_shutdown("Finished!!")

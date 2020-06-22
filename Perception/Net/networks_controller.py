@@ -166,20 +166,18 @@ class NetworksController(threading.Thread):
                 iter_info.append([elapsed, len(self.similarities)])
 
             # Make the tracking thread to update the persons
-            cprint.info(f'{len(self.persons)} persons and {len(self.faces)} faces going into the tracker...')
-            cprint.info('BEFORE')
-            cprint.info(f'Candidates: {self.tracker.candidates}')
-            cprint.info(f'Persons: {self.tracker.persons}')
-            cprint.info('>>>>>>>>')
+            # cprint.info(f'{len(self.persons)} persons and {len(self.faces)} faces going into the tracker...')
+            # cprint.info('BEFORE')
+            # cprint.info(f'Candidates: {self.tracker.candidates}')
+            # cprint.info(f'Persons: {self.tracker.persons}')
+            # cprint.info('>>>>>>>>')
             self.tracker.updateWithDetections(self.persons, self.faces, self.similarities)
-            cprint.info('<<<<<<<<')
-            cprint.info('AFTER')
-            cprint.info(f'Candidates: {self.tracker.candidates}')
-            cprint.info(f'Persons: {self.tracker.persons}')
-            cprint.info('====ale====')
-            # self.tracker.faces = self.faces
-            # self.tracker.similarities = self.similarities
-            # elapsed_ = time.time() - start
+            # cprint.info('<<<<<<<<')
+            # cprint.info('AFTER')
+            # cprint.info(f'Candidates: {self.tracker.candidates}')
+            # cprint.info(f'Persons: {self.tracker.persons}')
+            # cprint.info('====ale====')
+
             # Finishing the loop
             if self.benchmark:
                 iter_elapsed = datetime.now() - iter_start

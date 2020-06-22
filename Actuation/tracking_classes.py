@@ -54,11 +54,12 @@ class Person:
         # self.counter += 2
 
         # Remove the face if it does not belong to the person anymore
-        if self.face is not None:
+        face = self.face
+        if face is not None:
             # self.face.counter -= 1
-            if not bb1inbb2(self.face.coords, self.coords):
+            if not bb1inbb2(face.coords, self.coords):
                 self.face = None
-            if self.face.counter <= 0:
+            if face.counter <= 0:
                 self.face = None
 
     def setFace(self, coords, similarity):

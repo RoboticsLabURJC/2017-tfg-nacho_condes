@@ -82,7 +82,7 @@ class ROSCam:
         self.lock.release()
 
     def getImages(self):
-        """ Return the latest images from a rosbag or from the topic. """
+        """Return the latest images from a rosbag or from the topic."""
         if self.use_bag:
             _, rgb_data, _ = next(self.rgb_iter)
             _, depth_data, _ = next(self.depth_iter)

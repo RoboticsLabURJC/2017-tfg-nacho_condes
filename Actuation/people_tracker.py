@@ -49,6 +49,9 @@ class PeopleTracker(threading.Thread):
 
     def setCam(self, cam):
         self.cam = cam
+        self.image, self.depth = self.cam.getImages()
+        self.frame_counter += 1
+
 
     def setPrior(self):
         """Set the first image on the tracker."""
@@ -90,12 +93,12 @@ class PeopleTracker(threading.Thread):
     def updateWithDetections(self, boxes, faces, similarities):
         """Reassign the person to the most suitable bounding box."""
         for box in boxes:
-            cprint.ok('~~~~~')
-            cprint.ok('now this box:', box)
+            # cprint.ok('~~~~~')
+            # cprint.ok('now this box:', box)
             pers_distances = np.array(list(map(lambda x: distanceBetweenBoxes(box, x.coords), self.persons)))
             cand_distances = np.array(list(map(lambda x: distanceBetweenBoxes(box, x.coords), self.candidates)))
-            cprint.ok('distances to candidates', cand_distances)
-            cprint.ok('distances to persons', pers_distances)
+            # cprint.ok('distances to candidates', cand_distances)
+            # cprint.ok('distances to persons', pers_distances)
             # Assign to the nearest person, or create one if required
             near_pers = np.where(pers_distances <= self.same_person_thr)[0]
             near_cand = np.where(cand_distances <= self.same_person_thr)[0]
@@ -230,7 +233,8 @@ class PeopleTracker(threading.Thread):
         elapsed = np.infty
         while self.is_activated:
             # Control the rate
-            print(f'tracker[{self.frame_counter}]:elapsed:{elapsed:.3f} s')
+            if self.frame_counter % 100 == 0:
+                print(f'tracker[{self.frame_counter}]:elapsed:{elapsed:.3f} s')
             if elapsed <= PERIOD:
                 time.sleep(PERIOD - elapsed)
             start = time.time()

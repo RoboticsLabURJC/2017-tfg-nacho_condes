@@ -127,7 +127,7 @@ class FollowPersonBenchmarker:
         }
         self.tracking_stats = tracking_stats
 
-    def makeIters(self, frames_times, frames_numtrackings, frames_errors, frames_responses):
+    def makeIters(self, frames_times, frames_numtrackings, frames_errors, ref_coords, frames_responses):
         """Write the iterations for each processed frame in the benchmark."""
 
         iterations = []
@@ -162,7 +162,7 @@ class FollowPersonBenchmarker:
 
             errors = frames_errors.get(frame, ['', ''])
             responses = frames_responses.get(frame, ['', ''])
-
+            coords = ref_coords.get(frame, ['', '', '', '', ''])
             frame_info['7.- XControl'] = {
                 '1.- Error': f'{errors[1]}',
                 '2.- Response': f'{responses[1]}',
@@ -171,6 +171,12 @@ class FollowPersonBenchmarker:
             frame_info['8.- WControl'] = {
                 '1.- Error': f'{errors[0]}',
                 '2.- Response': f'{responses[0]}',
+            }
+            frame_info['9.- RefCoords'] = {
+                '1.- X': f'{coords[0]}',
+                '2.- Y': f'{coords[1]}',
+                '3.- W': f'{coords[2]}',
+                '4.- H': f'{coords[3]}',
             }
             iterations.append(frame_info)
 
