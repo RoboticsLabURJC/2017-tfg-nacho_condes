@@ -15,19 +15,18 @@ FILENAME_FORMAT = '%Y%m%d %H%M%S.yml'
 
 BOX_COLOR = {True: 'green', False: 'red'}
 
-# TO_MS = np.vectorize(lambda x: x.seconds * 1000.0 + x.microseconds / 1000.0) # Auxiliary vectorized function
 
 
 def crop_face(image, det):
-    ''' Crop the detected face, using the faced detection outputs. '''
+    """ Crop the detected face, using the faced detection outputs. """
     cx, cy, w, h, prob = np.squeeze(det).astype(int)
 
     # Filter as the borders might fall outside the image
     im_h, im_w = image.shape[:2]
 
-    y_up =    max(0,    cy - h//2)
-    y_down =  min(im_h, cy + h//2)
-    x_left =  max(0,    cx - w//2)
+    y_up = max(0,    cy - h//2)
+    y_down = min(im_h, cy + h//2)
+    x_left = max(0,    cx - w//2)
     x_right = min(im_w, cx + w//2)
 
     face_crop = image[y_up:y_down, x_left:x_right]
@@ -89,12 +88,10 @@ def computeXError(coords, depth):
     bb_depth = depth[coords[1]:coords[1]+coords[3], coords[0]:coords[0]+coords[2]]
     ph, pw = bb_depth.shape
     cropped_depth = bb_depth[ph//10:-ph//10, pw//10:-pw//10]
-    # print('coords', coords, 'cropped_depth', cropped_depth.shape)
     # Create a 10x10 mesh to sample the depth values
     vg = np.linspace(0, cropped_depth.shape[0]-1, num=10, dtype=np.int)
     hg = np.linspace(0, cropped_depth.shape[1]-1, num=10, dtype=np.int)
     grid = np.meshgrid(vg, hg)
-    # print('depth size:', depth.shape, 'vg:', vg, 'hg', hg)
 
     # Sample the values and compute the median depth
     sampled_depths = cropped_depth[tuple(grid)].ravel()
@@ -124,7 +121,7 @@ def arrowColor(rate):
 
 
 def movesImage(shape, xlim, xval, wlim, wval):
-    '''Render a crosshair representing the response sent to the robot.'''
+    """Render a crosshair representing the response sent to the robot."""
     img = np.zeros(shape, dtype=np.uint8)
     start_point = (shape[1]//2, shape[0]//2)
 

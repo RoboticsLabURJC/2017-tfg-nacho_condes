@@ -1,5 +1,5 @@
 import tensorflow as tf
-import tensorflow.contrib.tensorrt as trt # to solve compat. on bin graph
+# import tensorflow.contrib.tensorrt as trt # to solve compat. on bin graph
 import numpy as np
 import cv2
 from os import path

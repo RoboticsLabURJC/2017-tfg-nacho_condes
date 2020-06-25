@@ -5,8 +5,6 @@
 __author__ = '@naxvm'
 
 import argparse
-import sys
-from datetime import datetime, timedelta
 from os import path
 
 import numpy as np
@@ -29,6 +27,8 @@ from time import sleep
 
 XLIM = 0.7
 WLIM = 1
+
+DEBUG = False
 
 if __name__ == '__main__':
     # Parameter parsing
@@ -56,11 +56,11 @@ if __name__ == '__main__':
     rospy.init_node(cfg['NodeName'])
     # Create the networks controller (thread running on the GPU)
     # It configures itself after starting
-    nets_c = NetworksController(nets_cfg, cfg['RefFace'], benchmark=True)
+    nets_c = NetworksController(nets_cfg, cfg['RefFace'], benchmark=True, debug=DEBUG)
 
     # Person tracker (thread running on the CPU)
     ptcfg = cfg['PeopleTracker']
-    p_tracker = PeopleTracker(ptcfg['Patience'], ptcfg['RefSimThr'], ptcfg['SamePersonThr'])
+    p_tracker = PeopleTracker(ptcfg['Patience'], ptcfg['RefSimThr'], ptcfg['SamePersonThr'], debug=DEBUG)
     p_tracker.setCam(cam)
     sleep(2)
 
@@ -85,11 +85,10 @@ if __name__ == '__main__':
         tw_pub = rospy.Publisher(cfg['Topics']['Motors'], Twist, queue_size=1)
         sn_pub = rospy.Publisher(cfg['Topics']['Sound'], Sound, queue_size=1)
 
-    # Everything ready. Wait for the controller to be set.
-    while not nets_c.is_activated:
+    # Everything ready. Wait for the tracket to be set.
+    while not (p_tracker.is_activated and nets_c.is_activated):
         sleep(1)
-
-    p_tracker.start()
+    sleep(2)
 
     if benchmark:
         # Save the configuration on the benchmarker
@@ -107,14 +106,15 @@ if __name__ == '__main__':
 
     ref_tracked = False
     fps_str = 'N/A'
+    show_images = True
 
-    # PERIOD = 1/2
-    # elapsed_ = np.infty
 
     def shtdn_hook():
         rospy.loginfo("\nCleaning and exiting...")
         p_tracker.is_activated = False
         nets_c.close_all()
+        global show_images
+        show_images = False
         cv2.destroyAllWindows()
         if benchmark:
             v_out.release()
@@ -122,15 +122,29 @@ if __name__ == '__main__':
 
     # Register shutdown hook
     rospy.on_shutdown(shtdn_hook)
+    counter = 0
 
     while not rospy.is_shutdown():
-        print('---main---')
-        # import time
-        #
-        # if elapsed_ <= PERIOD:
-        #     time.sleep(PERIOD - elapsed_)
-        # start = time.time()
-        if not nets_c.is_activated or not p_tracker.is_activated:
+        if DEBUG:
+            # Debugging stuff to control the threads
+            if counter > 0:
+                p_tracker.iterate()
+                nets_c.iterate()
+                counter -= 1
+            else:
+                command = input('enter thread to step [(t)racker, (n)eural, (g)ui], \n\tnumber of frames to process normally, or a command to eval (starting with >)')
+                if command.startswith('>'):
+                    eval(command[1:])
+                    continue
+                elif command == 't':
+                    p_tracker.iterate()
+                elif command == 'n':
+                    nets_c.iterate()
+                elif command.isnumeric():
+                    counter = int(command)
+
+
+        if not nets_c.is_activated:
             rospy.signal_shutdown('ROSBag completed!')
         image, depth = p_tracker.getImages()
         frame_counter = p_tracker.frame_counter
@@ -211,8 +225,12 @@ if __name__ == '__main__':
                 x1, y1, x2, y2 = utils.center2Corners(face.coords)
                 vis_utils.draw_bounding_box_on_image_array(transformed, y1, x1, y2, x2, color='blue',
                                                            use_normalized_coordinates=False)
-            # else:
-            #     print("hasn't face")
+        for kp in p_tracker.keypoints.astype(int):
+            try:
+                x, y = kp
+            except TypeError:
+                pass
+            cv2.circle(transformed, (int(x), int(y)), 5, (255, 255, 0))
 
         # Show the images
         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
@@ -230,13 +248,14 @@ if __name__ == '__main__':
         if frame_counter % 10 == 0:
             # Update the fps
             last_elapsed = nets_c.last_elapsed
-            fps_str = f'{1000 / TO_MS(last_elapsed):.2f} fps'
+            if last_elapsed != 0:
+                fps_str = f'{1000 / TO_MS(last_elapsed):.2f} fps'
 
         cv2.putText(total_out, f'Neural rate: {fps_str}', (2 * IMAGE_WIDTH - 280, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.8,
                     (255, 255, 255), 1)
-
-        cv2.imshow('Output', cv2.resize(total_out, dsize=(IMAGE_WIDTH, IMAGE_HEIGHT), interpolation=cv2.INTER_CUBIC))
-        cv2.waitKey(1)
+        if show_images:
+            cv2.imshow('Output', cv2.resize(total_out, dsize=(IMAGE_WIDTH, IMAGE_HEIGHT), interpolation=cv2.INTER_CUBIC))
+            cv2.waitKey(1)
         if benchmark: v_out.write(total_out)
         # elapsed_ = time.time() - start
     # Finish the execution
@@ -245,5 +264,4 @@ if __name__ == '__main__':
         benchmarker.makeTrackingStats(p_tracker.tracked_counter, frames_with_ref)
         benchmarker.makeIters(nets_c.total_times, num_trackings, ref_errors, ref_coords, sent_responses)
         benchmarker.writeBenchmark()
-
     rospy.signal_shutdown("Finished!!")
