@@ -44,6 +44,11 @@ def corner2Corners(bbox):
     return np.array([bbox[0], bbox[1], bbox[0]+bbox[2], bbox[1]+bbox[3]])
 
 
+def corners2Corner(bbox):
+    '''[x1, y1, x2, y2] -> [x, y, w, h]'''
+    return np.array([bbox[0], bbox[1], bbox[2]-bbox[0], bbox[3]-bbox[1]])
+
+
 def center2Corners(bbox):
     """[cx, cy, w, h] -> [x1, y1, x2, y2]"""
     return np.array([bbox[0]-bbox[2]//2, bbox[1]-bbox[3]//2, bbox[0]+bbox[2]//2, bbox[1]+bbox[3]//2])
@@ -144,3 +149,28 @@ def movesImage(shape, xlim, xval, wlim, wval):
     img = cv2.arrowedLine(img, start_point, x_ep, x_col, thickness=4)
     return img
 
+def jaccardIndex(label, estim_bb):
+    """Function to compute the Jaccard Index between two bounding boxes."""
+    # Original coordinates
+    x, y, w, h = label
+    # Estimated coordinates
+    x_e, y_e, w_e, h_e = estim_bb[:4]
+
+    # Coordinates of intersection area
+    x_left = max(x, x_e)
+    x_right = min(x + w, x_e + w_e)
+    y_top = max(y, y_e)
+    y_bottom = min(y + h, y_e + h_e)
+
+    # Check if boxes intersect
+    if (x_left > x_right) or (y_top > y_bottom):
+        return 0
+
+    else:
+        # Intersection
+        inter = (x_right - x_left) * (y_bottom - y_top)
+
+        # Union area
+        union = w * h + w_e * h_e - inter
+
+        return inter/union
