@@ -1,4 +1,5 @@
 .idea
+own_videos/*
 resources/benchmarks/*
 resources/bags
 resources/ref_face/*
