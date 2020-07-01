@@ -28,7 +28,7 @@ from time import sleep
 XLIM = 0.7
 WLIM = 1
 
-DEBUG = False
+DEBUG = True
 
 if __name__ == '__main__':
     # Parameter parsing
@@ -122,14 +122,15 @@ if __name__ == '__main__':
 
     # Register shutdown hook
     rospy.on_shutdown(shtdn_hook)
-    counter = 0
+    counter = 30000
 
     while not rospy.is_shutdown():
         if DEBUG:
             # Debugging stuff to control the threads
             if counter > 0:
                 p_tracker.iterate()
-                nets_c.iterate()
+                if counter % 10 == 0:
+                    nets_c.iterate()
                 counter -= 1
             else:
                 command = input('enter thread to step [(t)racker, (n)eural, (g)ui], \n\tnumber of frames to process normally, or a command to eval (starting with >)')
@@ -153,9 +154,10 @@ if __name__ == '__main__':
         ### TRACKING ###
         ################
         # Forward step in the tracking using the detections
-        print('=====')
-        print(f'Detections: {len(nets_c.persons)}|{len(nets_c.faces)}')
-        print(f'Tracker: {len(p_tracker.persons)}')
+        # print('=====')
+        # print('-main-')
+        # print(f'Detections: {len(nets_c.persons)}|{len(nets_c.faces)}')
+        # print(f'Tracker: {len(p_tracker.persons)}')
         persons = p_tracker.persons
 
         ################
@@ -262,6 +264,6 @@ if __name__ == '__main__':
     if benchmark:
         benchmarker.makeDetectionStats(nets_c.total_times)
         benchmarker.makeTrackingStats(p_tracker.tracked_counter, frames_with_ref)
-        benchmarker.makeIters(nets_c.total_times, num_trackings, ref_errors, ref_coords, sent_responses)
+        benchmarker.makeIters(frame_counter, nets_c.total_times, num_trackings, ref_errors, ref_coords, sent_responses)
         benchmarker.writeBenchmark()
     rospy.signal_shutdown("Finished!!")

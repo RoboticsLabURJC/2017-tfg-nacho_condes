@@ -7,12 +7,12 @@ import utils
 from Actuation.tracking_classes import *
 import numpy as np
 np.set_printoptions(precision=2)
-FEATURE_PARAMS = dict(maxCorners=120,
-                      qualityLevel=0.3,
+FEATURE_PARAMS = dict(maxCorners=300,
+                      qualityLevel=0.1,
                       minDistance=7,
                       blockSize=7)
 
-LK_PARAMS = dict(winSize=(15, 15),
+LK_PARAMS = dict(winSize=(25, 25),
                  maxLevel=2,
                  criteria=(cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03))
 
@@ -89,7 +89,7 @@ class PeopleTracker(threading.Thread):
 
     def updateWithDetections(self, boxes, faces, similarities):
         """Reassign the person to the most suitable bounding box."""
-        print(self.persons)
+
         for box in boxes:
             pers_distances = np.array(list(map(lambda x: utils.distanceBetweenBoxes(box, x.coords), self.persons)))
             cand_distances = np.array(list(map(lambda x: utils.distanceBetweenBoxes(box, x.coords), self.candidates)))
@@ -148,7 +148,7 @@ class PeopleTracker(threading.Thread):
         for cand in self.candidates:
             if cand.counter >= 0:
                 # Survive
-                if cand.counter >= self.patience:
+                if cand.counter >= self.patience/2:
                     # The candidate will be a tracked person
                     cand.counter = self.patience
                     new_persons.append(cand)
@@ -191,7 +191,11 @@ class PeopleTracker(threading.Thread):
                 min_similarity = person.face.similarity
         # Update the reference person
         if ref_idx is not None:
-            self.persons[ref_idx].is_ref = True
+            for idx in range(len(self.persons)):
+                if idx == ref_idx:
+                    self.persons[ref_idx].is_ref = True
+                else:
+                    self.persons[ref_idx].is_ref = False
 
     def iterate(self):
         # Fetch the images
@@ -201,6 +205,7 @@ class PeopleTracker(threading.Thread):
             self.frame_counter += 1
         except StopIteration:
             self.is_activated = False
+            self.lock.release()
             return
         self.lock.release()
 
