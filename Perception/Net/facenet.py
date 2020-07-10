@@ -45,7 +45,7 @@ class FaceNet:
         _ = self.distancesToRef([dummy_tensor], preprocess=False)
 
     def preprocess(self, face):
-        ''' Function to preprocess a face. '''
+        """Function to preprocess a face."""
         # Squared crop
         prep_face = cv2.resize(face, dsize=(SQUARE_SIZE, SQUARE_SIZE), interpolation=cv2.INTER_CUBIC)
         # prep_face = cv2.blur(prep_face, (5,5))
@@ -57,10 +57,10 @@ class FaceNet:
 
 
     def distancesToRef(self, faces, preprocess=True):
-        '''
+        """
         Compute the embeddings of a list of faces
         and check the distance to the reference one.
-        '''
+        """
         nfaces = len(faces)
 
         # Tensor containing all the faces to eval

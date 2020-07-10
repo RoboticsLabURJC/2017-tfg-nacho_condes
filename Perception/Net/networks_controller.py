@@ -19,7 +19,7 @@ from Perception.Net.detection_network import DetectionNetwork
 
 class NetworksController(threading.Thread):
 
-    def __init__(self, nets_cfg, ref_img_path, benchmark=False, debug=False):
+    def __init__(self, nets_cfg, ref_img_path, benchmark=False):
         """ Threading class for running neural inferences on a sequential way. """
 
         super(NetworksController, self).__init__()
@@ -56,7 +56,6 @@ class NetworksController(threading.Thread):
 
         # self.cam = None
         self.tracker = None
-        self.debug = debug
 
     def createPersonDetector(self):
         """Instantiate the "person" detection network."""
@@ -93,62 +92,6 @@ class NetworksController(threading.Thread):
         self.image = self.tracker.image
         self.depth = self.tracker.depth
 
-    def iterate(self):
-        """Function to be called in the loop."""
-
-        # cprint.info('---networks---')
-        # if elapsed_ <= PERIOD:
-        #     time.sleep(PERIOD - elapsed_)
-        # start = time.time()
-        iter_info = []
-        # Fetch the images
-        self.is_activated = self.tracker.is_activated
-        try:
-            # self.image, self.depth = self.cam.getImages()
-            # We get it from the tracker, in order not to consume the
-            # iterator if the images come from a ROSBag
-            self.image, self.depth = self.tracker.getImages()
-        except StopIteration:
-            self.is_activated = False
-            return
-        if self.benchmark:
-            step_time = datetime.now()
-            iter_start = step_time
-
-        ### Person detection ###
-        self.persons, elapsed = self.pdet_network.predict(self.image)
-        if self.benchmark:
-            iter_info.append([elapsed, len(self.persons)])
-            step_time = datetime.now()
-
-        ### Face detection and cropping ###
-        face_detections = self.fdet_network.predict(self.image)
-        if self.benchmark:
-            elapsed = datetime.now() - step_time
-            iter_info.append([elapsed, len(face_detections) if isinstance(face_detections, list) else 1])
-
-        # Just confident faces
-        self.faces = list(filter(lambda f: f[-1] > 0.9, face_detections))
-        faces_cropped = [utils.crop_face(self.image, fdet) for fdet in self.faces]
-        if self.benchmark: step_time = datetime.now()
-
-        ### Face similarities ###
-        self.similarities = self.fenc_network.distancesToRef(faces_cropped)
-        if self.benchmark:
-            elapsed = datetime.now() - step_time
-            iter_info.append([elapsed, len(self.similarities)])
-
-        # Make the tracking thread to update the persons
-
-        self.tracker.updateWithDetections(self.persons, self.faces, self.similarities)
-
-        # Finishing the loop
-        if self.benchmark:
-            iter_elapsed = datetime.now() - iter_start
-            self.last_elapsed = iter_elapsed
-            iter_info.append(iter_elapsed)
-            self.total_times[self.tracker.frame_counter] = iter_info
-
 
     def run(self):
         """Main method of the thread."""
@@ -169,14 +112,80 @@ class NetworksController(threading.Thread):
         # Indicate we are ready to go
         self.is_activated = True
         self.tracker.is_activated = True
-        self.tracker.start()
-        time.sleep(2)
-
-        if self.debug:
-            # The control will be carried by the main thread
-            return
+        # import numpy as np
+        # elapsed_ = np.infty
+        # PERIOD = 1/2
         while self.is_activated:
-            self.iterate()
+            # cprint.info('---networks---')
+            # if elapsed_ <= PERIOD:
+            #     time.sleep(PERIOD - elapsed_)
+            # start = time.time()
+            iter_info = []
+            # Fetch the images
+            try:
+                # self.image, self.depth = self.cam.getImages()
+                # We get it from the tracker, in order not to consume the
+                # iterator if the images come from a ROSBag
+                self.is_activated = self.tracker.is_activated
+                self.image, self.depth = self.tracker.getImages()
+            except StopIteration:
+                self.is_activated = False
+                break
+            if self.benchmark:
+                step_time = datetime.now()
+                iter_start = step_time
+
+
+
+            ### Person detection ###
+            # cprint.info('\tla shape', self.image.shape, self.image.dtype, self.image.min(), self.image.max())
+            self.persons, elapsed = self.pdet_network.predict(self.image)
+            if self.benchmark:
+                iter_info.append([elapsed, len(self.persons)])
+                step_time = datetime.now()
+
+
+
+            ### Face detection and cropping ###
+            face_detections = self.fdet_network.predict(self.image)
+            if self.benchmark:
+                elapsed = datetime.now() - step_time
+                iter_info.append([elapsed, len(face_detections) if isinstance(face_detections, list) else 1])
+
+            # Just confident faces
+            self.faces = list(filter(lambda f: f[-1] > 0.9, face_detections))
+            faces_cropped = [utils.crop_face(self.image, fdet) for fdet in self.faces]
+            if self.benchmark: step_time = datetime.now()
+
+
+
+            ### Face similarities ###
+            self.similarities = self.fenc_network.distancesToRef(faces_cropped)
+            if self.benchmark:
+                elapsed = datetime.now() - step_time
+                iter_info.append([elapsed, len(self.similarities)])
+
+            # Make the tracking thread to update the persons
+            # cprint.info(f'{len(self.persons)} persons and {len(self.faces)} faces going into the tracker...')
+            # cprint.info('BEFORE')
+            # cprint.info(f'Candidates: {self.tracker.candidates}')
+            # cprint.info(f'Persons: {self.tracker.persons}')
+            # cprint.info('>>>>>>>>')
+            self.tracker.updateWithDetections(self.persons, self.faces, self.similarities)
+            # cprint.info('<<<<<<<<')
+            # cprint.info('AFTER')
+            # cprint.info(f'Candidates: {self.tracker.candidates}')
+            # cprint.info(f'Persons: {self.tracker.persons}')
+            # cprint.info('====ale====')
+
+            # Finishing the loop
+            if self.benchmark:
+                iter_elapsed = datetime.now() - iter_start
+                self.last_elapsed = iter_elapsed
+                iter_info.append(iter_elapsed)
+                self.total_times[self.tracker.frame_counter] = iter_info
+
+                # cprint.info(f'\r[INFERENCES] Elapsed: {iter_elapsed}\t{1e6/iter_elapsed.microseconds:.2f} fps', end='', flush=True)
 
     def close_all(self):
         """Function to stop the inferences."""

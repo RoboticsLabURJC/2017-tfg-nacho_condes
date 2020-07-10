@@ -15,23 +15,32 @@ FILENAME_FORMAT = '%Y%m%d %H%M%S.yml'
 
 BOX_COLOR = {True: 'green', False: 'red'}
 
+# TO_MS = np.vectorize(lambda x: x.seconds * 1000.0 + x.microseconds / 1000.0) # Auxiliary vectorized function
 
 
 def crop_face(image, det):
     """ Crop the detected face, using the faced detection outputs. """
+    cx, cy, w, h = np.squeeze(det)[:4].astype(int)
+
+    ''' Crop the detected face, using the faced detection outputs. '''
     cx, cy, w, h, prob = np.squeeze(det).astype(int)
 
     # Filter as the borders might fall outside the image
     im_h, im_w = image.shape[:2]
 
-    y_up = max(0,    cy - h//2)
-    y_down = min(im_h, cy + h//2)
-    x_left = max(0,    cx - w//2)
+    y_up =    max(0,    cy - h//2)
+    y_down =  min(im_h, cy + h//2)
+    x_left =  max(0,    cx - w//2)
     x_right = min(im_w, cx + w//2)
 
     face_crop = image[y_up:y_down, x_left:x_right]
 
     return face_crop
+
+
+def corner2Center(bbox):
+    """[x, y, w, h] -> [cx, cy, w, h]"""
+    return np.array([bbox[0]+bbox[2]/2, bbox[1]+bbox[3]/2, bbox[2], bbox[3]])
 
 
 def center2Corner(bbox):
@@ -48,6 +57,12 @@ def corners2Corner(bbox):
     '''[x1, y1, x2, y2] -> [x, y, w, h]'''
     return np.array([bbox[0], bbox[1], bbox[2]-bbox[0], bbox[3]-bbox[1]])
 
+def corners2Center(bbox):
+    '''[x1, y1, x2, y2] -> [cx, cy, w, h]'''
+    x1, y1, x2, y2 = bbox[:4]
+    w = (x2 - x1) // 2
+    h = (y2 - y1) // 2
+    return np.array([x1+w//2, y1+h//2, w, h])
 
 def center2Corners(bbox):
     """[cx, cy, w, h] -> [x1, y1, x2, y2]"""
@@ -93,13 +108,18 @@ def computeXError(coords, depth):
     bb_depth = depth[coords[1]:coords[1]+coords[3], coords[0]:coords[0]+coords[2]]
     ph, pw = bb_depth.shape
     cropped_depth = bb_depth[ph//10:-ph//10, pw//10:-pw//10]
+    # print('coords', coords, 'cropped_depth', cropped_depth.shape)
     # Create a 10x10 mesh to sample the depth values
     vg = np.linspace(0, cropped_depth.shape[0]-1, num=10, dtype=np.int)
     hg = np.linspace(0, cropped_depth.shape[1]-1, num=10, dtype=np.int)
     grid = np.meshgrid(vg, hg)
+    # print('depth size:', depth.shape, 'vg:', vg, 'hg', hg)
 
     # Sample the values and compute the median depth
-    sampled_depths = cropped_depth[tuple(grid)].ravel()
+    try:
+        sampled_depths = cropped_depth[tuple(grid)].ravel()
+    except IndexError:
+        return
     median = np.nanmedian(sampled_depths)
     if np.isnan(median):
         # The person is too close to estimate the distance
@@ -126,7 +146,7 @@ def arrowColor(rate):
 
 
 def movesImage(shape, xlim, xval, wlim, wval):
-    """Render a crosshair representing the response sent to the robot."""
+    '''Render a crosshair representing the response sent to the robot.'''
     img = np.zeros(shape, dtype=np.uint8)
     start_point = (shape[1]//2, shape[0]//2)
 

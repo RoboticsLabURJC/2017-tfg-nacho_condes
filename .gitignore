@@ -3,6 +3,7 @@ own_videos/*
 resources/benchmarks/*
 resources/bags
 resources/ref_face/*
+*mp4
 *__pycache__
 *swp*
 *nodes.txt

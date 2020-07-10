@@ -127,32 +127,33 @@ class FollowPersonBenchmarker:
         }
         self.tracking_stats = tracking_stats
 
-    def makeIters(self, frames_times, frames_numtrackings, frames_errors, ref_coords, frames_responses):
+    def makeIters(self, n_iters, frames_times, frames_numtrackings, frames_errors, ref_coords, frames_responses):
         """Write the iterations for each processed frame in the benchmark."""
 
         iterations = []
-        for frame, times in frames_times.items():
+        for frame in range(n_iters):
             # Fill selectively for each frame
+            times = frames_times.get(frame, None)
             frame_info = {}
 
             frame_info['1.- Frame'] = frame
+            if times is not None:
+                frame_info['2.- PersonDetection'] = {
+                        '1.- Elapsed': f'{TO_MS(times[0][0]):.4f} ms',
+                        '2.- Number': times[0][1],
+                }
 
-            frame_info['2.- PersonDetection'] = {
-                    '1.- Elapsed': f'{TO_MS(times[0][0]):.4f} ms',
-                    '2.- Number': times[0][1],
-            }
+                frame_info['3.- FaceDetection'] = {
+                        '1.- Elapsed': f'{TO_MS(times[1][0]):.4f} ms',
+                        '2.- Number': times[1][1],
+                }
 
-            frame_info['3.- FaceDetection'] = {
-                    '1.- Elapsed': f'{TO_MS(times[1][0]):.4f} ms',
-                    '2.- Number': times[1][1],
-            }
+                frame_info['4.- FaceEncoding'] = {
+                        '1.- Elapsed': f'{TO_MS(times[2][0]):.4f} ms',
+                        '2.- Number': times[2][1],
+                }
 
-            frame_info['4.- FaceEncoding'] = {
-                    '1.- Elapsed': f'{TO_MS(times[2][0]):.4f} ms',
-                    '2.- Number': times[2][1],
-            }
-
-            frame_info['5.- NeuralTime'] = f'{TO_MS(times[3]):.4f} ms'
+                frame_info['5.- NeuralTime'] = f'{TO_MS(times[3]):.4f} ms'
 
             # From now on, each frame might not having been tracked
             val = frames_numtrackings.get(frame, '')

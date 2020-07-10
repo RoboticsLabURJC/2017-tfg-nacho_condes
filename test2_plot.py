@@ -13,8 +13,6 @@ haar_file = 'test2/haar.csv'
 faced = np.loadtxt(faced_file, delimiter=';')
 haar = np.loadtxt(haar_file, delimiter=';')
 
-print('faced:', np.nanmean(faced))
-print('haar:', np.nanmean(haar))
 
 fig, axs = plt.subplots(figsize=(6, 4.5))
 axs.set_title('IoU with ground truth')
@@ -28,3 +26,16 @@ axs.legend(['faced', 'Haar cascade'])
 
 
 fig.savefig('test2/test2.pdf')
+
+haar_found = haar[np.isfinite(haar)]
+faced_found = faced[np.isfinite(faced)]
+np.set_printoptions(precision=3)
+print('faced')
+print(f'Average IoU: {np.nanmean(faced_found, axis=0)}')
+print(f'Standard deviation: {np.nanstd(faced_found, axis=0)}')
+print(f'Frames with detection: {len(faced_found)}: {len(faced_found)/len(faced)*100}%')
+print('\n\n')
+print('haar')
+print(f'Average IoU: {np.nanmean(haar_found, axis=0)}')
+print(f'Standard deviation: {np.nanstd(haar_found, axis=0)}')
+print(f'Frames with detection: {len(haar_found)}: {len(haar_found)/len(haar)*100}%')

@@ -28,7 +28,7 @@ if __name__ == '__main__':
     video = LabelMeSequence(VIDEO_PATH)
 
 
-    # fdet = FaceDetector()
+    fdet = FaceDetector()
     frontal_face_cascade_classifier = cv2.CascadeClassifier('test2/haarcascade_frontalface_default.xml')
 
     results = []
@@ -36,9 +36,9 @@ if __name__ == '__main__':
 
     for image, labels in video:
         if image is not None:
-            # faces = fdet.predict(image)
-            image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-            faces = frontal_face_cascade_classifier.detectMultiScale(image, scaleFactor=1.1, minNeighbors=2)
+            faces = list(map(utils.center2Corner, fdet.predict(image)))
+            # image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+            # faces = frontal_face_cascade_classifier.detectMultiScale(image, scaleFactor=1.1, minNeighbors=2)
             if len(faces) > 0 and len(labels) > 0:
                 label = labels['0']
                 JIs = [utils.jaccardIndex(label, face) for face in faces]

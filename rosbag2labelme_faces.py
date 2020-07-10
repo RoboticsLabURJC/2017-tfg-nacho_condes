@@ -11,8 +11,8 @@ topics = {
     'RGB': '/camera/rgb/image_raw',
     'Depth': '/camera/depth_registered/image_raw'
 }
-ROSBAG_PATH = 'resources/bags/jorge.bag'
-OUT_DIR = 'own_videos/2persons_faces'
+ROSBAG_PATH = 'resources/bags/test.bag'
+OUT_DIR = 'own_videos/test_face'
 SSD_PATH = 'Optimization/dl_models/ssd_mobilenet_v1_0.75_depth_coco/frozen_inference_graph.pb'
 
 cam = ROSCam(topics, ROSBAG_PATH)

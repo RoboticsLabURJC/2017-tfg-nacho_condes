@@ -1,11 +1,11 @@
 import numpy as np
-from utils import bb1inbb2
+from utils import distanceBetweenBoxes, bb1inbb2, center2Corner
 
 
 class Face:
     """Instance of a tracked face."""
     def __init__(self, coords, similarity, counter=5):
-        self.coords = list(coords)[:4]
+        self.coords = coords
         self.similarity = similarity
         self.counter = counter
 
@@ -28,7 +28,7 @@ class Person:
         using the descriptors found inside the location of the person."""
 
         # Look for suitable descriptors, "bounding box" (descriptor point) inside the coords?
-        valid_idxs = list(map(lambda kp: bb1inbb2([kp[0], kp[1], 0, 0], self.coords), old_kps.reshape(-1, 2)))
+        valid_idxs = list(map(lambda kp: bb1inbb2([kp[0], kp[1], 0, 0], self.coords), old_kps))
         if sum(valid_idxs) == 0:
             return
 
@@ -36,19 +36,16 @@ class Person:
         new_valid = new_kps[valid_idxs]
         # And compute the average displacement
         displacement = new_valid - old_valid
-        avg_displ = displacement.mean(axis=0).squeeze()
+        avg_displ = displacement.mean(axis=0)
 
         # Move the bounding box accordingly (keeping it inside the image)
         self.coords[0] = np.clip(self.coords[0] + avg_displ[0], 0, self.im_size[0])
         self.coords[1] = np.clip(self.coords[1] + avg_displ[1], 0, self.im_size[1])
-        if self.face is not None:
-            self.face.coords[0] = np.clip(self.face.coords[0] + avg_displ[0], 0, self.im_size[0])
-            self.face.coords[1] = np.clip(self.face.coords[1] + avg_displ[1], 0, self.im_size[1])
 
         # And rescale it accordingly to the distribution of the keypoints
         old_std = old_valid.std(axis=0)
         new_std = new_valid.std(axis=0)
-        if np.count_nonzero(old_std) == 2 and np.count_nonzero(new_std) == 2:
+        if np.count_nonzero(old_std) != 0 and np.count_nonzero(new_std):
             std_ratio = new_std / old_std
             self.coords[2] = self.coords[2] * std_ratio[0]
             self.coords[3] = self.coords[3] * std_ratio[1]
@@ -73,5 +70,5 @@ class Person:
     def __repr__(self):
         thestr = f'{self.coords[:4]} [{self.counter}, {self.is_ref}]'
         if self.face is not None:
-            thestr += f' -- Face: {self.face.coords} ({self.face.counter}, {self.face.similarity})'
+            thestr += f' -- Face: {self.face.coords[:4]} ({self.face.counter}, {self.face.similarity})'
         return thestr + '\n'

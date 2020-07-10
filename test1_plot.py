@@ -34,3 +34,13 @@ axs[1].plot(ssd[:, 1], linewidth=1)
 axs[1].legend(['YOLO', 'SSD'])
 
 fig.savefig('test1/test1.pdf')
+
+print('SSD')
+print(f'Average IoU/inference time: {np.nanmean(ssd, axis=0)}')
+print(f'Standard deviation: {np.nanstd(ssd, axis=0)}')
+print(f'Frames with detection: {sum(ssd[:, 0] > 0)}: {np.mean(ssd[:, 0] > 0)*100}%')
+print('\n\n')
+print('YOLO')
+print(f'Average IoU/inference time: {np.nanmean(yolo, axis=0)}')
+print(f'Standard deviation: {np.nanstd(yolo, axis=0)}')
+print(f'Frames with detection: {sum(yolo[:, 0] > 0)}: {np.mean(yolo[:, 0] > 0)*100}%')
