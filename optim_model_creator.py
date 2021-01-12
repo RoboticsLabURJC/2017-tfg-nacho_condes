@@ -54,7 +54,7 @@ for format in optim_params['Formats']:
             pb_name = os.path.join(MODELS_DIR, model_name, OPTS_SUBDIR, filename + '.pb')
             yml_name = os.path.join(MODELS_DIR, model_name, OPTS_SUBDIR, filename + '.yml')
 
-            optim_command = (f"python {OPTIMIZATION_SCRIPT} {model_name} {saved_as} {input_w} " +
+            optim_command = (f"python3 {OPTIMIZATION_SCRIPT} {model_name} {saved_as} {input_w} " +
                              f"{input_h} {format} {mss} {mce} {optim_params['AllowGrowth']} " +
                              f"{arch} {pb_name} --input_names {' '.join(input_names)} " +
                              f"--output_names {' '.join(output_names)} " +
@@ -67,7 +67,7 @@ for format in optim_params['Formats']:
             sleep(2)
 
             # === Benchmark ===
-            benchmark_command = (f"python {BENCHMARKING_SCRIPT} {pb_name} {arch} {input_w} {input_h} " +
+            benchmark_command = (f"python3 {BENCHMARKING_SCRIPT} {pb_name} {arch} {input_w} {input_h} " +
                                  f"{rosbag_file} {yml_name}")
             cprint.info(benchmark_command)
             os.system(benchmark_command)

@@ -1,7 +1,7 @@
-import tensorflow as tf
-# import tensorflow.contrib.tensorrt as trt # to solve compat. on bin graph
-import numpy as np
 import cv2
+import tensorflow as tf
+import tensorflow.contrib.tensorrt as trt # to solve compat. on bin graph
+import numpy as np
 from os import path
 from PIL import Image
 from Perception.Net.utils import label_map_util, nms
