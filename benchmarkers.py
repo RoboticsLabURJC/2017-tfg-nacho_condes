@@ -38,7 +38,7 @@ class FollowPersonBenchmarker:
             makedirs(self.dirname)
 
 
-    def makeConfig(self, pdet_model, fenc_model, rosbag_file, xcfg, wcfg, ptcfg):
+    def make_config(self, pdet_model, fenc_model, rosbag_file, xcfg, wcfg, ptcfg):
         """Build the config section for the benchmark report."""
         config = {
             '1.- Networks': {
@@ -64,7 +64,7 @@ class FollowPersonBenchmarker:
         }
         self.config = config
 
-    def makeLoadTimes(self, t_pers_det, t_face_det, t_face_enc, ttfi):
+    def make_load_times(self, t_pers_det, t_face_det, t_face_enc, ttfi):
         """Build the load times section for the benchmark report."""
 
         load_times = {
@@ -75,7 +75,7 @@ class FollowPersonBenchmarker:
         }
         self.load_times = load_times
 
-    def makeDetectionStats(self, frames_times):
+    def make_detection_stats(self, frames_times):
         """Build the detection statistics section for the benchmark report."""
 
         # Convert the times to an array
@@ -118,7 +118,7 @@ class FollowPersonBenchmarker:
         }
         self.detection_stats = detection_stats
 
-    def makeTrackingStats(self, tracked_persons, frames_with_ref):
+    def make_tracking_stats(self, tracked_persons, frames_with_ref):
         """Build the tracking statistics section for the benchmark report."""
 
         tracking_stats = {
@@ -127,7 +127,7 @@ class FollowPersonBenchmarker:
         }
         self.tracking_stats = tracking_stats
 
-    def makeIters(self, frames_times, frames_numtrackings, frames_errors, ref_coords, frames_responses):
+    def make_iters(self, frame_counter, frames_times, frames_numtrackings, frames_errors, ref_coords, frames_responses):
         """Write the iterations for each processed frame in the benchmark."""
 
         iterations = []
@@ -183,7 +183,7 @@ class FollowPersonBenchmarker:
         self.iterations = iterations
 
 
-    def writeBenchmark(self):
+    def write_benchmark(self):
         """Write the metrics to the output file."""
 
         # Build the entire structure

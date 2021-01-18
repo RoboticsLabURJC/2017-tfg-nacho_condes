@@ -2,6 +2,7 @@
 resources/benchmarks/*
 resources/bags
 resources/ref_face/*
+resources/labelme_sequences
 *__pycache__
 *swp*
 *nodes.txt

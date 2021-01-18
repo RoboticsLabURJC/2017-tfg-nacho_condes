@@ -4,7 +4,7 @@ import time
 from datetime import datetime
 from cprint import cprint
 import utils
-from Actuation.tracking_classes import *
+from Perception.tracking_classes import *
 import numpy as np
 np.set_printoptions(precision=2)
 FEATURE_PARAMS = dict(maxCorners=300,
@@ -62,9 +62,9 @@ class PeopleTracker(threading.Thread):
         # self.keypoints = keypoints.squeeze()
 
 
-    def getImages(self):
-        """Serve the latest available images from the Camera."""
-        return self.image, self.depth
+    # def getImages(self):
+    #     """Serve the latest available images from the Camera."""
+    #     return self.image, self.depth
 
 
     def stepAll(self):

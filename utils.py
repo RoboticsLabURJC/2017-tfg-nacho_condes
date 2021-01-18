@@ -49,6 +49,11 @@ def center2Corners(bbox):
     return np.array([bbox[0]-bbox[2]//2, bbox[1]-bbox[3]//2, bbox[0]+bbox[2]//2, bbox[1]+bbox[3]//2])
 
 
+def corners2Corner(bbox):
+    """[x1, y1, x2, y2] -> [x, y, w, h]"""
+    return np.array([bbox[0], bbox[1], bbox[2] - bbox[0], bbox[3] - bbox[1]])
+
+
 def distanceBetweenBoxes(bb1, bb2):
     """Compute the center of both boxes and return the distance betwen them."""
     bb1 = np.array(bb1, dtype=np.int32)

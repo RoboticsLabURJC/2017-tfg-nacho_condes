@@ -157,6 +157,10 @@ class DetectionNetwork:
         orig_h, orig_w = img.shape[:2]
         # img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
         input_image = Image.fromarray(img)
+        import pickle
+        with open('aa.pkl', 'wb') as f:
+            pickle.dump(input_image, f)
+            print("Dumped!")
         img_rsz = np.array(input_image.resize(self.input_shape[:2]))
 
         if self.arch == 'ssd':

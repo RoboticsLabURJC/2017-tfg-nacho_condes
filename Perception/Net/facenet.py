@@ -34,7 +34,7 @@ class FaceNet:
         cprint.info("FaceNet ready!")
 
 
-    def setReferenceFace(self, ref_crop):
+    def set_reference_face(self, ref_crop):
         ''' Set the reference face (previously cropped by the detector). '''
 
         # Set the reference face
@@ -42,7 +42,7 @@ class FaceNet:
 
         # Dummy initialization...
         dummy_tensor = np.random.randn(SQUARE_SIZE, SQUARE_SIZE, 3)
-        _ = self.distancesToRef([dummy_tensor], preprocess=False)
+        _ = self.distances_to_ref([dummy_tensor], preprocess=False)
 
     def preprocess(self, face):
         ''' Function to preprocess a face. '''
@@ -56,7 +56,7 @@ class FaceNet:
         return prep_face
 
 
-    def distancesToRef(self, faces, preprocess=True):
+    def distances_to_ref(self, faces, preprocess=True):
         '''
         Compute the embeddings of a list of faces
         and check the distance to the reference one.

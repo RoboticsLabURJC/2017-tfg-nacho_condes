@@ -19,16 +19,22 @@ from Perception.Net.detection_network import DetectionNetwork
 
 class NetworksController(threading.Thread):
 
-    def __init__(self, nets_cfg, ref_img_path, benchmark=False, debug=False):
-        """ Threading class for running neural inferences on a sequential way. """
+    def __init__(self, DetectionHeight=None, DetectionWidth=None, Arch=None, DetectionModel=None, RefFace=None, FaceEncoderModel=None, benchmark=False, debug=False):
+        """Threading class for running neural inferences on a sequential way."""
 
         super(NetworksController, self).__init__()
         self.name = 'NetworksControllerThread'
         self.daemon = True
 
         # Arguments for the networks
-        self.nets_cfg = nets_cfg
-        self.ref_img_path = ref_img_path
+        # self.nets_cfg = nets_cfg
+        self.detection_height = DetectionHeight
+        self.detection_width = DetectionWidth
+        self.arch = Arch
+        self.detection_model = DetectionModel
+        self.face_encoder_model = FaceEncoderModel
+
+        self.ref_img_path = RefFace
 
         # Placeholders
         self.pdet_network = None
@@ -58,17 +64,17 @@ class NetworksController(threading.Thread):
         self.tracker = None
         self.debug = debug
 
-    def createPersonDetector(self):
+    def create_person_detector(self):
         """Instantiate the "person" detection network."""
         start = datetime.now()
-        input_shape = (self.nets_cfg['DetectionHeight'], self.nets_cfg['DetectionWidth'], 3)
-        pdet_network = DetectionNetwork(self.nets_cfg['Arch'], input_shape, self.nets_cfg['DetectionModel'])
+        input_shape = (self.detection_height, self.detection_width, 3)
+        pdet_network = DetectionNetwork(self.arch, input_shape, self.detection_model)
         elapsed = datetime.now() - start
         # Assign the attributes
         self.pdet_network = pdet_network
         self.t_pers_det = elapsed
 
-    def createFaceDetector(self):
+    def create_face_detector(self):
         """Instantiate the face detection network."""
         start = datetime.now()
         fdet_network = FaceDetector()
@@ -77,32 +83,28 @@ class NetworksController(threading.Thread):
         self.fdet_network = fdet_network
         self.t_face_det = elapsed
 
-    def createFaceEncoder(self):
+    def create_face_encoder(self):
         """Instantiate the face encoding network."""
         start = datetime.now()
-        fenc_network = FaceNet(self.nets_cfg['FaceEncoderModel'])
+        fenc_network = FaceNet(self.face_encoder_model)
         elapsed = datetime.now() - start
         # Assign the attributes
         self.fenc_network = fenc_network
         self.t_face_enc = elapsed
 
-    def setTracker(self, tracker):
-        """Set the tracker (CPU thread to be updated with the
-        latest inferences."""
-        self.tracker = tracker
-        self.image = self.tracker.image
-        self.depth = self.tracker.depth
+    # def set_tracker(self, tracker):
+    #     """Set the tracker (CPU thread to be updated with the
+    #     latest inferences."""
+    #     self.tracker = tracker
+    #     self.image = self.tracker.image
+    #     self.depth = self.tracker.depth
 
     def iterate(self):
         """Function to be called in the loop."""
 
-        # cprint.info('---networks---')
-        # if elapsed_ <= PERIOD:
-        #     time.sleep(PERIOD - elapsed_)
-        # start = time.time()
         iter_info = []
         # Fetch the images
-        self.is_activated = self.tracker.is_activated
+        # self.is_activated = self.tracker.is_activated
         try:
             # self.image, self.depth = self.cam.getImages()
             # We get it from the tracker, in order not to consume the
@@ -155,21 +157,21 @@ class NetworksController(threading.Thread):
 
         # Create the networks
         zero_time = datetime.now()
-        self.createPersonDetector()
-        self.createFaceDetector()
-        self.createFaceEncoder()
+        self.create_person_detector()
+        self.create_face_detector()
+        self.create_face_encoder()
 
         # Set the reference face
         ref_img = imread(self.ref_img_path)
         ref_box = self.fdet_network.predict(ref_img)
         ref_face = crop_face(ref_img, ref_box)
-        self.fenc_network.setReferenceFace(ref_face)
+        self.fenc_network.set_reference_face(ref_face)
 
         self.ttfi = datetime.now() - zero_time
         # Indicate we are ready to go
         self.is_activated = True
-        self.tracker.is_activated = True
-        self.tracker.start()
+        # self.tracker.is_activated = True
+        # self.tracker.start()
         time.sleep(2)
 
         if self.debug:
